@@ -13,6 +13,21 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+/*
+$router->get('/', function(){
+    return "hello world";
 });
+*/
+
+$router->get('/', 'ExampleController@sayHello');
+
+$router->group(['prefix'=>'contacts'],function() use ($router){
+    $router->get('/', 'ContactsController@getContacts');
+    $router->get('/search/{search}', 'ContactsController@searchContacts');
+    $router->get('/id/{id}', 'ContactsController@getContactById');
+    $router->post('/', 'ContactsController@postContact');
+});
+
+$router->post('/{id}', 'ExampleController@postSomething');
+
+$router->get('/say/{something}', 'ExampleController@saySomething');
