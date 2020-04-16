@@ -21,22 +21,16 @@ class ContactsController extends Controller
     }
 
     public function getContacts(){
-        return app('db')->select("SELECT * FROM contacts");
-    }
-
-    //I'll continue like this to separate concerns
-    public function getContactsRepository(){
         return $this->repo->getContacts();
     }
 
     public function searchContacts(string $search){
-        $loweredString = strtolower($search);
-        return app('db')->select("SELECT * FROM contacts WHERE LOWER(name) LIKE '%$loweredString%'");
+        return $this->repo->searchContacts($search);
     }
 
     public function getContactById(string $id){
         if (is_numeric($id)){
-            return app('db')->select("SELECT * FROM contacts WHERE id = $id");
+            return $this->repo->getContactById($id);
         }
         else return response()->json(['error'=>'id is not numeric']);
     }
@@ -44,7 +38,6 @@ class ContactsController extends Controller
     public function postContact(Request $request){
         $name = $request->json()->get('name');
         $phone = $request->json()->get('phone');
-        return app('db')->insert("INSERT INTO contacts (name,phone) VALUES ('$name',$phone)");
+        return $this->repo->postContact($name,$phone);
     }
-    //
 }
