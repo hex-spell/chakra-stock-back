@@ -22,6 +22,7 @@ $router->get('/', function(){
 $router->get('/', 'ExampleController@sayHello');
 
 $router->group(['prefix'=>'contacts'],function() use ($router){
+    $router->get('/withrepository', 'ContactsController@getContactsRepository');
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id}', 'ContactsController@getContactById');

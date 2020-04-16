@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\ContactsRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ContactsController extends Controller
@@ -11,13 +12,21 @@ class ContactsController extends Controller
      *
      * @return void
      */
-    public function __construct()
+
+    private $repo;
+
+    public function __construct(ContactsRepositoryInterface $repo)
     {
-        //
+        $this->repo = $repo;
     }
 
     public function getContacts(){
         return app('db')->select("SELECT * FROM contacts");
+    }
+
+    //I'll continue like this to separate concerns
+    public function getContactsRepository(){
+        return $this->repo->getContacts();
     }
 
     public function searchContacts(string $search){
