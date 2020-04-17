@@ -4,7 +4,7 @@ use App\Interfaces\OrdersRepositoryInterface;
 
 class OrdersRepository implements OrdersRepositoryInterface {
     public function getOrders(){
-        return app('db')->select("SELECT * FROM orders");
+        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id");
     }
 
     /*public function searchOrders(string $search){
@@ -13,7 +13,7 @@ class OrdersRepository implements OrdersRepositoryInterface {
     }*/
 
     public function getOrderById(int $id){
-        return app('db')->select("SELECT * FROM orders WHERE id = $id");
+        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id WHERE id = $id");
     }
 
     /*public function deleteOrderById(int $id){
