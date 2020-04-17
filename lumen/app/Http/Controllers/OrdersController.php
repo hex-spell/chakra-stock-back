@@ -28,31 +28,31 @@ class OrdersController extends Controller
         return $this->repo->getOrders();
     }
 
-    public function searchOrders(string $search){
+    /*public function searchOrders(string $search){
         $sanitizedSearch = $this->sanitizeString($search);
         return $this->repo->searchOrders($sanitizedSearch);
-    }
+    }*/
 
     public function getOrderById(int $id){
         return $this->repo->getOrderById($id);
     }
 
-    public function deleteOrderById(int $id){
+    /*public function deleteOrderById(int $id){
         return $this->repo->deleteOrderById($id);
-    }
+    }*/
 
-    public function postOrder(Request $request){
+    /*public function postOrder(Request $request){
         $this->validate($request, $this->validatePostOrder);
         $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
         $phone = $request->json()->get('phone');
         return $this->repo->postOrder($name,$phone);
-    }
+    }*/
 
-    public function updateOrder(Request $request){
+    /*public function updateOrder(Request $request){
         $this->validate($request,$this->validateUpdateOrder);
         $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
         $phone = $request->json()->get('phone');
         $id = $request->json()->get('id');
         return $this->repo->updateOrder($name,$phone,$id);
-    }
+    }*/
 }

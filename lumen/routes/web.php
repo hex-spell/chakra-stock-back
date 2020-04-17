@@ -30,6 +30,15 @@ $router->group(['prefix'=>'contacts'],function() use ($router){
     $router->put('/', 'ContactsController@updateContact');
 });
 
+$router->group(['prefix'=>'orders'],function() use ($router){
+    $router->get('/', 'OrdersController@getOrders');
+    //$router->get('/search/{search}', 'OrdersController@searchOrders');
+    $router->get('/id/{id:[0-9]+}', 'OrdersController@getOrderById');
+    /*$router->delete('/id/{id:[0-9]+}', 'OrdersController@deleteOrderById');
+    $router->post('/', 'OrdersController@postOrder');
+    $router->put('/', 'OrdersController@updateOrder');*/
+});
+
 $router->post('/{id}', 'ExampleController@postSomething');
 
 $router->get('/say/{something}', 'ExampleController@saySomething');
