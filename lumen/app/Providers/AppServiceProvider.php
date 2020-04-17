@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\ContactsRepositoryInterface;
 use App\Repositories\ContactsRepository;
+use App\Interfaces\OrdersRepositoryInterface;
+use App\Repositories\OrdersRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,5 +18,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ContactsRepositoryInterface::class, ContactsRepository::class);
+        $this->app->bind(OrdersRepositoryInterface::class, OrdersRepository::class);
     }
 }
