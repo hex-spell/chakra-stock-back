@@ -25,6 +25,7 @@ $router->group(['prefix'=>'contacts'],function() use ($router){
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
+    $router->delete('/id/{id:[0-9]+}', 'ContactsController@deleteContactById');
     $router->post('/', 'ContactsController@postContact');
     $router->put('/', 'ContactsController@updateContact');
 });

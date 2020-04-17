@@ -37,6 +37,10 @@ class ContactsController extends Controller
         return $this->repo->getContactById($id);
     }
 
+    public function deleteContactById(int $id){
+        return $this->repo->deleteContactById($id);
+    }
+
     public function postContact(Request $request){
         $this->validate($request, $this->validatePostContact);
         $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
