@@ -22,11 +22,11 @@ $router->get('/', function(){
 $router->get('/', 'ExampleController@sayHello');
 
 $router->group(['prefix'=>'contacts'],function() use ($router){
-    $router->get('/withrepository', 'ContactsController@getContactsRepository');
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
-    $router->get('/id/{id}', 'ContactsController@getContactById');
+    $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
     $router->post('/', 'ContactsController@postContact');
+    $router->put('/', 'ContactsController@updateContact');
 });
 
 $router->post('/{id}', 'ExampleController@postSomething');

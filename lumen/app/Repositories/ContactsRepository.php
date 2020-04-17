@@ -19,4 +19,9 @@ class ContactsRepository implements ContactsRepositoryInterface {
     public function postContact(string $name, string $phone){
         return app('db')->insert("INSERT INTO contacts (name,phone) VALUES ('$name',$phone)");
     }
+
+    public function updateContact(string $name, string $phone, int $id)
+    {
+        return app('db')->update("UPDATE contacts SET name='$name', phone=$phone WHERE id=$id");
+    }
 }

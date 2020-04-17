@@ -15,6 +15,10 @@ class ContactsController extends Controller
 
     private $repo;
 
+    private $validateUpdateContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts']);
+
+    private $validatePostContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts']);
+
     public function __construct(ContactsRepositoryInterface $repo)
     {
         $this->repo = $repo;
@@ -25,19 +29,26 @@ class ContactsController extends Controller
     }
 
     public function searchContacts(string $search){
-        return $this->repo->searchContacts($search);
+        $sanitizedSearch = $this->sanitizeString($search);
+        return $this->repo->searchContacts($sanitizedSearch);
     }
 
-    public function getContactById(string $id){
-        if (is_numeric($id)){
-            return $this->repo->getContactById($id);
-        }
-        else return response()->json(['error'=>'id is not numeric']);
+    public function getContactById(int $id){
+        return $this->repo->getContactById($id);
     }
 
     public function postContact(Request $request){
-        $name = $request->json()->get('name');
+        $this->validate($request, $this->validatePostContact);
+        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
         $phone = $request->json()->get('phone');
         return $this->repo->postContact($name,$phone);
+    }
+
+    public function updateContact(Request $request){
+        $this->validate($request,$this->validateUpdateContact);
+        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
+        $phone = $request->json()->get('phone');
+        $id = $request->json()->get('id');
+        return $this->repo->updateContact($name,$phone,$id);
     }
 }
