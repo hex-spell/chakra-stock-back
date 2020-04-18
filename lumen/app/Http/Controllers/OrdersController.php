@@ -28,10 +28,10 @@ class OrdersController extends Controller
         return $this->repo->getOrders();
     }
 
-    /*public function searchOrders(string $search){
+    public function searchOrdersByContactName(string $search){
         $sanitizedSearch = $this->sanitizeString($search);
-        return $this->repo->searchOrders($sanitizedSearch);
-    }*/
+        return $this->repo->searchOrdersByContactName($sanitizedSearch);
+    }
 
     public function getOrderById(int $id){
         return $this->repo->getOrderById($id);

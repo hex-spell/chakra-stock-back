@@ -7,10 +7,10 @@ class OrdersRepository implements OrdersRepositoryInterface {
         return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id");
     }
 
-    /*public function searchOrders(string $search){
+    public function searchOrdersByContactName(string $search){
         $loweredString = strtolower($search);
-        return app('db')->select("SELECT * FROM contacts WHERE LOWER(name) LIKE '%$loweredString%'");
-    }*/
+        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id WHERE LOWER(name) LIKE '%$loweredString%'");
+    }
 
     public function getOrderById(int $id){
         return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id WHERE id = $id");
