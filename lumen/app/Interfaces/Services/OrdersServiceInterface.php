@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface OrdersRepositoryInterface
+interface OrdersServiceInterface
 {
     public function getOrders();
     public function searchOrdersByContactName(string $search);

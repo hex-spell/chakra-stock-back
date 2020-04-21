@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\Services\OrdersServiceInterface;
+use App\Services\OrdersService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,5 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(OrdersServiceInterface::class, OrdersService::class);
     }
 }

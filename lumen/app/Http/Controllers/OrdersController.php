@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\Repositories\OrdersRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Interfaces\Services\OrdersServiceInterface;
 
 class OrdersController extends Controller
 {
@@ -13,28 +13,30 @@ class OrdersController extends Controller
      * @return void
      */
 
-    private $repo;
+    private $OrdersService;
+
+    public function __construct(OrdersServiceInterface $Service)
+    {
+        $this->OrdersService = $Service;
+    }
 
     //private $validateUpdateContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts']);
 
     //private $validatePostContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone']);
 
-    public function __construct(OrdersRepositoryInterface $repo)
-    {
-        $this->repo = $repo;
-    }
+    
 
     public function getOrders(){
-        return $this->repo->getOrders();
+        return $this->OrdersService->getOrders();
     }
 
     public function searchOrdersByContactName(string $search){
         $sanitizedSearch = $this->sanitizeString($search);
-        return $this->repo->searchOrdersByContactName($sanitizedSearch);
+        return $this->OrdersService->searchOrdersByContactName($sanitizedSearch);
     }
 
     public function getOrderById(int $id){
-        return $this->repo->getOrderById($id);
+        return $this->OrdersService->getOrderById($id);
     }
 
     /*public function deleteOrderById(int $id){
