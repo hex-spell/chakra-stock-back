@@ -1,6 +1,6 @@
 <?php
 namespace App\Repositories;
-use App\Interfaces\ContactsRepositoryInterface;
+use App\Interfaces\Repositories\ContactsRepositoryInterface;
 
 class ContactsRepository implements ContactsRepositoryInterface {
     public function getContacts(){

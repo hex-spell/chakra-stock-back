@@ -1,6 +1,6 @@
 <?php
 namespace App\Repositories;
-use App\Interfaces\OrdersRepositoryInterface;
+use App\Interfaces\Repositories\OrdersRepositoryInterface;
 
 class OrdersRepository implements OrdersRepositoryInterface {
     public function getOrders(){
