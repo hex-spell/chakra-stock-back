@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface ContactsRepositoryInterface
+interface ContactsServiceInterface
 {
     public function getContacts();
     public function searchContacts(string $search);

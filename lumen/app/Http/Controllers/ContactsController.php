@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\Repositories\ContactsRepositoryInterface;
+use App\Interfaces\Services\ContactsServiceInterface;
 use Illuminate\Http\Request;
 
 class ContactsController extends Controller
@@ -13,46 +13,45 @@ class ContactsController extends Controller
      * @return void
      */
 
-    private $repo;
+    private $service;
 
     private $validateUpdateContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts']);
 
     private $validatePostContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone']);
 
-    public function __construct(ContactsRepositoryInterface $repo)
+    public function __construct(ContactsServiceInterface $service)
     {
-        $this->repo = $repo;
+        $this->service = $service;
     }
 
     public function getContacts(){
-        return $this->repo->getContacts();
+        return $this->service->getContacts();
     }
 
     public function searchContacts(string $search){
-        $sanitizedSearch = $this->sanitizeString($search);
-        return $this->repo->searchContacts($sanitizedSearch);
+        return $this->service->searchContacts($search);
     }
 
     public function getContactById(int $id){
-        return $this->repo->getContactById($id);
+        return $this->service->getContactById($id);
     }
 
     public function deleteContactById(int $id){
-        return $this->repo->deleteContactById($id);
+        return $this->service->deleteContactById($id);
     }
 
     public function postContact(Request $request){
         $this->validate($request, $this->validatePostContact);
-        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
+        $name = $request->json()->get('name');
         $phone = $request->json()->get('phone');
-        return $this->repo->postContact($name,$phone);
+        return $this->service->postContact($name,$phone);
     }
 
     public function updateContact(Request $request){
         $this->validate($request,$this->validateUpdateContact);
-        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
+        $name = $request->json()->get('name');
         $phone = $request->json()->get('phone');
         $id = $request->json()->get('id');
-        return $this->repo->updateContact($name,$phone,$id);
+        return $this->service->updateContact($name,$phone,$id);
     }
 }

@@ -1,34 +1,30 @@
 <?php
 namespace App\Repositories;
 use App\Interfaces\Repositories\ContactsRepositoryInterface;
-use App\Models\Contacts;
 
 class ContactsRepository implements ContactsRepositoryInterface {
     public function getContacts(){
-        return Contacts::all()->take(10);
+        return app('db')->select("SELECT * FROM contacts");
     }
 
     public function searchContacts(string $search){
         $loweredString = strtolower($search);
-        return Contacts::whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();
+        return app('db')->select("SELECT * FROM contacts WHERE LOWER(name) LIKE '%$loweredString%'");
     }
 
     public function getContactById(int $id){
-        return Contacts::find($id);
+        return app('db')->select("SELECT * FROM contacts WHERE id = $id");
     }
 
     public function deleteContactById(int $id){
-        return Contacts::destroy($id);
+        return app('db')->delete("DELETE FROM contacts WHERE id = $id");
     }
 
     public function postContact(string $name, string $phone){
-        return Contacts::create(array('name'=>$name,'phone'=>$phone));
+        return app('db')->insert("INSERT INTO contacts (name,phone) VALUES ('$name',$phone)");
     }
 
     public function updateContact(string $name, string $phone, int $id){
-        $Contact = Contacts::find($id);
-        $Contact->name = $name;
-        $Contact->phone = $phone;
-        return $Contact->save();
+        return app('db')->update("UPDATE contacts SET name='$name', phone=$phone WHERE id=$id");
     }
 }
