@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Contacts;
 
 class Orders extends Model{
     public $timestamps = false;
@@ -9,8 +10,9 @@ class Orders extends Model{
         'deleted' => false
     ];*/
     //protected $fillable = array('name','phone');
-    /*public function contact()
+    protected $primaryKey = 'order_id';
+    public function contact()
     {
-        return $this->belongsTo('App\Models\Contacts','contact_id');
-    }*/
+        return $this->belongsTo(Contacts::class,'contact_id');
+    }
 }

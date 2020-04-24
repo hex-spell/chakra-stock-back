@@ -5,17 +5,16 @@ use App\Models\Orders;
 
 class OrdersRepository implements OrdersRepositoryInterface {
     public function getOrders(){
-        //return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id");
-        return Orders::all()->contact()->take(10);
+        return Orders::select('*')->join('contacts','contact_id','id')->take(10)->get();
     }
 
     public function searchOrdersByContactName(string $search){
         $loweredString = strtolower($search);
-        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id WHERE LOWER(name) LIKE '%$loweredString%'");
+        return Orders::select('*')->join('contacts','contact_id','id')->whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();
     }
 
     public function getOrderById(int $id){
-        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id WHERE id = $id");
+        return Orders::select('*')->where('order_id','=',$id)->join('contacts','contact_id','id')->get();
     }
 
     /*public function deleteOrderById(int $id){
