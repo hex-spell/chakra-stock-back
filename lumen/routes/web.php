@@ -19,6 +19,12 @@ $router->get('/', function(){
 });
 */
 
+$router->group(['prefix'=>'users'],function() use ($router){
+    $router->post('/', 'UserController@addUser');
+    $router->put('/', 'UserController@updateUser');
+    $router->delete('/', 'UserController@deleteUser');
+    $router->post('/login', 'UserController@login');
+});
 
 $router->group(['prefix'=>'contacts'],function() use ($router){
     $router->get('/', 'ContactsController@getContacts');
