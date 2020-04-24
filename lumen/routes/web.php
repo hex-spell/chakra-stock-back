@@ -26,7 +26,7 @@ $router->group(['prefix'=>'users'],function() use ($router){
     $router->post('/login', 'UserController@login');
 });
 
-$router->group(['prefix'=>'contacts'],function() use ($router){
+$router->group(['prefix'=>'contacts','middleware'=>'auth'],function() use ($router){
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
