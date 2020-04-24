@@ -19,7 +19,6 @@ $router->get('/', function(){
 });
 */
 
-$router->get('/', 'ExampleController@sayHello');
 
 $router->group(['prefix'=>'contacts'],function() use ($router){
     $router->get('/', 'ContactsController@getContacts');
@@ -39,6 +38,3 @@ $router->group(['prefix'=>'orders'],function() use ($router){
     $router->put('/', 'OrdersController@updateOrder');*/
 });
 
-$router->post('/{id}', 'ExampleController@postSomething');
-
-$router->get('/say/{something}', 'ExampleController@saySomething');
