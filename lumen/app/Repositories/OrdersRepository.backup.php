@@ -1,12 +1,10 @@
 <?php
 namespace App\Repositories;
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
-use App\Models\Orders;
 
 class OrdersRepository implements OrdersRepositoryInterface {
     public function getOrders(){
-        //return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id");
-        return Orders::all()->contact()->take(10);
+        return app('db')->select("SELECT * FROM orders JOIN contacts ON orders.contact_id = contacts.id");
     }
 
     public function searchOrdersByContactName(string $search){
