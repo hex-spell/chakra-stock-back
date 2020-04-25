@@ -21,6 +21,8 @@ class UserController extends Controller
 
     private $validateAddUser = ['name'=>'required|string|between:4,30','email'=>'required|email|between:4,30|unique:users,email','password'=>'required|string|between:4,30'];
 
+    private $validateLogin = ['email'=>'required|email|between:4,30','password'=>'required|string|between:4,30'];
+
     public function addUser(Request $request){
         $this->validate($request,$this->validateAddUser);
         $name = $request->json()->get('name');
@@ -38,7 +40,14 @@ class UserController extends Controller
         return $this->service->deleteUser($id);
     }
 
-    public function login(int $id){
-        return $this->service->login($id);
+    public function login(Request $request){
+        $this->validate($request,$this->validateLogin);
+        $email = $request->json()->get('email');
+        $password = $request->json()->get('password');
+        $user = User::select('*')->where('email','=',$email)->first();
+        if (app('hash')->check($password,$user->password)){
+            return json_encode(['api_token'=>$user->api_token]);
+        }
+        return null;
     }
 }
