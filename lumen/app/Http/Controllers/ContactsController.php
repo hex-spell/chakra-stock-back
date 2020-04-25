@@ -15,9 +15,9 @@ class ContactsController extends Controller
 
     private $service;
 
-    private $validateUpdateContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts']);
+    private $validateUpdateContact = ['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts'];
 
-    private $validatePostContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone']);
+    private $validatePostContact = ['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone'];
 
     public function __construct(ContactsServiceInterface $service)
     {

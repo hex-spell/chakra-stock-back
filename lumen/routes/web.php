@@ -35,7 +35,7 @@ $router->group(['prefix'=>'contacts','middleware'=>'auth'],function() use ($rout
     $router->put('/', 'ContactsController@updateContact');
 });
 
-$router->group(['prefix'=>'orders'],function() use ($router){
+$router->group(['prefix'=>'orders','middleware'=>'auth'],function() use ($router){
     $router->get('/', 'OrdersController@getOrders');
     $router->get('/searchbycontactname/{search}', 'OrdersController@searchOrdersByContactName');
     $router->get('/id/{id:[0-9]+}', 'OrdersController@getOrderById');

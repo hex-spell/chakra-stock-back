@@ -17,9 +17,9 @@ class UserController extends Controller
 
     //private $service;
 
-    private $validateUpdateUser = array(['name'=>'required|string|between:4,30','password'=>'required|string|between:4,30','email'=>'required|string|between:4,30','id'=>'required|integer|exist:contacts','api_token'=>'required|string|size:60']);
+    private $validateUpdateUser = ['name'=>'required|string|between:4,30','password'=>'required|string|between:4,30','email'=>'required|string|between:4,30','id'=>'required|integer|exist:contacts','api_token'=>'required|string|size:60'];
 
-    private $validateAddUser = array(['name'=>'required|string|between:4,30','email'=>'required|string|between:4,30','password'=>'required|string|between:4,30']);
+    private $validateAddUser = ['name'=>'required|string|between:4,30','email'=>'required|email|between:4,30|unique:users,email','password'=>'required|string|between:4,30'];
 
     public function addUser(Request $request){
         $this->validate($request,$this->validateAddUser);
