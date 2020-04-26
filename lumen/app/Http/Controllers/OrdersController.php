@@ -31,8 +31,7 @@ class OrdersController extends Controller
     }
 
     public function searchOrdersByContactName(string $search){
-        $sanitizedSearch = $this->sanitizeString($search);
-        return $this->OrdersService->searchOrdersByContactName($sanitizedSearch);
+        return $this->OrdersService->searchOrdersByContactName($search);
     }
 
     public function getOrderById(int $id){

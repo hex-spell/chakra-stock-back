@@ -19,14 +19,15 @@ $router->get('/', function(){
 });
 */
 
+$router->post('/login', 'AuthController@authenticate');
+
 $router->group(['prefix'=>'users'],function() use ($router){
     $router->post('/', 'UserController@addUser');
     $router->put('/', 'UserController@updateUser');
     $router->delete('/', 'UserController@deleteUser');
-    $router->post('/login', 'UserController@login');
 });
 
-$router->group(['prefix'=>'contacts','middleware'=>'auth'],function() use ($router){
+$router->group(['prefix'=>'contacts','middleware'=>'jwt.auth'],function() use ($router){
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
@@ -35,7 +36,7 @@ $router->group(['prefix'=>'contacts','middleware'=>'auth'],function() use ($rout
     $router->put('/', 'ContactsController@updateContact');
 });
 
-$router->group(['prefix'=>'orders','middleware'=>'auth'],function() use ($router){
+$router->group(['prefix'=>'orders','middleware'=>'jwt.auth'],function() use ($router){
     $router->get('/', 'OrdersController@getOrders');
     $router->get('/searchbycontactname/{search}', 'OrdersController@searchOrdersByContactName');
     $router->get('/id/{id:[0-9]+}', 'OrdersController@getOrderById');
