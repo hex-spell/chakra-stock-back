@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\Services\ContactsServiceInterface;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -15,22 +13,35 @@ class UserController extends Controller
      * @return void
      */
 
-    //private $service;
+    private $request;
 
-    private $validateUpdateUser = ['name'=>'required|string|between:4,30','password'=>'required|string|between:4,30','email'=>'required|string|between:4,30','id'=>'required|integer|exist:contacts','api_token'=>'required|string|size:60'];
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    private $validateUserName = ['name'=>'required|string|between:4,30'];
 
     private $validateAddUser = ['name'=>'required|string|between:4,30','email'=>'required|email|between:4,30|unique:users,email','password'=>'required|string|between:4,30'];
 
-    public function addUser(Request $request){
-        $this->validate($request,$this->validateAddUser);
-        $name = $request->json()->get('name');
-        $password = app('hash')->make($request->json()->get('password'));
-        $email = $request->json()->get('email');
+    public function getUsers(){
+        return User::all();
+    }
+
+    public function addUser(){
+        $this->validate($this->request,$this->validateAddUser);
+        $name = $this->request->json()->get('name');
+        $password = app('hash')->make($this->request->json()->get('password'));
+        $email = $this->request->json()->get('email');
         return User::create(array('name'=>$name,'password'=>$password,'email'=>$email));
     }
 
-    public function updateUser(string $search){
-        return $this->service->updateUser($search);
+    public function updateUserName(){
+        $this->validate($this->request,$this->validateUserName);
+        $name = $this->request->json()->get('name');
+        $User = User::find($this->request->auth->id);
+        $User->name = $name;
+        return $User->save();
     }
 
     public function deleteUser(int $id){

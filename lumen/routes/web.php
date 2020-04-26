@@ -22,8 +22,9 @@ $router->get('/', function(){
 $router->post('/login', 'AuthController@authenticate');
 
 $router->group(['prefix'=>'users'],function() use ($router){
+    $router->get('/',['middleware'=>'jwt.auth','uses'=>'UserController@getUsers']);
     $router->post('/', 'UserController@addUser');
-    $router->put('/', 'UserController@updateUser');
+    $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UserController@updateUserName']);
     $router->delete('/', 'UserController@deleteUser');
 });
 
