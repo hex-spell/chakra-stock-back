@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Repositories\UsersRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -14,10 +15,12 @@ class UserController extends Controller
      */
 
     private $request;
+    private $repo;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, UsersRepositoryInterface $repo)
     {
         $this->request = $request;
+        $this->repo = $repo;
     }
 
     private $validateUserName = ['name'=>'required|string|between:4,30'];
@@ -35,26 +38,24 @@ class UserController extends Controller
         $name = $this->request->json()->get('name');
         $password = app('hash')->make($this->request->json()->get('password'));
         $email = $this->request->json()->get('email');
-        return User::create(array('name'=>$name,'password'=>$password,'email'=>$email));
+        return $this->repo->addUser($name,$password,$email);
     }
 
     public function updateUserName(){
         $this->validate($this->request,$this->validateUserName);
         $name = $this->request->json()->get('name');
-        $User = User::find($this->request->auth->id);
-        $User->name = $name;
-        return $User->save();
+        $id = $this->request->auth->id;
+        return $this->repo->updateUserName($name,$id);
     }
 
     public function updateUserPassword(){
         $this->validate($this->request,$this->validateUserPassword);
         $password = $this->request->json()->get('password');
-        $User = User::find($this->request->auth->id);
-        $User->password = app('hash')->make($password);;
-        return $User->save();
+        $id = $this->request->auth->id;
+        return $this->repo->updateUserPassword($password,$id);
     }
 
     public function deleteUser(int $id){
-        return $this->service->deleteUser($id);
+        //return $this->service->deleteUser($id);
     }
 }

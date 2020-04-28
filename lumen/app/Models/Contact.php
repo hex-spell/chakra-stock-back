@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Orders;
 
-class Contacts extends Model{
+class Contact extends Model{
     public $timestamps = false;
     protected $attributes = [
         'deleted' => false

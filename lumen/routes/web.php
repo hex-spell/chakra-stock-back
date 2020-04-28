@@ -22,11 +22,11 @@ $router->get('/', function(){
 $router->post('/login', 'AuthController@authenticate');
 
 $router->group(['prefix'=>'users'],function() use ($router){
-    $router->get('/',['middleware'=>'jwt.auth','uses'=>'UserController@getUsers']);
-    $router->post('/', 'UserController@addUser');
-    $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UserController@updateUserName']);
-    $router->put('/updatepassword',['middleware'=>'jwt.auth', 'uses'=>'UserController@updateUserPassword']);
-    $router->delete('/', 'UserController@deleteUser');
+    $router->get('/',['middleware'=>'jwt.auth','uses'=>'UsersController@getUsers']);
+    $router->post('/', 'UsersController@addUser');
+    $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserName']);
+    $router->put('/updatepassword',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserPassword']);
+    $router->delete('/', 'UsersController@deleteUser');
 });
 
 $router->group(['prefix'=>'contacts','middleware'=>'jwt.auth'],function() use ($router){

@@ -1,20 +1,20 @@
 <?php
 namespace App\Repositories;
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
-use App\Models\Orders;
+use App\Models\Order;
 
 class OrdersRepository implements OrdersRepositoryInterface {
     public function getOrders(){
-        return Orders::select('*')->join('contacts','contact_id','id')->take(10)->get();
+        return Order::select('*')->join('contacts','contact_id','id')->take(10)->get();
     }
 
     public function searchOrdersByContactName(string $search){
         $loweredString = strtolower($search);
-        return Orders::select('*')->join('contacts','contact_id','id')->whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();
+        return Order::select('*')->join('contacts','contact_id','id')->whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();
     }
 
     public function getOrderById(int $id){
-        return Orders::select('*')->where('order_id','=',$id)->join('contacts','contact_id','id')->get();
+        return Order::select('*')->where('order_id','=',$id)->join('contacts','contact_id','id')->get();
     }
 
     /*public function deleteOrderById(int $id){

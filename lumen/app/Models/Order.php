@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Contacts;
 
-class Orders extends Model{
+class Order extends Model{
     public $timestamps = false;
     /*protected $attributes = [
         'deleted' => false
@@ -13,6 +13,6 @@ class Orders extends Model{
     protected $primaryKey = 'order_id';
     public function contact()
     {
-        return $this->belongsTo(Contacts::class,'contact_id');
+        return $this->belongsTo(Contact::class,'contact_id');
     }
 }
