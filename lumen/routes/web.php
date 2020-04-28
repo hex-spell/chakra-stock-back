@@ -25,6 +25,7 @@ $router->group(['prefix'=>'users'],function() use ($router){
     $router->get('/',['middleware'=>'jwt.auth','uses'=>'UserController@getUsers']);
     $router->post('/', 'UserController@addUser');
     $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UserController@updateUserName']);
+    $router->put('/updatepassword',['middleware'=>'jwt.auth', 'uses'=>'UserController@updateUserPassword']);
     $router->delete('/', 'UserController@deleteUser');
 });
 

@@ -22,6 +22,8 @@ class UserController extends Controller
 
     private $validateUserName = ['name'=>'required|string|between:4,30'];
 
+    private $validateUserPassword = ['name'=>'required|string|between:4,30'];
+
     private $validateAddUser = ['name'=>'required|string|between:4,30','email'=>'required|email|between:4,30|unique:users,email','password'=>'required|string|between:4,30'];
 
     public function getUsers(){
@@ -41,6 +43,14 @@ class UserController extends Controller
         $name = $this->request->json()->get('name');
         $User = User::find($this->request->auth->id);
         $User->name = $name;
+        return $User->save();
+    }
+
+    public function updateUserPassword(){
+        $this->validate($this->request,$this->validateUserPassword);
+        $password = $this->request->json()->get('password');
+        $User = User::find($this->request->auth->id);
+        $User->password = app('hash')->make($password);;
         return $User->save();
     }
 
