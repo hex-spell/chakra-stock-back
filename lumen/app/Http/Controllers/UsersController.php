@@ -33,6 +33,10 @@ class UsersController extends Controller
         return User::all();
     }
 
+    public function getUserByID(int $id){
+        return User::find($id);
+    }
+
     public function addUser(){
         $this->validate($this->request,$this->validateAddUser);
         $name = $this->request->json()->get('name');

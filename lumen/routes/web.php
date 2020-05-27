@@ -23,6 +23,7 @@ $router->post('/login', 'AuthController@authenticate');
 
 $router->group(['prefix'=>'users'],function() use ($router){
     $router->get('/',['middleware'=>'jwt.auth','uses'=>'UsersController@getUsers']);
+    $router->get('/{id}',['middleware'=>'jwt.auth','uses'=>'UsersController@getUserByID']);
     $router->post('/', 'UsersController@addUser');
     $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserName']);
     $router->put('/updatepassword',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserPassword']);
