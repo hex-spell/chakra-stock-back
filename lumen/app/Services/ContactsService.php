@@ -20,9 +20,9 @@ class ContactsService implements ContactsServiceInterface
         $this->repo = $repo;
     }
 
-    public function getContacts()
+    public function getContacts(int $offset,string $search,string $role)
     {
-        return $this->repo->getContacts();
+        return $this->repo->getContacts($offset,$search,$role);
     }
 
     public function searchContacts(string $search)

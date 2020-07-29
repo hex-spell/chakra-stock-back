@@ -24,8 +24,15 @@ class ContactsController extends Controller
         $this->service = $service;
     }
 
-    public function getContacts(){
-        return $this->service->getContacts();
+    //NO OLVIDARME DE AGREGAR EL PARAMETRO DE ORDENAR
+    public function getContacts(Request $request){
+        //saca los 3 parametros de la url
+        $offset = $request->get('offset') ? $request->get('offset') : 0;
+        $search = $request->get('search') ? $request->get('search') : '';
+        //role es 'c' o 'p', clientes o proveedores respectivamente
+        //por default quiero que devuelva clientes
+        $role = $request->get('role') ? $request->get('role') : 'c';
+        return $this->service->getContacts($offset,$search,$role);
     }
 
     public function searchContacts(string $search){
