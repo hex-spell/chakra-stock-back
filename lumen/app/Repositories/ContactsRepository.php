@@ -21,8 +21,8 @@ class ContactsRepository implements ContactsRepositoryInterface {
         return Contact::destroy($id);
     }
 
-    public function postContact(string $name, string $phone){
-        return Contact::create(array('name'=>$name,'phone'=>$phone));
+    public function postContact(string $name, string $phone, string $role, float $money, string $address){
+        return Contact::create(array('name'=>$name,'phone'=>$phone,'role'=>$role,'money'=>$money,'address'=>$address));
     }
 
     public function updateContact(string $name, string $phone, int $id){

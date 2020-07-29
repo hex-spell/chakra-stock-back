@@ -20,27 +20,33 @@ class ContactsService implements ContactsServiceInterface
         $this->repo = $repo;
     }
 
-    public function getContacts(){
+    public function getContacts()
+    {
         return $this->repo->getContacts();
     }
 
-    public function searchContacts(string $search){
+    public function searchContacts(string $search)
+    {
         return $this->repo->searchContacts($search);
     }
 
-    public function getContactById(int $id){
+    public function getContactById(int $id)
+    {
         return $this->repo->getContactById($id);
     }
 
-    public function deleteContactById(int $id){
+    public function deleteContactById(int $id)
+    {
         return $this->repo->deleteContactById($id);
     }
 
-    public function postContact(string $name, string $phone){
-        return $this->repo->postContact($name,$phone);
+    public function postContact(string $name, string $phone, string $role, float $money, string $address)
+    {
+        return $this->repo->postContact($name, $phone, $role, $money, $address);
     }
 
-    public function updateContact(string $name, string $phone, int $id){
-        return $this->repo->updateContact($name,$phone,$id);
+    public function updateContact(string $name, string $phone, int $id)
+    {
+        return $this->repo->updateContact($name, $phone, $id);
     }
 }

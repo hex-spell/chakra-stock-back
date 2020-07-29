@@ -1,80 +1,111 @@
-CREATE TABLE Clientes
+CREATE TABLE contact
 (
-  Fecha_de_carga DATE NOT NULL,
-  Eliminado? INT NOT NULL,
-  Dirección VARCHAR(255) NOT NULL,
-  cliente_id INT NOT NULL,
-  PRIMARY KEY (cliente_id)
+  created_at DATE NOT NULL,
+  deleted_at DATE,
+  address VARCHAR(30) NOT NULL,
+  contact_id INT NOT NULL AUTO_INCREMENT,
+  money FLOAT NOT NULL,
+  name VARCHAR(30) NOT NULL,
+  role CHAR(1) NOT NULL,
+  phone VARCHAR(30) NOT NULL,
+  updated_at DATE NOT NULL,
+  PRIMARY KEY (contact_id)
 );
 
-CREATE TABLE Pedidos
+CREATE TABLE orders
 (
-  Descripción VARCHAR(255) NOT NULL,
-  Suma_total INT NOT NULL,
-  Fecha_de_carga DATE NOT NULL,
-  Entregado? INT NOT NULL,
-  pedido_id INT NOT NULL,
-  cliente_id INT,
-  PRIMARY KEY (pedido_id),
-  FOREIGN KEY (cliente_id) REFERENCES Clientes(cliente_id)
+  created_at DATE NOT NULL,
+  order_id INT NOT NULL AUTO_INCREMENT,
+  completed INT NOT NULL,
+  type CHAR(1) NOT NULL,
+  updated_at DATE NOT NULL,
+  deleted_at DATE,
+  contact_id INT NOT NULL,
+  PRIMARY KEY (order_id),
+  FOREIGN KEY (contact_id) REFERENCES contact(contact_id)
 );
 
-CREATE TABLE Gastos
+CREATE TABLE expenses
 (
-  Descripcion VARCHAR(255) NOT NULL,
-  Suma_total INT NOT NULL,
-  Fecha_de_carga DATE NOT NULL,
-  gasto_id INT NOT NULL,
-  PRIMARY KEY (gasto_id)
+  description VARCHAR(30),
+  sum FLOAT NOT NULL,
+  created_at DATE NOT NULL,
+  expense_id INT NOT NULL AUTO_INCREMENT,
+  updated_at DATE NOT NULL,
+  deleted_at DATE,
+  PRIMARY KEY (expense_id)
 );
 
-CREATE TABLE Categorías
+CREATE TABLE product_categories
 (
-  Nombre VARCHAR(255) NOT NULL,
-  categoria_id INT NOT NULL,
-  PRIMARY KEY (categoria_id)
+  name VARCHAR(30) NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (category_id)
 );
 
-CREATE TABLE Pagos
+CREATE TABLE transactions
 (
-  Fecha_de_carga DATE NOT NULL,
-  Suma INT NOT NULL,
-  pago_id INT NOT NULL,
-  cliente_id INT,
-  pedido_id INT NOT NULL,
-  PRIMARY KEY (pago_id),
-  FOREIGN KEY (cliente_id) REFERENCES Clientes(cliente_id),
-  FOREIGN KEY (pedido_id) REFERENCES Pedidos(pedido_id)
+  created_at DATE NOT NULL,
+  sum FLOAT NOT NULL,
+  transaction_id INT NOT NULL AUTO_INCREMENT,
+  updated_at DATE NOT NULL,
+  contact_id INT NOT NULL,
+  order_id INT NOT NULL,
+  PRIMARY KEY (transaction_id),
+  FOREIGN KEY (contact_id) REFERENCES contact(contact_id),
+  FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
-CREATE TABLE Historial_de_productos
+CREATE TABLE product_history
 (
-  Fecha_de_carga DATE NOT NULL,
-  Nombre VARCHAR(255) NOT NULL,
-  Precio INT NOT NULL,
-  producto_historico_id INT NOT NULL,
-  PRIMARY KEY (producto_historico_id)
+  created_at DATE NOT NULL,
+  name VARCHAR(30) NOT NULL,
+  sell_price FLOAT NOT NULL,
+  buy_price FLOAT NOT NULL,
+  product_history_id INT NOT NULL AUTO_INCREMENT,
+  updated_at DATE NOT NULL,
+  PRIMARY KEY (product_history_id)
 );
 
-CREATE TABLE Productos
+CREATE TABLE expense_categories
 (
-  Stock INT NOT NULL,
-  Eliminado? INT NOT NULL,
-  producto_id INT NOT NULL,
-  producto_historico_id INT NOT NULL,
-  categoria_id INT NOT NULL,
-  PRIMARY KEY (producto_id, producto_historico_id),
-  FOREIGN KEY (producto_historico_id) REFERENCES Historial_de_productos(producto_historico_id),
-  FOREIGN KEY (categoria_id) REFERENCES Categorías(categoria_id)
+  name VARCHAR(30) NOT NULL,
+  category_id INT NOT NULL AUTO_INCREMENT,
+  expense_id INT NOT NULL,
+  PRIMARY KEY (category_id),
+  FOREIGN KEY (expense_id) REFERENCES expenses(expense_id)
 );
 
-CREATE TABLE Pedidos_Productos
+CREATE TABLE users
 (
-  Cantidad INT NOT NULL,
-  pedido_id INT NOT NULL,
-  producto_id INT NOT NULL,
-  producto_historico_id INT NOT NULL,
-  PRIMARY KEY (pedido_id, producto_id, producto_historico_id),
-  FOREIGN KEY (pedido_id) REFERENCES Pedidos(pedido_id),
-  FOREIGN KEY (producto_id, producto_historico_id) REFERENCES Productos(producto_id, producto_historico_id)
+  user_id INT NOT NULL AUTO_INCREMENT,
+  password VARCHAR(60) NOT NULL,
+  email VARCHAR(60) NOT NULL,
+  name CHAR(60) NOT NULL,
+  PRIMARY KEY (user_id),
+  UNIQUE (email)
+);
+
+CREATE TABLE products
+(
+  stock INT NOT NULL,
+  deleted_at DATE,
+  product_id INT NOT NULL AUTO_INCREMENT,
+  product_history_id INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (product_id, product_history_id),
+  FOREIGN KEY (product_history_id) REFERENCES product_history(product_history_id),
+  FOREIGN KEY (category_id) REFERENCES product_categories(category_id)
+);
+
+CREATE TABLE order_products
+(
+  ammount INT NOT NULL,
+  delivered INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  producto_history_id INT NOT NULL,
+  PRIMARY KEY (order_id, product_id, producto_history_id),
+  FOREIGN KEY (order_id) REFERENCES orders(order_id),
+  FOREIGN KEY (product_id, producto_history_id) REFERENCES products(product_id, product_history_id)
 );

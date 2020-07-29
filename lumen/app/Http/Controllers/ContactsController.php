@@ -17,7 +17,7 @@ class ContactsController extends Controller
 
     private $validateUpdateContact = ['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts'];
 
-    private $validatePostContact = ['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone'];
+    private $validatePostContact = ['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','address'=>'required|string|between:4,30','role'=>'required|string|size:1','money'=>'required|numeric'];
 
     public function __construct(ContactsServiceInterface $service)
     {
@@ -44,7 +44,10 @@ class ContactsController extends Controller
         $this->validate($request, $this->validatePostContact);
         $name = $request->json()->get('name');
         $phone = $request->json()->get('phone');
-        return $this->service->postContact($name,$phone);
+        $address = $request->json()->get('address');
+        $role = $request->json()->get('role');
+        $money = $request->json()->get('money');
+        return $this->service->postContact($name, $phone, $role, $money, $address);
     }
 
     public function updateContact(Request $request){

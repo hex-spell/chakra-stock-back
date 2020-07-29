@@ -1,5 +1,7 @@
 # lumen-rest
 this api was made to learn all lumen's features
+## Start server using 
+`php -S 192.168.0.66:4000 -t public`
 ## endpoints
 
 ### Users 
