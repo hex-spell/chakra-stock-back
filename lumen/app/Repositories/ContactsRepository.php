@@ -4,11 +4,13 @@ use App\Interfaces\Repositories\ContactsRepositoryInterface;
 use App\Models\Contact;
 
 class ContactsRepository implements ContactsRepositoryInterface {
-    public function getContacts(int $offset,string $search,string $role){
+    public function getContacts(int $offset,string $search,string $role,string $order){
         //los paso a minusculas para asegurarme de no perder resultados
+        //tengo que hacer un middleware para hacer todo esto minusculas
         $loweredSearch = strtolower($search);
         $loweredRole = strtolower($role);
-        return Contact::whereRaw('lower(name) like (?) and lower(role) = (?)',["%{$loweredSearch}%","{$loweredRole}"])->take(10)->skip($offset)->get();
+        $loweredOrder = strtolower($order);
+        return Contact::whereRaw('lower(name) like (?) and lower(role) = (?)',["%{$loweredSearch}%","{$loweredRole}"])->take(10)->skip($offset)->orderBy($loweredOrder)->get();
     }
 
     public function searchContacts(string $search){
