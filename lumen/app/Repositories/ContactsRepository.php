@@ -10,7 +10,8 @@ class ContactsRepository implements ContactsRepositoryInterface {
         $loweredSearch = strtolower($search);
         $loweredRole = strtolower($role);
         $loweredOrder = strtolower($order);
-        return Contact::whereRaw('lower(name) like (?) and lower(role) = (?)',["%{$loweredSearch}%","{$loweredRole}"])->take(10)->skip($offset)->orderBy($loweredOrder)->get();
+        $query = Contact::whereRaw('lower(name) like (?) and lower(role) = (?)',["%{$loweredSearch}%","{$loweredRole}"])->take(10)->skip($offset)->orderBy($loweredOrder);
+        return array('contacts'=>$query->get(),'count'=>$query->count());
     }
 
     public function searchContacts(string $search){

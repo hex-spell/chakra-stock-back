@@ -26,13 +26,15 @@ class ContactsController extends Controller
 
     //NO OLVIDARME DE AGREGAR EL PARAMETRO DE ORDENAR
     public function getContacts(Request $request){
-        //saca los 3 parametros de la url
+        //saca los 4 parametros de la url
         $offset = $request->get('offset') ? $request->get('offset') : 0;
         $search = $request->get('search') ? $request->get('search') : '';
         //role es 'c' o 'p', clientes o proveedores respectivamente
         //por default quiero que devuelva clientes
+        //deberia buscar una forma de validar 'role' para que solamente pueda ser 'c' o 'p'
         $role = $request->get('role') ? $request->get('role') : 'c';
         $order = $request->get('order') ? $request->get('order') : 'name';
+        //deberia preguntarle a alguien si esto se puede refactorizar, son demasiados parametros para una sola funcion
         return $this->service->getContacts($offset,$search,$role,$order);
     }
 
