@@ -32,7 +32,7 @@ class ContactsController extends Controller
         //role es 'c' o 'p', clientes o proveedores respectivamente
         //por default quiero que devuelva clientes
         $role = $request->get('role') ? $request->get('role') : 'c';
-        $order = $request->get('order') ? $request->get('order') : 'c';
+        $order = $request->get('order') ? $request->get('order') : 'name';
         return $this->service->getContacts($offset,$search,$role,$order);
     }
 
