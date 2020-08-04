@@ -31,10 +31,12 @@ class ContactsRepository implements ContactsRepositoryInterface {
         return Contact::create(array('name'=>$name,'phone'=>$phone,'role'=>$role,'money'=>$money,'address'=>$address));
     }
 
-    public function updateContact(string $name, string $phone, int $id){
+    public function updateContact(string $name,string $phone,string $address,float $money,int $id){
         $Contact = Contact::find($id);
         $Contact->name = $name;
         $Contact->phone = $phone;
+        $Contact->address = $address;
+        $Contact->money = $money;
         return $Contact->save();
     }
 }

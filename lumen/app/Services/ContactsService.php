@@ -45,8 +45,8 @@ class ContactsService implements ContactsServiceInterface
         return $this->repo->postContact($name, $phone, $role, $money, $address);
     }
 
-    public function updateContact(string $name, string $phone, int $id)
+    public function updateContact(string $name,string $phone,string $address,float $money,int $id)
     {
-        return $this->repo->updateContact($name, $phone, $id);
+        return $this->repo->updateContact($name,$phone,$address,$money,$id);
     }
 }
