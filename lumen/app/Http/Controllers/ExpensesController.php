@@ -72,7 +72,7 @@ class ExpensesController extends Controller
             [
                 'description' => 'required|string|between:4,30',
                 'category_id' => 'required|integer|exists:expense_categories,category_id',
-                'expense_id' => 'required|integer|exists:expense,expense_id',
+                'expense_id' => 'required|integer|exists:expenses,expense_id',
                 'sum' => 'required|numeric',
             ]
         );

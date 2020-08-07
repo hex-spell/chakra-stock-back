@@ -49,11 +49,11 @@ class ExpensesRepository implements ExpensesRepositoryInterface
 
   public function updateExpense(string $description, float $sum, int $expense_id, int $category_id)
   {
-    $Expense = Expense::find($expense_id);
+    $Expense = Expense::findOrFail($expense_id);
     $Expense->description = $description;
     $Expense->sum = $sum;
     $Expense->category_id = $category_id;
-    return $Expense->save();
+    return $Expense->save(); 
   }
 
   public function postExpenseCategory(string $name)
