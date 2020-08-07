@@ -39,6 +39,15 @@ $router->group(['prefix'=>'contacts','middleware'=>'jwt.auth'],function() use ($
     $router->put('/', 'ContactsController@updateContact');
 });
 
+$router->group(['prefix'=>'expenses','middleware'=>'jwt.auth'],function() use ($router){
+    $router->get('/', 'ExpensesController@getExpenses');
+    $router->get('/search/{search}', 'ExpensesController@searchExpenses');
+    $router->get('/id/{id:[0-9]+}', 'ExpensesController@getContactById');
+    $router->delete('/id/{id:[0-9]+}', 'ExpensesController@deleteContactById');
+    $router->post('/', 'ExpensesController@postContact');
+    $router->put('/', 'ExpensesController@updateContact');
+});
+
 $router->group(['prefix'=>'orders','middleware'=>'jwt.auth'],function() use ($router){
     $router->get('/', 'OrdersController@getOrders');
     $router->get('/searchbycontactname/{search}', 'OrdersController@searchOrdersByContactName');

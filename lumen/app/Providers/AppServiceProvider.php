@@ -7,6 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\Services\OrdersServiceInterface;
 use App\Services\ContactsService;
 use App\Services\OrdersService;
+use App\Services\ExpensesService;
+use App\Interfaces\Services\ExpensesServiceInterface;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ContactsServiceInterface::class, ContactsService::class);
         $this->app->bind(OrdersServiceInterface::class, OrdersService::class);
+        $this->app->bind(ExpensesServiceInterface::class, ExpensesService::class);
     }
 }

@@ -23,6 +23,8 @@ class Contact extends Model
 
     use SoftDeletes;
 
+    public $timestamps = true;
+    
     protected $dates = ['deleted_at'];
 
 

@@ -1,25 +1,25 @@
 CREATE TABLE contact
 (
-  created_at DATE NOT NULL,
-  deleted_at DATE,
+  created_at TIMESTAMP NOT NULL,
+  deleted_at TIMESTAMP,
   address VARCHAR(30) NOT NULL,
   contact_id INT NOT NULL AUTO_INCREMENT,
   money FLOAT NOT NULL,
   name VARCHAR(30) NOT NULL,
   role CHAR(1) NOT NULL,
   phone VARCHAR(30) NOT NULL,
-  updated_at DATE NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
   PRIMARY KEY (contact_id)
 );
 
 CREATE TABLE orders
 (
-  created_at DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   order_id INT NOT NULL AUTO_INCREMENT,
   completed INT NOT NULL,
   type CHAR(1) NOT NULL,
-  updated_at DATE NOT NULL,
-  deleted_at DATE,
+  updated_at TIMESTAMP NOT NULL,
+  deleted_at TIMESTAMP,
   contact_id INT NOT NULL,
   PRIMARY KEY (order_id),
   FOREIGN KEY (contact_id) REFERENCES contact(contact_id)
@@ -29,11 +29,13 @@ CREATE TABLE expenses
 (
   description VARCHAR(30),
   sum FLOAT NOT NULL,
-  created_at DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   expense_id INT NOT NULL AUTO_INCREMENT,
-  updated_at DATE NOT NULL,
-  deleted_at DATE,
+  category_id INT NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
+  deleted_at TIMESTAMP,
   PRIMARY KEY (expense_id)
+  FOREIGN KEY (category_id) REFERENCES expense_categories(category_id)
 );
 
 CREATE TABLE product_categories
@@ -45,10 +47,10 @@ CREATE TABLE product_categories
 
 CREATE TABLE transactions
 (
-  created_at DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   sum FLOAT NOT NULL,
   transaction_id INT NOT NULL AUTO_INCREMENT,
-  updated_at DATE NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
   contact_id INT NOT NULL,
   order_id INT NOT NULL,
   PRIMARY KEY (transaction_id),
@@ -58,12 +60,12 @@ CREATE TABLE transactions
 
 CREATE TABLE product_history
 (
-  created_at DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   name VARCHAR(30) NOT NULL,
   sell_price FLOAT NOT NULL,
   buy_price FLOAT NOT NULL,
   product_history_id INT NOT NULL AUTO_INCREMENT,
-  updated_at DATE NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
   PRIMARY KEY (product_history_id)
 );
 
@@ -71,9 +73,7 @@ CREATE TABLE expense_categories
 (
   name VARCHAR(30) NOT NULL,
   category_id INT NOT NULL AUTO_INCREMENT,
-  expense_id INT NOT NULL,
-  PRIMARY KEY (category_id),
-  FOREIGN KEY (expense_id) REFERENCES expenses(expense_id)
+  PRIMARY KEY (category_id)
 );
 
 CREATE TABLE users
@@ -89,7 +89,7 @@ CREATE TABLE users
 CREATE TABLE products
 (
   stock INT NOT NULL,
-  deleted_at DATE,
+  deleted_at TIMESTAMP,
   product_id INT NOT NULL AUTO_INCREMENT,
   product_history_id INT NOT NULL,
   category_id INT NOT NULL,

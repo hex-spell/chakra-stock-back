@@ -11,7 +11,10 @@ class ContactsRepository implements ContactsRepositoryInterface {
         $loweredRole = strtolower($role);
         $loweredOrder = strtolower($order);
         $query = Contact::whereRaw('lower(name) like (?) and lower(role) = (?)',["%{$loweredSearch}%","{$loweredRole}"]);
-        return array('contacts'=>$query->take(10)->skip($offset)->orderBy($loweredOrder)->get(),'count'=>$query->count());
+        //si el orden es por fecha, quiero que sea descendiente
+        $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder,'desc') : $query->orderBy($loweredOrder);
+        $count = $query->count();
+        return array('contacts'=>$orderedQuery->skip($offset)->take(10)->get(),'count'=>$count);
     }
 
     public function searchContacts(string $search){

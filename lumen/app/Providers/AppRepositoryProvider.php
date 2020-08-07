@@ -9,6 +9,8 @@ use App\Interfaces\Repositories\OrdersRepositoryInterface;
 use App\Repositories\OrdersRepository;
 use App\Interfaces\Repositories\UsersRepositoryInterface;
 use App\Repositories\UsersRepository;
+use App\Interfaces\Repositories\ExpensesRepositoryInterface;
+use App\Repositories\ExpensesRepository;
 
 class AppRepositoryProvider extends ServiceProvider
 {
@@ -22,5 +24,6 @@ class AppRepositoryProvider extends ServiceProvider
         $this->app->bind(ContactsRepositoryInterface::class, ContactsRepository::class);
         $this->app->bind(OrdersRepositoryInterface::class, OrdersRepository::class);
         $this->app->bind(UsersRepositoryInterface::class, UsersRepository::class);
+        $this->app->bind(ExpensesRepositoryInterface::class, ExpensesRepository::class);
     }
 }
