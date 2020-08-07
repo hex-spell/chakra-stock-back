@@ -32,13 +32,13 @@ class Expense extends Model
     /**
      * @var array
      */
-    protected $fillable = ['description', 'sum'];
+    protected $fillable = ['description', 'sum','category_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function expenseCategory()
     {
-        return $this->belongsTo('App\ExpenseCategory', 'category_id', 'category_id');
+        return $this->belongsTo('App\Models\ExpenseCategory', 'category_id', 'category_id');
     }
 }

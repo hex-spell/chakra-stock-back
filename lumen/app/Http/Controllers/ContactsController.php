@@ -77,7 +77,7 @@ class ContactsController extends Controller
             [
                 'name' => 'required|string|between:4,30',
                 'address' => 'required|string|between:4,30',
-                'contact_id' => 'required|integer',
+                'contact_id' => 'required|integer|exists:contacts,contact_id',
                 'money' => 'required|numeric',
                 'phone' => 'required|numeric|unique:contacts,phone,'
                     . $request->get('contact_id') .

@@ -1,13 +1,70 @@
 <?php
+
 namespace App\Repositories;
+
 use App\Interfaces\Repositories\ExpensesRepositoryInterface;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 
-class ExpensesRepository implements ExpensesRepositoryInterface {
-    public function getExpenses(){return "hello";}
-    public function searchExpenses(){return "hello";}
-    public function getExpenseById(){return "hello";}
-    public function deleteExpenseById(){return "hello";}
-    public function postExpense(){return "hello";}
-    public function updateExpense(){return "hello";}
+class ExpensesRepository implements ExpensesRepositoryInterface
+{
+  public function getExpenses(string $search, string $order, int $category_id, int $offset)
+  {
+    $loweredSearch = strtolower($search);
+    $loweredOrder = strtolower($order);
+    //argumentos de la consulta
+    $whereRaw = array('lower(description) like (?)', ["%{$loweredSearch}%"]);
+    //si el category_id es 0 o nulo, se busca en todas las categorias
+    $query = $category_id ? ExpenseCategory::findOrFail($category_id)->expenses()->whereRaw($whereRaw[0], $whereRaw[1])
+      : Expense::whereRaw($whereRaw[0], $whereRaw[1]);
+    //si el orden es por fecha, se cambia la orientacion
+    $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder, 'desc') : $query->orderBy($loweredOrder);
+    $count = $query->count();
+    return array('expenses' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count);
+  }
+
+  public function getExpenseCategories()
+  {
+    return ExpenseCategory::all();
+  }
+
+
+  public function searchExpenses()
+  {
+    return "hello";
+  }
+  public function getExpenseById()
+  {
+    return "hello";
+  }
+  public function deleteExpenseById()
+  {
+    return "hello";
+  }
+
+  public function postExpense(string $description, float $sum, int $category_id)
+  {
+    return Expense::create(array('description' => $description, 'sum' => $sum, 'category_id' => $category_id));
+  }
+
+  public function updateExpense(string $description, float $sum, int $expense_id, int $category_id)
+  {
+    $Expense = Expense::find($expense_id);
+    $Expense->description = $description;
+    $Expense->sum = $sum;
+    $Expense->category_id = $category_id;
+    return $Expense->save();
+  }
+
+  public function postExpenseCategory(string $name)
+  {
+    return ExpenseCategory::create(array('name' => $name));
+  }
+
+  public function updateExpenseCategory(string $name, int $category_id)
+  {
+    $Category = ExpenseCategory::find($category_id);
+    $Category->name = $name;
+    return $Category->save();
+  }
 }
