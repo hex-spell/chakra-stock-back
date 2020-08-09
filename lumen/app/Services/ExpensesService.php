@@ -41,9 +41,9 @@ class ExpensesService implements ExpensesServiceInterface
         return $this->repo->getExpenseById();
     }
 
-    public function deleteExpenseById()
+    public function deleteExpenseById(int $expense_id)
     {
-        return $this->repo->deleteExpenseById();
+        return $this->repo->deleteExpenseById($expense_id);
     }
 
     public function postExpense(string $description, float $sum, int $category_id)

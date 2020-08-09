@@ -8,7 +8,7 @@ interface ExpensesServiceInterface
     public function getExpenseCategories();
     public function searchExpenses();
     public function getExpenseById();
-    public function deleteExpenseById();
+    public function deleteExpenseById(int $expense_id);
     public function postExpense(string $description, float $sum, int $category_id);
     public function updateExpense(string $description, float $sum, int $expense_id, int $category_id);
     public function postExpenseCategory(string $name);

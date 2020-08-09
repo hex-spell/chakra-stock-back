@@ -37,9 +37,9 @@ class ExpensesRepository implements ExpensesRepositoryInterface
   {
     return "hello";
   }
-  public function deleteExpenseById()
+  public function deleteExpenseById(int $expense_id)
   {
-    return "hello";
+    return Expense::destroy($expense_id);
   }
 
   public function postExpense(string $description, float $sum, int $category_id)

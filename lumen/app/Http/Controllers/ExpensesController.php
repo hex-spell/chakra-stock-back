@@ -44,9 +44,18 @@ class ExpensesController extends Controller
         return $this->service->getExpenseById();
     }
 
-    public function deleteExpenseById()
+    public function deleteExpenseById(Request $request)
     {
-        return $this->service->deleteExpenseById();
+        {
+            $this->validate(
+                $request,
+                [
+                    'expense_id' => 'required|numeric|exists:expenses,expense_id'
+                ]
+            );
+            $expense_id = $request->get('expense_id');
+            return $this->service->deleteExpenseById($expense_id);
+        }
     }
 
     public function postExpense(Request $request)
