@@ -13,4 +13,5 @@ interface ExpensesServiceInterface
     public function updateExpense(string $description, float $sum, int $expense_id, int $category_id);
     public function postExpenseCategory(string $name);
     public function updateExpenseCategory(string $name, int $category_id);
+    public function deleteExpenseCategoryById(int $category_id);
 }

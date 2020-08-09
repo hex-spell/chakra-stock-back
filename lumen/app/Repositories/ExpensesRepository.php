@@ -67,4 +67,8 @@ class ExpensesRepository implements ExpensesRepositoryInterface
     $Category->name = $name;
     return $Category->save();
   }
+
+  public function deleteExpenseCategoryById(int $category_id){
+    return ExpenseCategory::destroy($category_id);
+  }
 }

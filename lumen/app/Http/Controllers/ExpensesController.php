@@ -103,11 +103,24 @@ class ExpensesController extends Controller
                 'name' => 'required|string|between:4,30|unique:expense_categories,name,'
                     . $request->get('category_id') .
                     ',category_id',
-                'id' => 'required|numeric|exists:expense_categories,category_id'
+                'category_id' => 'required|numeric|exists:expense_categories,category_id'
             ]
         );
         $name = $request->get('name');
         $category_id = $request->get('category_id');
-        return $this->repo->updateExpenseCategory($name, $category_id);
+        return $this->service->updateExpenseCategory($name, $category_id);
+    }
+
+    public function deleteExpenseCategoryById(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'category_id' => 'required|numeric|exists:expense_categories,category_id'
+            ]
+        );
+        $category_id = $request->get('category_id');
+        return $this->service->deleteExpenseCategoryById($category_id);
     }
 }
+

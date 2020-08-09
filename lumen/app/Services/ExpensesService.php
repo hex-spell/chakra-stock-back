@@ -65,4 +65,9 @@ class ExpensesService implements ExpensesServiceInterface
     {
         return $this->repo->updateExpenseCategory($name, $category_id);
     }
+
+    public function deleteExpenseCategoryById(int $category_id)
+    {
+        return $this->repo->deleteExpenseCategoryById($category_id);
+    }
 }

@@ -49,6 +49,7 @@ $router->group(['prefix'=>'expenses','middleware'=>'jwt.auth'],function() use ($
     $router->put('/', 'ExpensesController@updateExpense');
     $router->post('/categories', 'ExpensesController@postExpenseCategory');
     $router->put('/categories', 'ExpensesController@updateExpenseCategory');
+    $router->delete('/categories', 'ExpensesController@deleteExpenseCategoryById');
 });
 
 $router->group(['prefix'=>'orders','middleware'=>'jwt.auth'],function() use ($router){
