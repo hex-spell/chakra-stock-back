@@ -52,6 +52,20 @@ $router->group(['prefix'=>'expenses','middleware'=>'jwt.auth'],function() use ($
     $router->delete('/categories', 'ExpensesController@deleteExpenseCategoryById');
 });
 
+$router->group(['prefix'=>'products','middleware'=>'jwt.auth'],function() use ($router){
+    $router->get('/', 'ProductsController@getProducts');
+    $router->get('/categories', 'ProductsController@getProductCategories');
+    $router->get('/search/{search}', 'ProductsController@searchProducts');
+    $router->get('/id/{id:[0-9]+}', 'ProductsController@getProductById');
+    $router->delete('/', 'ProductsController@deleteProductById');
+    $router->post('/', 'ProductsController@postProduct');
+    $router->put('/', 'ProductsController@updateProduct');
+    $router->post('/categories', 'ProductsController@postProductCategory');
+    $router->put('/categories', 'ProductsController@updateProductCategory');
+    $router->delete('/categories', 'ProductsController@deleteProductCategoryById');
+});
+
+
 $router->group(['prefix'=>'orders','middleware'=>'jwt.auth'],function() use ($router){
     $router->get('/', 'OrdersController@getOrders');
     $router->get('/searchbycontactname/{search}', 'OrdersController@searchOrdersByContactName');
