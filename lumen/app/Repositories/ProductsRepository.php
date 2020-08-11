@@ -11,7 +11,31 @@ class ProductsRepository implements ProductsRepositoryInterface
 {
   public function getProducts(string $search, string $order, int $category_id, int $offset)
   {
-    return "hello";
+    $loweredSearch = strtolower($search);
+    $loweredOrder = strtolower($order);
+    //argumentos de la consulta
+    $whereRaw = ['lower(name) like (?)', ["%{$loweredSearch}%"]];
+    //si el category_id es 0 o nulo, se busca en todas las categorias
+
+    $query = $category_id ? ProductCategory::findOrFail($category_id)->products()->with('current') :
+      Product::with('current');
+
+
+    $filteredQuery = $query->whereHas('current', function ($query) use ($whereRaw) {
+      return $query->whereRaw($whereRaw[0], $whereRaw[1]);
+    });
+
+    //si el orden es por fecha o por stock, se cambia la orientacion
+    $orderedQuery = $loweredOrder === 'updated_at' || $loweredOrder === 'stock' ?
+
+      $filteredQuery->orderBy($loweredOrder, 'desc') :
+
+      $filteredQuery->whereHas('current', function ($query) use ($loweredOrder) {
+        return $query->orderBy($loweredOrder);
+      });
+
+    $count = $filteredQuery->count();
+    return ['products' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
   }
   public function getProductCategories()
   {
@@ -27,7 +51,7 @@ class ProductsRepository implements ProductsRepositoryInterface
   }
   public function deleteProductById(int $product_id)
   {
-    return "hello";
+    return Product::destroy($product_id);
   }
   public function postProduct(string $name, float $sell, float $buy, int $stock, int $category_id)
   {
