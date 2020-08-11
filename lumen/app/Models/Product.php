@@ -20,7 +20,7 @@ class Product extends Model
     use SoftDeletes;
 
     public $timestamps = true;
-    
+
     protected $dates = ['deleted_at'];
 
     /**
@@ -29,11 +29,18 @@ class Product extends Model
     protected $fillable = ['category_id', 'stock'];
 
     /**
+     * The primary key for the model.
+     * 
+     * @var string
+     */
+    protected $primaryKey = 'product_id';
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function current()
     {
-        return $this->belongsTo('App\ProductHistory', 'product_history_id', 'product_history_id');
+        return $this->hasOne('App\Models\ProductHistory', 'product_history_id', 'product_history_id');
     }
 
     /**
@@ -49,6 +56,20 @@ class Product extends Model
      */
     public function productHistories()
     {
-        return $this->hasMany('App\ProductHistory', 'product_id', 'product_id');
+        return $this->hasMany('App\Models\ProductHistory', 'product_id', 'product_id');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($product) {
+            return $product->current()->update(['product_id' => $product->product_id]);
+        });
+    }
+
+    public function updateProduct(int $category_id, int $stock)
+    {
+        $this->category_id = $category_id;
+        $this->stock = $stock;
+        return $this->save();
     }
 }

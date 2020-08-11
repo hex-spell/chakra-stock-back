@@ -63,15 +63,19 @@ class ProductsController extends Controller
         $this->validate(
             $request,
             [
-                'description' => 'required|string|between:4,30',
+                'name' => 'required|string|between:4,30',
                 'category_id' => 'required|integer|exists:product_categories,category_id',
-                'sum' => 'required|numeric',
+                'sell' => 'required|numeric',
+                'buy' => 'required|numeric',
+                'stock' => 'numeric'
             ]
         );
-        $description = $request->get('description');
-        $sum = $request->get('sum');
+        $name = $request->get('name');
+        $sell = $request->get('sell');
+        $buy = $request->get('buy');
         $category_id = $request->get('category_id');
-        return $this->service->postProduct($description, $sum, $category_id);
+        $stock = $request->get('stock') ? $request->get('stock') : 0;
+        return $this->service->postProduct($name, $sell, $buy, $stock, $category_id);
     }
 
     public function updateProduct(Request $request)
@@ -79,17 +83,21 @@ class ProductsController extends Controller
         $this->validate(
             $request,
             [
-                'description' => 'required|string|between:4,30',
+                'name' => 'required|string|between:4,30',
                 'category_id' => 'required|integer|exists:product_categories,category_id',
                 'product_id' => 'required|integer|exists:products,product_id',
-                'sum' => 'required|numeric',
+                'sell' => 'required|numeric',
+                'buy' => 'required|numeric',
+                'stock' => 'numeric'
             ]
         );
-        $description = $request->get('description');
-        $sum = $request->get('sum');
+        $name = $request->get('name');
+        $sell = $request->get('sell');
+        $buy = $request->get('buy');
         $category_id = $request->get('category_id');
         $product_id = $request->get('product_id');
-        return $this->service->updateProduct($description, $sum, $product_id, $category_id);
+        $stock = $request->get('stock') ? $request->get('stock') : 0;
+        return $this->service->updateProduct($name, $sell, $buy, $stock, $product_id, $category_id);
     }
 
     public function postProductCategory(Request $request)

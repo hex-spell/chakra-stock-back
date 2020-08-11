@@ -11,7 +11,7 @@ use App\Services\ExpensesService;
 use App\Interfaces\Services\ExpensesServiceInterface;
 use App\Services\ProductsService;
 use App\Interfaces\Services\ProductsServiceInterface;
-
+use App\Models\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function register()
     {
         $this->app->bind(ContactsServiceInterface::class, ContactsService::class);

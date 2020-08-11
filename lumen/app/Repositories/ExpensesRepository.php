@@ -13,14 +13,14 @@ class ExpensesRepository implements ExpensesRepositoryInterface
     $loweredSearch = strtolower($search);
     $loweredOrder = strtolower($order);
     //argumentos de la consulta
-    $whereRaw = array('lower(description) like (?)', ["%{$loweredSearch}%"]);
+    $whereRaw = ['lower(description) like (?)', ["%{$loweredSearch}%"]];
     //si el category_id es 0 o nulo, se busca en todas las categorias
     $query = $category_id ? ExpenseCategory::findOrFail($category_id)->expenses()->whereRaw($whereRaw[0], $whereRaw[1])
       : Expense::whereRaw($whereRaw[0], $whereRaw[1]);
     //si el orden es por fecha, se cambia la orientacion
     $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder, 'desc') : $query->orderBy($loweredOrder);
     $count = $query->count();
-    return array('expenses' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count);
+    return ['expenses' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
   }
 
   public function getExpenseCategories()
@@ -44,7 +44,7 @@ class ExpensesRepository implements ExpensesRepositoryInterface
 
   public function postExpense(string $description, float $sum, int $category_id)
   {
-    return Expense::create(array('description' => $description, 'sum' => $sum, 'category_id' => $category_id));
+    return Expense::create(['description' => $description, 'sum' => $sum, 'category_id' => $category_id]);
   }
 
   public function updateExpense(string $description, float $sum, int $expense_id, int $category_id)
@@ -58,7 +58,7 @@ class ExpensesRepository implements ExpensesRepositoryInterface
 
   public function postExpenseCategory(string $name)
   {
-    return ExpenseCategory::create(array('name' => $name));
+    return ExpenseCategory::create(['name' => $name]);
   }
 
   public function updateExpenseCategory(string $name, int $category_id)

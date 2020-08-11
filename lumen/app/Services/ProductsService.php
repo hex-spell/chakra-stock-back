@@ -45,14 +45,14 @@ class ProductsService implements ProductsServiceInterface
         return $this->repo->deleteProductById($product_id);
     }
 
-    public function postProduct(string $description, float $sum, int $category_id)
+    public function postProduct(string $name, float $sell, float $buy, int $stock, int $category_id)
     {
-        return $this->repo->postProduct($description, $sum, $category_id);
+        return $this->repo->postProduct($name, $sell, $buy, $stock, $category_id);
     }
 
-    public function updateProduct(string $description, float $sum, int $product_id, int $category_id)
+    public function updateProduct(string $name, float $sell, float $buy, int $stock,int $product_id, int $category_id)
     {
-        return $this->repo->updateProduct($description, $sum, $product_id, $category_id);
+        return $this->repo->updateProduct($name, $sell, $buy, $stock, $product_id, $category_id);
     }
 
     public function postProductCategory(string $name)

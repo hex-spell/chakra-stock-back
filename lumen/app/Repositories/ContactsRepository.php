@@ -31,7 +31,7 @@ class ContactsRepository implements ContactsRepositoryInterface {
     }
 
     public function postContact(string $name, string $phone, string $role, float $money, string $address){
-        return Contact::create(array('name'=>$name,'phone'=>$phone,'role'=>$role,'money'=>$money,'address'=>$address));
+        return Contact::create(['name'=>$name,'phone'=>$phone,'role'=>$role,'money'=>$money,'address'=>$address]);
     }
 
     public function updateContact(string $name,string $phone,string $address,float $money,int $id){

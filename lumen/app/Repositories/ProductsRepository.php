@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\Repositories\ProductsRepositoryInterface;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductHistory;
 
 class ProductsRepository implements ProductsRepositoryInterface
 {
@@ -14,7 +15,7 @@ class ProductsRepository implements ProductsRepositoryInterface
   }
   public function getProductCategories()
   {
-    return "hello";
+    return ProductCategory::all();
   }
   public function searchProducts()
   {
@@ -28,24 +29,30 @@ class ProductsRepository implements ProductsRepositoryInterface
   {
     return "hello";
   }
-  public function postProduct(string $description, float $sum, int $category_id)
+  public function postProduct(string $name, float $sell, float $buy, int $stock, int $category_id)
   {
-    return "hello";
+    return ProductHistory::create(['name' => $name, 'sell_price' => $sell, 'buy_price' => $buy])->currentProduct()->create(['category_id' => $category_id, 'stock' => $stock]);
   }
-  public function updateProduct(string $description, float $sum, int $product_id, int $category_id)
+  public function updateProduct(string $name, float $sell, float $buy, int $stock, int $product_id, int $category_id)
   {
-    return "hello";
+    ProductHistory::create(['name' => $name, 'sell_price' => $sell, 'buy_price' => $buy, 'product_id' => $product_id]);
+    $Product = Product::find($product_id);
+    $Product->category_id = $category_id;
+    $Product->stock = $stock;
+    return $Product->save();
   }
   public function postProductCategory(string $name)
   {
-    return "hello";
+    return ProductCategory::create(['name' => $name]);
   }
   public function updateProductCategory(string $name, int $category_id)
   {
-    return "hello";
+    $Category = ProductCategory::find($category_id);
+    $Category->name = $name;
+    return $Category->save();
   }
   public function deleteProductCategoryById(int $category_id)
   {
-    return "hello";
+    return ProductCategory::destroy($category_id);
   }
 }

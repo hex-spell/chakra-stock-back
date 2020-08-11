@@ -48,7 +48,7 @@ class ProductHistory extends Model
      */
     public function parentProduct()
     {
-        return $this->belongsTo('App\Product', null, 'product_id');
+        return $this->belongsTo('App\Models\Product', 'product_id', 'product_id');
     }
 
     /**
@@ -56,6 +56,13 @@ class ProductHistory extends Model
      */
     public function currentProduct()
     {
-        return $this->hasOne('App\Product', 'product_history_id', 'product_history_id');
+        return $this->hasOne('App\Models\Product', 'product_history_id', 'product_history_id');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($ProductHistory) {
+            return $ProductHistory->parentProduct()->update(['product_history_id' => $ProductHistory->product_history_id]);
+        });
     }
 }
