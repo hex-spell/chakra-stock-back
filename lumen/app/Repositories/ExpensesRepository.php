@@ -20,12 +20,12 @@ class ExpensesRepository implements ExpensesRepositoryInterface
     //si el orden es por fecha, se cambia la orientacion
     $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder, 'desc') : $query->orderBy($loweredOrder);
     $count = $query->count();
-    return ['expenses' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
+    return ['result' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
   }
 
   public function getExpenseCategories()
   {
-    return ExpenseCategory::all();
+    return ['result'=>ExpenseCategory::all()];
   }
 
 

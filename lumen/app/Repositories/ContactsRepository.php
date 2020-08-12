@@ -14,7 +14,7 @@ class ContactsRepository implements ContactsRepositoryInterface {
         //si el orden es por fecha, quiero que sea descendiente
         $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder,'desc') : $query->orderBy($loweredOrder);
         $count = $query->count();
-        return array('contacts'=>$orderedQuery->skip($offset)->take(10)->get(),'count'=>$count);
+        return ['result'=>$orderedQuery->skip($offset)->take(10)->get(),'count'=>$count];
     }
 
     public function searchContacts(string $search){
