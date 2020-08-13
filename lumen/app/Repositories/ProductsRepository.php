@@ -35,11 +35,11 @@ class ProductsRepository implements ProductsRepositoryInterface
       });
 
     $count = $filteredQuery->count();
-    return ['products' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
+    return ['result' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
   }
   public function getProductCategories()
   {
-    return ProductCategory::all();
+    return ['result' => ProductCategory::all()];
   }
   public function searchProducts()
   {

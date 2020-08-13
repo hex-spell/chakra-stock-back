@@ -65,14 +65,14 @@ class ProductsController extends Controller
             [
                 'name' => 'required|string|between:4,30',
                 'category_id' => 'required|integer|exists:product_categories,category_id',
-                'sell' => 'required|numeric',
-                'buy' => 'required|numeric',
+                'sell_price' => 'required|numeric',
+                'buy_price' => 'required|numeric',
                 'stock' => 'numeric'
             ]
         );
         $name = $request->get('name');
-        $sell = $request->get('sell');
-        $buy = $request->get('buy');
+        $sell = $request->get('sell_price');
+        $buy = $request->get('buy_price');
         $category_id = $request->get('category_id');
         $stock = $request->get('stock') ? $request->get('stock') : 0;
         return $this->service->postProduct($name, $sell, $buy, $stock, $category_id);
@@ -86,14 +86,14 @@ class ProductsController extends Controller
                 'name' => 'required|string|between:4,30',
                 'category_id' => 'required|integer|exists:product_categories,category_id',
                 'product_id' => 'required|integer|exists:products,product_id',
-                'sell' => 'required|numeric',
-                'buy' => 'required|numeric',
+                'sell_price' => 'required|numeric',
+                'buy_price' => 'required|numeric',
                 'stock' => 'numeric'
             ]
         );
         $name = $request->get('name');
-        $sell = $request->get('sell');
-        $buy = $request->get('buy');
+        $sell = $request->get('sell_price');
+        $buy = $request->get('buy_price');
         $category_id = $request->get('category_id');
         $product_id = $request->get('product_id');
         $stock = $request->get('stock') ? $request->get('stock') : 0;
