@@ -13,24 +13,18 @@
 |
 */
 
-/*
-$router->get('/', function(){
-    return "hello world";
-});
-*/
-
 $router->post('/login', 'AuthController@authenticate');
 
-$router->group(['prefix'=>'users'],function() use ($router){
-    $router->get('/',['middleware'=>'jwt.auth','uses'=>'UsersController@getUsers']);
-    $router->get('/{id}',['middleware'=>'jwt.auth','uses'=>'UsersController@getUserByID']);
+$router->group(['prefix' => 'users'], function () use ($router) {
+    $router->get('/', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@getUsers']);
+    $router->get('/{id}', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@getUserByID']);
     $router->post('/', 'UsersController@addUser');
-    $router->put('/updatename',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserName']);
-    $router->put('/updatepassword',['middleware'=>'jwt.auth', 'uses'=>'UsersController@updateUserPassword']);
+    $router->put('/updatename', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@updateUserName']);
+    $router->put('/updatepassword', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@updateUserPassword']);
     $router->delete('/', 'UsersController@deleteUser');
 });
 
-$router->group(['prefix'=>'contacts','middleware'=>'jwt.auth'],function() use ($router){
+$router->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
@@ -39,7 +33,7 @@ $router->group(['prefix'=>'contacts','middleware'=>'jwt.auth'],function() use ($
     $router->put('/', 'ContactsController@updateContact');
 });
 
-$router->group(['prefix'=>'expenses','middleware'=>'jwt.auth'],function() use ($router){
+$router->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ExpensesController@getExpenses');
     $router->get('/categories', 'ExpensesController@getExpenseCategories');
     $router->get('/search/{search}', 'ExpensesController@searchExpenses');
@@ -52,7 +46,7 @@ $router->group(['prefix'=>'expenses','middleware'=>'jwt.auth'],function() use ($
     $router->delete('/categories', 'ExpensesController@deleteExpenseCategoryById');
 });
 
-$router->group(['prefix'=>'products','middleware'=>'jwt.auth'],function() use ($router){
+$router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ProductsController@getProducts');
     $router->get('/categories', 'ProductsController@getProductCategories');
     $router->get('/search/{search}', 'ProductsController@searchProducts');
@@ -66,12 +60,15 @@ $router->group(['prefix'=>'products','middleware'=>'jwt.auth'],function() use ($
 });
 
 
-$router->group(['prefix'=>'orders','middleware'=>'jwt.auth'],function() use ($router){
+$router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'OrdersController@getOrders');
-    $router->get('/searchbycontactname/{search}', 'OrdersController@searchOrdersByContactName');
-    $router->get('/id/{id:[0-9]+}', 'OrdersController@getOrderById');
-    /*$router->delete('/id/{id:[0-9]+}', 'OrdersController@deleteOrderById');
     $router->post('/', 'OrdersController@postOrder');
-    $router->put('/', 'OrdersController@updateOrder');*/
+    $router->put('/', 'OrdersController@updateOrder');
+    $router->post('/products', 'OrdersController@addOrderProduct');
+    $router->put('/products', 'OrdersController@modifyOrderProduct');
+    $router->post('/products/delivered', 'OrdersController@markDelivered');
+    $router->get('/transactions', 'OrdersController@getTransactions');
+    $router->post('/transactions', 'OrdersController@addTransaction');
+    $router->put('/transactions', 'OrdersController@modifyTransaction');
+    $router->post('/completed', 'OrdersController@markCompleted');
 });
-

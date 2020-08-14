@@ -6,18 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property int $order_id
+ * @property int $transaction_id
  * @property int $contact_id
+ * @property int $order_id
  * @property string $created_at
- * @property int $completed
- * @property string $type
+ * @property float $sum
  * @property string $updated_at
  * @property string $deleted_at
  * @property Contact $contact
- * @property OrderProduct[] $orderProducts
- * @property Transaction[] $transactions
+ * @property Order $order
  */
-class Order extends Model
+class Transaction extends Model
 {
     use SoftDeletes;
 
@@ -30,12 +29,12 @@ class Order extends Model
      * 
      * @var string
      */
-    protected $primaryKey = 'order_id';
+    protected $primaryKey = 'transaction_id';
 
     /**
      * @var array
      */
-    protected $fillable = ['contact_id', 'completed', 'type'];
+    protected $fillable = ['contact_id', 'order_id', 'sum'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -46,18 +45,10 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function products()
+    public function order()
     {
-        return $this->belongsToMany('App\Models\Product', 'order_products')->using('App\Models\OrderProducts')->as('details');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function transactions()
-    {
-        return $this->hasMany('App\Models\Transaction', 'order_id', 'order_id');
+        return $this->belongsTo('App\Models\Order', 'order_id', 'order_id');
     }
 }

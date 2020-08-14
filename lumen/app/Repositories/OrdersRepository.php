@@ -1,31 +1,62 @@
 <?php
+
 namespace App\Repositories;
+
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
 use App\Models\Order;
 
-class OrdersRepository implements OrdersRepositoryInterface {
-    public function getOrders(){
-        return Order::select('*')->join('contacts','contact_id','id')->take(10)->get();
+class OrdersRepository implements OrdersRepositoryInterface
+{
+    public function getOrders(string $search, string $order, string $type, int $offset)
+    {
+        return "hello";
     }
-
-    public function searchOrdersByContactName(string $search){
-        $loweredString = strtolower($search);
-        return Order::select('*')->join('contacts','contact_id','id')->whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();
+    public function searchOrders()
+    {
+        return "hello";
     }
-
-    public function getOrderById(int $id){
-        return Order::select('*')->where('order_id','=',$id)->join('contacts','contact_id','id')->get();
+    public function getOrderById()
+    {
+        return "hello";
     }
-
-    /*public function deleteOrderById(int $id){
-        return app('db')->delete("DELETE FROM contacts WHERE id = $id");
+    public function deleteOrderById(int $order_id)
+    {
+        return "hello";
     }
-
-    public function postOrder(string $name, string $phone){
-        return app('db')->insert("INSERT INTO contacts (name,phone) VALUES ('$name',$phone)");
+    public function postOrder(int $contact_id, string $type)
+    {
+        return "hello";
     }
-
-    public function updateOrder(string $name, string $phone, int $id){
-        return app('db')->update("UPDATE contacts SET name='$name', phone=$phone WHERE id=$id");
-    }*/
+    public function updateOrder(int $contact_id, string $type)
+    {
+        return "hello";
+    }
+    public function addOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    {
+        return "hello";
+    }
+    public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    {
+        return "hello";
+    }
+    public function markDelivered(int $product_id, int $ammount)
+    {
+        return "hello";
+    }
+    public function getTransactions(int $order_id)
+    {
+        return "hello";
+    }
+    public function addTransaction(float $sum)
+    {
+        return "hello";
+    }
+    public function modifyTransaction(int $transaction_id, float $sum)
+    {
+        return "hello";
+    }
+    public function markCompleted(int $order_id)
+    {
+        return "hello";
+    }
 }

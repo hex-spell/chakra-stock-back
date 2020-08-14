@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Services;
+
 use App\Interfaces\Services\OrdersServiceInterface;
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
 
-Class OrdersService implements OrdersServiceInterface{
+class OrdersService implements OrdersServiceInterface
+{
     private $repo;
 
     public function __construct(OrdersRepositoryInterface $repo)
@@ -11,16 +14,56 @@ Class OrdersService implements OrdersServiceInterface{
         $this->repo = $repo;
     }
 
-    public function getOrders(){
-        return $this->repo->getOrders();
+    public function getOrders(string $search, string $order, string $type, int $offset)
+    {
+        return $this->repo->getOrders($search, $order, $type, $offset);
     }
-
-    public function searchOrdersByContactName(string $search){
-        return $this->repo->searchOrdersByContactName($search);
+    public function searchOrders()
+    {
+        return $this->repo->searchOrders();
     }
-
-    public function getOrderById(int $id){
-        return $this->repo->getOrderById($id);
+    public function getOrderById()
+    {
+        return $this->repo->getOrderById();
     }
-
+    public function deleteOrderById(int $order_id)
+    {
+        return $this->repo->deleteOrderById($order_id);
+    }
+    public function postOrder(int $contact_id, string $type)
+    {
+        return $this->repo->postOrder($contact_id, $type);
+    }
+    public function updateOrder(int $contact_id, string $type)
+    {
+        return $this->repo->updateOrder($contact_id, $type);
+    }
+    public function addOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    {
+        return $this->repo->addOrderProduct($product_id, $product_history_id, $ammount);
+    }
+    public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    {
+        return $this->repo->modifyOrderProduct($product_id, $product_history_id, $ammount);
+    }
+    public function markDelivered(int $product_id, int $ammount)
+    {
+        return $this->repo->markDelivered($product_id, $ammount);
+    }
+    public function getTransactions(int $order_id)
+    {
+        return $this->repo->getTransactions($order_id);
+    }
+    public function addTransaction(float $sum)
+    {
+        return $this->repo->addTransaction($sum);
+    }
+    public function modifyTransaction(int $transaction_id, float $sum)
+    {
+        return $this->repo->modifyTransaction($transaction_id, $sum);
+    }
+    public function markCompleted(int $order_id)
+    {
+        return $this->repo->markCompleted($order_id);
+    }
 }

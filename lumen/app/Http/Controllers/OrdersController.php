@@ -13,47 +13,84 @@ class OrdersController extends Controller
      * @return void
      */
 
-    private $OrdersService;
+    private $service;
 
-    public function __construct(OrdersServiceInterface $Service)
+    public function __construct(OrdersServiceInterface $service)
     {
-        $this->OrdersService = $Service;
+        $this->service = $service;
     }
 
-    //private $validateUpdateContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone','id'=>'required|integer|exist:contacts']);
-
-    //private $validatePostContact = array(['name'=>'required|string|between:4,30','phone'=>'required|digits_between:4,30|numeric|unique:contacts,phone']);
-
-    
-
-    public function getOrders(){
-        return $this->OrdersService->getOrders();
+    public function getOrders(Request $request)
+    {
+        $search = $request->get('search') ? $request->get('search') : "";
+        $order = $request->get('order') ? $request->get('order') : "";
+        $type = $request->get('type') ? $request->get('type') : "";
+        $offset = $request->get('offset') ? $request->get('offset') : "";
+        return $this->service->getOrders($search, $order, $type, $offset);
     }
-
-    public function searchOrdersByContactName(string $search){
-        return $this->OrdersService->searchOrdersByContactName($search);
+    public function searchOrders()
+    {
+        return $this->service->searchOrders();
     }
-
-    public function getOrderById(int $id){
-        return $this->OrdersService->getOrderById($id);
+    public function getOrderById()
+    {
+        return $this->service->getOrderById();
     }
-
-    /*public function deleteOrderById(int $id){
-        return $this->repo->deleteOrderById($id);
-    }*/
-
-    /*public function postOrder(Request $request){
-        $this->validate($request, $this->validatePostOrder);
-        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
-        $phone = $request->json()->get('phone');
-        return $this->repo->postOrder($name,$phone);
-    }*/
-
-    /*public function updateOrder(Request $request){
-        $this->validate($request,$this->validateUpdateOrder);
-        $name = $this->sanitizeString($request->json()->get('name')); //sanitized name
-        $phone = $request->json()->get('phone');
-        $id = $request->json()->get('id');
-        return $this->repo->updateOrder($name,$phone,$id);
-    }*/
+    public function deleteOrderById(int $order_id)
+    {
+        return $this->service->deleteOrderById($order_id);
+    }
+    public function postOrder(Request $request)
+    {
+        $contact_id = $request->get('contact_$contact_id') ? $request->get('contact_$contact_id') : "";
+        $type = $request->get('type') ? $request->get('type') : "";
+        return $this->service->postOrder($contact_id, $type);
+    }
+    public function updateOrder(Request $request)
+    {
+        $contact_id = $request->get('contact_$contact_id') ? $request->get('contact_$contact_id') : "";
+        $type = $request->get('type') ? $request->get('type') : "";
+        return $this->service->updateOrder($contact_id, $type);
+    }
+    public function addOrderProduct(Request $request)
+    {
+        $product_id = $request->get('product_id') ? $request->get('product_id') : "";
+        $product_history_id = $request->get('product_history_id') ? $request->get('product_history_id') : "";
+        $ammount = $request->get('ammount') ? $request->get('ammount') : "";
+        return $this->service->addOrderProduct($product_id, $product_history_id, $ammount);
+    }
+    public function modifyOrderProduct(Request $request)
+    {
+        $product_id = $request->get('product_id') ? $request->get('product_id') : "";
+        $product_history_id = $request->get('product_history_id') ? $request->get('product_history_id') : "";
+        $ammount = $request->get('ammount') ? $request->get('ammount') : "";
+        return $this->service->modifyOrderProduct($product_id, $product_history_id, $ammount);
+    }
+    public function markDelivered(Request $request)
+    {
+        $product_id = $request->get('product_id') ? $request->get('product_id') : "";
+        $ammount = $request->get('ammount') ? $request->get('ammount') : "";
+        return $this->service->markDelivered($product_id, $ammount);
+    }
+    public function getTransactions(Request $request)
+    {
+        $order_id = $request->get('order_id') ? $request->get('order_id') : "";
+        return $this->service->getTransactions($order_id);
+    }
+    public function addTransaction(Request $request)
+    {
+        $sum = $request->get('sum') ? $request->get('sum') : "";
+        return $this->service->addTransaction($sum);
+    }
+    public function modifyTransaction(Request $request)
+    {
+        $transaction_id = $request->get('transaction_id') ? $request->get('transaction_id') : "";
+        $sum = $request->get('sum') ? $request->get('sum') : "";
+        return $this->service->modifyTransaction($transaction_id, $sum);
+    }
+    public function markCompleted(Request $request)
+    {
+        $order_id = $request->get('order_id') ? $request->get('order_id') : "";
+        return $this->service->markCompleted($order_id);
+    }
 }

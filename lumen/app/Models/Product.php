@@ -59,6 +59,11 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductHistory', 'product_id', 'product_id');
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany('App\Models\Order','order_products')->using('App\Models\OrderProducts')->as('details');
+    }
+
     protected static function booted()
     {
         static::created(function ($product) {

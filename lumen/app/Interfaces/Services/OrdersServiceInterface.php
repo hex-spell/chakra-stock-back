@@ -4,10 +4,17 @@ namespace App\Interfaces\Services;
 
 interface OrdersServiceInterface
 {
-    public function getOrders();
-    public function searchOrdersByContactName(string $search);
-    public function getOrderById(int $id);
-    /*public function deleteOrderById(int $id);
-    public function postOrder(string $name, string $phone);
-    public function updateOrder(string $name, string $phone,int $id);*/
+    public function getOrders(string $search, string $order, string $type, int $offset);
+    public function searchOrders();
+    public function getOrderById();
+    public function deleteOrderById(int $order_id);
+    public function postOrder(int $contact_id, string $type);
+    public function updateOrder(int $contact_id, string $type);
+    public function addOrderProduct(int $product_id, int $product_history_id, int $ammount);
+    public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount);
+    public function markDelivered(int $product_id, int $ammount);
+    public function getTransactions(int $order_id);
+    public function addTransaction(float $sum);
+    public function modifyTransaction(int $transaction_id, float $sum);
+    public function markCompleted(int $order_id);
 }
