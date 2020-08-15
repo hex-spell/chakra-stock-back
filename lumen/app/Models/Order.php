@@ -46,11 +46,11 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products()
     {
-        return $this->belongsToMany('App\Models\Product', 'order_products')->using('App\Models\OrderProducts')->as('details');
+        return $this->belongsToMany('App\Models\Product', 'order_products','order_id','product_id','order_id')->withPivot('product_history_id','ammount','delivered')/* ->using('App\Models\OrderProducts') */;
     }
 
     /**

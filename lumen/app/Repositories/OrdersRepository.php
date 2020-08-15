@@ -4,12 +4,18 @@ namespace App\Repositories;
 
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderProducts;
+use App\Models\ProductHistory;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
-        return "hello";
+    $loweredSearch = strtolower($search);
+    $loweredOrder = strtolower($order);
+
+    return Order::with('contact')->get();
     }
     public function searchOrders()
     {
@@ -25,15 +31,26 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function postOrder(int $contact_id, string $type)
     {
-        return "hello";
+        return Order::create(['contact_id' => $contact_id, 'type' => $type]);
     }
-    public function updateOrder(int $contact_id, string $type)
+    public function updateOrder(int $order_id, int $contact_id, string $type)
     {
-        return "hello";
+        $Order = Order::find($order_id);
+        $Order->contact_id = $contact_id;
+        $Order->type = $type;
+        return $Order->save();
     }
-    public function addOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    public function addOrderProduct(int $order_id, int $product_id, int $ammount)
     {
-        return "hello";
+        $Product = Product::find($product_id);
+        return Order::find($order_id)->products()->attach(
+            $Product,
+            [
+                'product_history_id' => $Product->product_history_id,
+                'ammount' => $ammount,
+                'delivered' => 0
+            ]
+        );
     }
     public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
     {

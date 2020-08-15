@@ -18,7 +18,7 @@ class OrderProducts extends Pivot
     /**
      * @var array
      */
-    protected $fillable = ['ammount', 'delivered'];
+    protected $fillable = ['ammount', 'delivered', 'product_history_id'];
 
   
 }

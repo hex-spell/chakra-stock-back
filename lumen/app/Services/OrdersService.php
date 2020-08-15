@@ -34,13 +34,13 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->postOrder($contact_id, $type);
     }
-    public function updateOrder(int $contact_id, string $type)
+    public function updateOrder(int $order_id, int $contact_id, string $type)
     {
-        return $this->repo->updateOrder($contact_id, $type);
+        return $this->repo->updateOrder($order_id, $contact_id, $type);
     }
-    public function addOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    public function addOrderProduct(int $order_id, int $product_id, int $ammount)
     {
-        return $this->repo->addOrderProduct($product_id, $product_history_id, $ammount);
+        return $this->repo->addOrderProduct($order_id, $product_id, $ammount);
     }
     public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
     {

@@ -61,7 +61,7 @@ class Product extends Model
 
     public function orders()
     {
-        return $this->belongsToMany('App\Models\Order','order_products')->using('App\Models\OrderProducts')->as('details');
+        return $this->belongsToMany('App\Models\Order','order_products','product_id','order_id','product_id')->withPivot('ammount','product_history_id','delivered');
     }
 
     protected static function booted()
