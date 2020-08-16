@@ -22,9 +22,9 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->searchOrders();
     }
-    public function getOrderById()
+    public function getOrderById(int $order_id)
     {
-        return $this->repo->getOrderById();
+        return $this->repo->getOrderById($order_id);
     }
     public function deleteOrderById(int $order_id)
     {
@@ -42,9 +42,9 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->addOrderProduct($order_id, $product_id, $ammount);
     }
-    public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount)
     {
-        return $this->repo->modifyOrderProduct($product_id, $product_history_id, $ammount);
+        return $this->repo->modifyOrderProduct($order_id, $product_id, $ammount);
     }
     public function markDelivered(int $product_id, int $ammount)
     {

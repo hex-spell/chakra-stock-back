@@ -20,5 +20,23 @@ class OrderProducts extends Pivot
      */
     protected $fillable = ['ammount', 'delivered', 'product_history_id'];
 
-  
+    protected $table = 'order_products';
+
+    public function productVersion() {
+        return $this->hasOne('App\Models\ProductHistory', 'product_history_id', 'product_history_id')->select([
+            "product_id",
+            "product_history_id",
+            "name",
+            "sell_price",
+        ]);
+    }
+
+    public function currentVersion() {
+        return $this->hasOne('App\Models\ProductHistory', 'product_id', 'product_id')->select([
+            "product_id",
+            "product_history_id",
+            "name",
+            "sell_price",
+        ])->latest();
+    }
 }

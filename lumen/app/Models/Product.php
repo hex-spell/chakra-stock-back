@@ -59,6 +59,11 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductHistory', 'product_id', 'product_id');
     }
 
+    public function freezedProduct(int $id)
+    {
+        return $this->hasMany('App\Models\ProductHistory', 'product_id', 'product_id')->where('product_history_id',$id)->first();
+    }
+
     public function orders()
     {
         return $this->belongsToMany('App\Models\Order','order_products','product_id','order_id','product_id')->withPivot('ammount','product_history_id','delivered');

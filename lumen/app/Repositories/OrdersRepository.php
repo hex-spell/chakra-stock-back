@@ -12,18 +12,38 @@ class OrdersRepository implements OrdersRepositoryInterface
 {
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
-    $loweredSearch = strtolower($search);
-    $loweredOrder = strtolower($order);
-
-    return Order::with('contact')->get();
+        $loweredSearch = strtolower($search);
+        $loweredOrder = strtolower($order);
+        $Orders = Order::with('contact')->withCount('products')->get();
+        
+        return ['result' => $Orders];
     }
     public function searchOrders()
     {
         return "hello";
     }
-    public function getOrderById()
+    public function getOrderById(int $order_id)
     {
-        return "hello";
+        $Order = Order::find($order_id);
+        $Products = OrderProducts::where('order_id', $order_id)->with('productVersion')->select(
+            [
+                "ammount",
+                "delivered",
+                "product_id",
+                "product_history_id"
+            ]
+        )->get();
+        $sum = 0;
+        foreach ($Products as $product) {
+            $sum += $product->productVersion->sell_price;
+        }
+        //loop que revisa si los productos estan actualizados
+        foreach ($Products as $product) {
+            if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
+                $product->currentVersion = $product->currentVersion()->first();
+            }
+        }
+        return ['order' => $Order, 'contact' => $Order->contact()->first(), 'products' => $Products,  'sum' => $sum ];
     }
     public function deleteOrderById(int $order_id)
     {
@@ -52,9 +72,17 @@ class OrdersRepository implements OrdersRepositoryInterface
             ]
         );
     }
-    public function modifyOrderProduct(int $product_id, int $product_history_id, int $ammount)
+    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount)
     {
-        return "hello";
+        $Product = Product::find($product_id);
+        return Order::find($order_id)->products()->sync(
+            $Product,
+            [
+                'product_history_id' => $Product->product_history_id,
+                'ammount' => $ammount,
+                'delivered' => 0
+            ]
+        );
     }
     public function markDelivered(int $product_id, int $ammount)
     {

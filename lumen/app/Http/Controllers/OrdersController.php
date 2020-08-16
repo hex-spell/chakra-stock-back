@@ -32,9 +32,11 @@ class OrdersController extends Controller
     {
         return $this->service->searchOrders();
     }
-    public function getOrderById()
+    public function getOrderById(Request $request)
     {
-        return $this->service->getOrderById();
+        $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
+        $order_id = $request->get('order_id');
+        return $this->service->getOrderById($order_id);
     }
     public function deleteOrderById(int $order_id)
     {
@@ -58,9 +60,9 @@ class OrdersController extends Controller
     {
         $this->validate(
             $request,
-            [   
+            [
                 'order_id' => 'required|numeric|exists:orders,order_id',
-                'contact_id' => 'required|numeric|exists:contacts,contact_id',  
+                'contact_id' => 'required|numeric|exists:contacts,contact_id',
                 'type' => 'required|string|size:1',
             ]
         );
@@ -70,13 +72,13 @@ class OrdersController extends Controller
         return $this->service->updateOrder($order_id, $contact_id, $type);
     }
     public function addOrderProduct(Request $request)
-    {  
+    {
         $order_id = $request->get('order_id');
         $product_id = $request->get('product_id');
         $ammount = $request->get('ammount');
         $this->validate(
             $request,
-            [   
+            [
                 'order_id' => 'required|numeric|exists:orders,order_id|unique:order_products,order_id,NULL,id,product_id,' . $product_id,
                 'product_id' => 'required|numeric|exists:products,product_id|unique:order_products,product_id,NULL,id,order_id,' . $order_id,
                 'ammount' => 'required|integer',
@@ -88,18 +90,16 @@ class OrdersController extends Controller
     {
         $order_id = $request->get('order_id');
         $product_id = $request->get('product_id');
-        $product_history_id = $request->get('product_history_id');
         $ammount = $request->get('ammount');
         $this->validate(
             $request,
-            [   
-                'order_id' => 'required|numeric|exists:order,order_id|unique:order_products,order_id,NULL,id,product_id,' . $product_id,
-                'product_id' => 'required|numeric|exists:product,product_id|unique:order_products,product_id,NULL,id,user_id,' . $order_id,
-                'product_history_id' => 'required|numeric|exists:product_history,product_history_id',
+            [
+                'order_id' => 'required|numeric|exists:order,order_id|unique:order_products,order_id,' . $order_id . ',order_id,product_id,' . $product_id,
+                'product_id' => 'required|numeric|exists:product,product_id|unique:order_products,product_id,' . $product_id . ',id,user_id,' . $order_id,
                 'ammount' => 'required|integer',
             ]
         );
-        return $this->service->modifyOrderProduct($order_id, $product_id, $product_history_id, $ammount);
+        return $this->service->modifyOrderProduct($order_id, $product_id, $ammount);
     }
     public function markDelivered(Request $request)
     {
