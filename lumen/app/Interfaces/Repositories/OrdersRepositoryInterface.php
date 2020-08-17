@@ -12,6 +12,7 @@ interface OrdersRepositoryInterface
     public function updateOrder(int $order_id, int $contact_id, string $type);
     public function addOrderProduct(int $order_id, int $product_id, int $ammount);
     public function modifyOrderProduct(int $order_id, int $product_id, int $ammount);
+    public function removeOrderProduct(int $order_id, int $product_id);
     public function markDelivered(int $product_id, int $ammount);
     public function getTransactions(int $order_id);
     public function addTransaction(float $sum);

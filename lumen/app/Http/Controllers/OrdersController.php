@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Interfaces\Services\OrdersServiceInterface;
 
 class OrdersController extends Controller
@@ -94,12 +95,38 @@ class OrdersController extends Controller
         $this->validate(
             $request,
             [
-                'order_id' => 'required|numeric|exists:order,order_id|unique:order_products,order_id,' . $order_id . ',order_id,product_id,' . $product_id,
-                'product_id' => 'required|numeric|exists:product,product_id|unique:order_products,product_id,' . $product_id . ',id,user_id,' . $order_id,
+                'order_id' => [
+                    'required',
+                    'numeric',
+                    Rule::exists('order_products')->where(function ($query) use ($product_id) {
+                        $query->where('product_id', $product_id);
+                    })
+                ],
+                'product_id' => [
+                    'required',
+                    'numeric',
+                    Rule::exists('order_products')->where(function ($query) use ($order_id) {
+                        $query->where('order_id', $order_id);
+                    })
+                ],
                 'ammount' => 'required|integer',
             ]
         );
         return $this->service->modifyOrderProduct($order_id, $product_id, $ammount);
+    }
+    public function removeOrderProduct(Request $request)
+    {
+        $order_id = $request->get('order_id');
+        $product_id = $request->get('product_id');
+
+        $this->validate(
+            $request,
+            [
+                'order_id' => 'required|numeric|exist:order_products,order_id',
+                'product_id' => 'required|numeric|exists:order_products,product_id'
+            ]
+        );
+        return $this->service->removeOrderProduct($order_id, $product_id);
     }
     public function markDelivered(Request $request)
     {

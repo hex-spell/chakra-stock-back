@@ -47,6 +47,7 @@ class Order extends Model
             "name",
             "address",
             "phone",
+            "contact_id"
         ]);
     }
 
@@ -56,25 +57,17 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany('App\Models\Product', 'order_products', 'order_id', 'product_id', 'order_id')
-            ->using('App\Models\OrderProducts')      
-            ->withPivot('product_history_id', 'ammount', 'delivered')
-            ->as('details')
-            ->select([
-                "ammount",
-                "delivered",
-                "product_id",
-                "product_history_id",
-            ]);
+        ->using('App\Models\OrderProducts')      
+        ->withPivot('product_history_id', 'ammount', 'delivered')
+        ->as('details')
+        ->select([
+            "ammount",
+            "delivered",
+            "product_id",
+            "product_history_id",
+        ]);
     }
 
-    public function sumProducts(){
-        $Products = $this->products()->select("sell_price")->get();
-        $sum = 0;
-        foreach ($Products as $product) {
-            $sum += $product->productVersion->sell_price;
-        }
-        return $sum;
-    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

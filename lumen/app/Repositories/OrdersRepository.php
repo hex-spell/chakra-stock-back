@@ -10,12 +10,20 @@ use App\Models\ProductHistory;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
+    //TENGO QUE BUSCAR ALGUNA FORMA DE CONSEGUIR LA SUMA DE LOS VALORES DE TODOS LOS PRODUCTOS EN UN PEDIDO
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
         $Orders = Order::with('contact')->withCount('products')->get();
-        
+       /*  foreach ($Orders as $order) {
+            $sum = 0;
+            foreach ($order->products()->get() as $product) {
+                $sum += ProductHistory::find($product->details->product_history_id)->sell_price;
+            }
+            $order->sum = $sum;
+        } */
+
         return ['result' => $Orders];
     }
     public function searchOrders()
@@ -43,7 +51,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                 $product->currentVersion = $product->currentVersion()->first();
             }
         }
-        return ['order' => $Order, 'contact' => $Order->contact()->first(), 'products' => $Products,  'sum' => $sum ];
+        return ['order' => $Order, 'contact' => $Order->contact()->first(), 'products' => $Products,  'sum' => $sum];
     }
     public function deleteOrderById(int $order_id)
     {
@@ -72,17 +80,14 @@ class OrdersRepository implements OrdersRepositoryInterface
             ]
         );
     }
+    public function removeOrderProduct(int $order_id, int $product_id)
+    {
+        return Order::find($order_id)->products()->detach($product_id);
+    }
     public function modifyOrderProduct(int $order_id, int $product_id, int $ammount)
     {
-        $Product = Product::find($product_id);
-        return Order::find($order_id)->products()->sync(
-            $Product,
-            [
-                'product_history_id' => $Product->product_history_id,
-                'ammount' => $ammount,
-                'delivered' => 0
-            ]
-        );
+        $this->removeOrderProduct($order_id, $product_id);
+        return $this->addOrderProduct($order_id, $product_id, $ammount);
     }
     public function markDelivered(int $product_id, int $ammount)
     {
