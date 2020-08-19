@@ -59,13 +59,7 @@ class Order extends Model
         return $this->belongsToMany('App\Models\Product', 'order_products', 'order_id', 'product_id', 'order_id')
         ->using('App\Models\OrderProducts')      
         ->withPivot('product_history_id', 'ammount', 'delivered')
-        ->as('details')
-        ->select([
-            "ammount",
-            "delivered",
-            "product_id",
-            "product_history_id",
-        ]);
+        ->as('details');
     }
 
     /**

@@ -16,13 +16,16 @@ class OrdersRepository implements OrdersRepositoryInterface
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
         $Orders = Order::with('contact')->withCount('products')->get();
-       /*  foreach ($Orders as $order) {
+        foreach ($Orders as $order) {
             $sum = 0;
             foreach ($order->products()->get() as $product) {
-                $sum += ProductHistory::find($product->details->product_history_id)->sell_price;
+                $productHistory = ProductHistory::find($product->details->product_history_id);
+                $sell = $productHistory->sell_price;
+                $ammount = $product->details->ammount;
+                $sum += $sell ? $sell*$ammount : 0;
             }
             $order->sum = $sum;
-        } */
+        }
 
         return ['result' => $Orders];
     }
@@ -43,7 +46,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         )->get();
         $sum = 0;
         foreach ($Products as $product) {
-            $sum += $product->productVersion->sell_price;
+            $sum += $product->productVersion->sell_price*$product->ammount;
         }
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
