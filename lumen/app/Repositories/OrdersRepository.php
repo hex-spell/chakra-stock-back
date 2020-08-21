@@ -19,12 +19,19 @@ class OrdersRepository implements OrdersRepositoryInterface
         $Orders = Order::with('contact')->withCount('products')->get();
         foreach ($Orders as $order) {
             $sum = 0;
+            $paid = 0;
+            //loop que suma los valores de los productos multiplicados por la cantidad pedida
             foreach ($order->products()->get() as $product) {
                 $productHistory = ProductHistory::find($product->details->product_history_id);
                 $sell = $productHistory->sell_price;
                 $ammount = $product->details->ammount;
-                $sum += $sell ? $sell*$ammount : 0;
+                $sum += $sell ? $sell * $ammount : 0;
             }
+            //loop que suma todas las transacciones para saber el total pagado
+            foreach ($order->transactions()->get() as $transaction) {
+                $paid += $transaction->sum;
+            }
+            $order->paid = $paid;
             $order->sum = $sum;
         }
 
@@ -37,6 +44,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     public function getOrderById(int $order_id)
     {
         $Order = Order::find($order_id);
+        $Transactions = $Order->transactions()->select(['transaction_id', 'sum', 'created_at'])->get();
         $Products = OrderProducts::where('order_id', $order_id)->with('productVersion')->select(
             [
                 "ammount",
@@ -46,16 +54,25 @@ class OrdersRepository implements OrdersRepositoryInterface
             ]
         )->get();
         $sum = 0;
+        $paid = 0;
+
+        //loop que suma los valores de los productos
         foreach ($Products as $product) {
-            $sum += $product->productVersion->sell_price*$product->ammount;
+            $sum += $product->productVersion->sell_price * $product->ammount;
         }
+
+        //loop que suma todas las transacciones
+        foreach ($Transactions as $transaction) {
+            $paid += $transaction->sum;
+        }
+
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
             if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
                 $product->currentVersion = $product->currentVersion()->first();
             }
         }
-        return ['order' => $Order, 'contact' => $Order->contact()->first(), 'products' => $Products,  'sum' => $sum];
+        return ['order' => $Order, 'sum' => $sum, 'paid' => $paid, 'contact' => $Order->contact()->first(), 'products' => $Products, 'transactions' => $Transactions];
     }
     public function deleteOrderById(int $order_id)
     {
@@ -104,15 +121,17 @@ class OrdersRepository implements OrdersRepositoryInterface
     public function addTransaction(int $order_id, float $sum)
     {
         $Order = Order::find($order_id);
-        return $Order->transactions()->create(['sum'=>$sum,'contact_id'=>$Order->contact()->first()->contact_id]);
+        return $Order->transactions()->create(['sum' => $sum, 'contact_id' => $Order->contact()->first()->contact_id]);
     }
     public function modifyTransaction(int $transaction_id, float $sum)
     {
-        return "hello";
+        $Transaction = Transaction::find($transaction_id);
+        $Transaction->sum = $sum;
+        return $Transaction->save();
     }
     public function deleteTransaction(int $transaction_id)
     {
-        return "hello";
+        return Transaction::find($transaction_id)->destroy();
     }
     public function markCompleted(int $order_id)
     {
