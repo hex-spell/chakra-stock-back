@@ -7,10 +7,11 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderProducts;
 use App\Models\ProductHistory;
+use App\Models\Transaction;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
-    //TENGO QUE BUSCAR ALGUNA FORMA DE CONSEGUIR LA SUMA DE LOS VALORES DE TODOS LOS PRODUCTOS EN UN PEDIDO
+    //TENGO QUE BUSCAR ALGUNA FORMA DE BUSCAR EL PEDIDO POR NOMBRE DE CONTACTO, SEGURO ES UN WHEREHAS
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
@@ -98,13 +99,18 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function getTransactions(int $order_id)
     {
-        return "hello";
+        return Transaction::all();
     }
-    public function addTransaction(float $sum)
+    public function addTransaction(int $order_id, float $sum)
+    {
+        $Order = Order::find($order_id);
+        return $Order->transactions()->create(['sum'=>$sum,'contact_id'=>$Order->contact()->first()->contact_id]);
+    }
+    public function modifyTransaction(int $transaction_id, float $sum)
     {
         return "hello";
     }
-    public function modifyTransaction(int $transaction_id, float $sum)
+    public function deleteTransaction(int $transaction_id)
     {
         return "hello";
     }

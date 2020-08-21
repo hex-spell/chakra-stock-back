@@ -71,5 +71,6 @@ $router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () u
     $router->get('/transactions', 'OrdersController@getTransactions');
     $router->post('/transactions', 'OrdersController@addTransaction');
     $router->put('/transactions', 'OrdersController@modifyTransaction');
+    $router->delete('/transactions', 'OrdersController@deleteTransaction');
     $router->post('/completed', 'OrdersController@markCompleted');
 });

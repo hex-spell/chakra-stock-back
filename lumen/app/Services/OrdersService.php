@@ -58,13 +58,17 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->getTransactions($order_id);
     }
-    public function addTransaction(float $sum)
+    public function addTransaction(int $order_id, float $sum)
     {
-        return $this->repo->addTransaction($sum);
+        return $this->repo->addTransaction($order_id, $sum);
     }
     public function modifyTransaction(int $transaction_id, float $sum)
     {
         return $this->repo->modifyTransaction($transaction_id, $sum);
+    }
+    public function deleteTransaction(int $transaction_id)
+    {
+        return $this->repo->deleteTransaction($transaction_id);
     }
     public function markCompleted(int $order_id)
     {

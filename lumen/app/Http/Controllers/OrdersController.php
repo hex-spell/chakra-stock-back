@@ -137,13 +137,27 @@ class OrdersController extends Controller
     }
     public function getTransactions(Request $request)
     {
+        $this->validate(
+            $request,
+            [
+                'order_id' => 'required|numeric|exist:order_products,order_id',
+            ]
+        );
         $order_id = $request->get('order_id') ? $request->get('order_id') : 0;
         return $this->service->getTransactions($order_id);
     }
     public function addTransaction(Request $request)
     {
+        $this->validate(
+            $request,
+            [
+                'order_id' => 'required|numeric|exists:orders,order_id',
+                'sum' => 'required|numeric'
+            ]
+        );
+        $order_id = $request->get('order_id');
         $sum = $request->get('sum');
-        return $this->service->addTransaction($sum);
+        return $this->service->addTransaction($order_id, $sum);
     }
     public function modifyTransaction(Request $request)
     {
