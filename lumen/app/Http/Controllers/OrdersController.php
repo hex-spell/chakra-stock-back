@@ -25,7 +25,7 @@ class OrdersController extends Controller
     {
         $search = $request->get('search') ? $request->get('search') : "";
         $order = $request->get('order') ? $request->get('order') : "";
-        $type = $request->get('type') ? $request->get('type') : "";
+        $type = $request->get('type') ? $request->get('type') : "a";
         $offset = $request->get('offset') ? $request->get('offset') : 0;
         return $this->service->getOrders($search, $order, $type, $offset);
     }

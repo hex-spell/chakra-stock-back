@@ -11,13 +11,28 @@ use App\Models\Transaction;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
-    //TENGO QUE BUSCAR ALGUNA FORMA DE BUSCAR EL PEDIDO POR NOMBRE DE CONTACTO, SEGURO ES UN WHEREHAS
+    //ME FALTA ORDENARLOS
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
-        $Orders = Order::with('contact')->withCount('products')->get();
-        foreach ($Orders as $order) {
+        $loweredType = strtolower($type);
+  
+        $Orders = Order::where('type',$loweredType)->with('contact')->withCount('products');
+
+        //argumentos para el where
+        $whereRaw = ['lower(contacts.name) like (?)', ["%{$loweredSearch}%"]];
+        
+        //filtra la query por nombre de contacto
+        $filteredOrders = $Orders->whereHas('contact', function ($query) use ($whereRaw) {
+            return $query->whereRaw($whereRaw[0], $whereRaw[1]);
+        });
+        
+        //ejecuta la consulta
+        $filteredOrders = $filteredOrders->get();
+
+        //agrega propiedades {sum, paid} a cada pedido
+        foreach ($filteredOrders as $order) {
             $sum = 0;
             $paid = 0;
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
@@ -35,7 +50,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             $order->sum = $sum;
         }
 
-        return ['result' => $Orders];
+        return ['result' => $filteredOrders];
     }
     public function searchOrders()
     {
