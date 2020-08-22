@@ -17,17 +17,17 @@ class OrdersRepository implements OrdersRepositoryInterface
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
         $loweredType = strtolower($type);
-  
-        $Orders = Order::where('type',$loweredType)->with('contact')->withCount('products');
+
+        $Orders = Order::where('type', $loweredType)->with('contact')->withCount('products')->orderBy('created_at','desc');
 
         //argumentos para el where
         $whereRaw = ['lower(contacts.name) like (?)', ["%{$loweredSearch}%"]];
-        
+
         //filtra la query por nombre de contacto
         $filteredOrders = $Orders->whereHas('contact', function ($query) use ($whereRaw) {
             return $query->whereRaw($whereRaw[0], $whereRaw[1]);
         });
-        
+
         //ejecuta la consulta
         $filteredOrders = $filteredOrders->get();
 
@@ -91,6 +91,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function deleteOrderById(int $order_id)
     {
+        //ESTA FUNCION DEBERÍA DEVOLVER A STOCK LOS ITEMS YA ENTREGADOS?
         return "hello";
     }
     public function postOrder(int $contact_id, string $type)
@@ -129,9 +130,28 @@ class OrdersRepository implements OrdersRepositoryInterface
     {
         return "hello";
     }
-    public function getTransactions(int $order_id)
+    public function getTransactions(string $search, string $order, string $type, int $offset)
     {
-        return Transaction::all();
+        $loweredSearch = strtolower($search);
+        $loweredOrder = strtolower($order);
+        $loweredType = strtolower($type);
+
+        $Transactions = Transaction::with('order');
+
+        //argumentos para el where
+        $whereRawType = ['lower(type) like (?)', ["%{$loweredType}%"]];
+        $whereRawName = ['lower(name) like (?)', ["%{$loweredSearch}%"]];
+
+        
+        //filtra la query por tipo de transaccion y nombre de contacto
+        $filteredTransactions = $Transactions->whereHas('order', function ($order) use ($whereRawType, $whereRawName) {
+            $orderFilteredByContactName = $order->whereHas('contact', function($contact) use ($whereRawName){
+                return $contact->whereRaw($whereRawName[0], $whereRawName[1]);
+            });
+            return $orderFilteredByContactName->whereRaw($whereRawType[0], $whereRawType[1]);
+        });
+
+        return ['result' => $filteredTransactions->with('order.contact')->orderBy('created_at','desc')->take(10)->offset($offset)->get()];
     }
     public function addTransaction(int $order_id, float $sum)
     {

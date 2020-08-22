@@ -54,9 +54,9 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->markDelivered($product_id, $ammount);
     }
-    public function getTransactions(int $order_id)
+    public function getTransactions(string $search, string $order, string $type, int $offset)
     {
-        return $this->repo->getTransactions($order_id);
+        return $this->repo->getTransactions($search, $order, $type, $offset);
     }
     public function addTransaction(int $order_id, float $sum)
     {

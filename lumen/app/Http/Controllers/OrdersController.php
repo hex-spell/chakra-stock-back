@@ -45,7 +45,7 @@ class OrdersController extends Controller
     }
     public function postOrder(Request $request)
     {
-        //los tipos son A o B
+        //los tipos son A (salientes) o B (entrantes)
         $this->validate(
             $request,
             [
@@ -130,21 +130,19 @@ class OrdersController extends Controller
     }
     public function markDelivered(Request $request)
     {
-
+        //ACÁ DEBERÍA VALIDAR QUE LA CANTIDAD ENTREGADA NO SEA MAYOR A LA CANTIDAD QUE HAY EN STOCK
+        //HACIENDO UNA REGLA DE VALIDACION PERSONALIZADA
         $product_id = $request->get('product_id');
         $ammount = $request->get('ammount');
         return $this->service->markDelivered($product_id, $ammount);
     }
     public function getTransactions(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'order_id' => 'required|numeric|exists:order_products,order_id',
-            ]
-        );
-        $order_id = $request->get('order_id') ? $request->get('order_id') : 0;
-        return $this->service->getTransactions($order_id);
+        $search = $request->get('search') ? $request->get('search') : "";
+        $order = $request->get('order') ? $request->get('order') : "";
+        $type = $request->get('type') ? $request->get('type') : "a";
+        $offset = $request->get('offset') ? $request->get('offset') : 0;
+        return $this->service->getTransactions($search, $order, $type, $offset);
     }
     public function addTransaction(Request $request)
     {
@@ -185,6 +183,8 @@ class OrdersController extends Controller
     }
     public function markCompleted(Request $request)
     {
+        //ACÁ DEBERIA VALIDAR QUE EL PEDIDO ESTÉ PAGO Y ENTREGADO
+        //AUNQUE PROBABLEMENTE TENGA QUE HACERLO DESDE EL REPOSITORIO
         $order_id = $request->get('order_id');
         return $this->service->markCompleted($order_id);
     }
