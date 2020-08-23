@@ -45,9 +45,9 @@ class ProductsRepository implements ProductsRepositoryInterface
   {
     return "hello";
   }
-  public function getProductById()
+  public function getProductById(int $product_id)
   {
-    return "hello";
+    return Product::find($product_id);
   }
   public function deleteProductById(int $product_id)
   {

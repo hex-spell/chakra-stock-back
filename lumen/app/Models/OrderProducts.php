@@ -18,6 +18,8 @@ class OrderProducts extends Pivot
     /**
      * @var array
      */
+    public $timestamps = false;
+
     protected $fillable = ['ammount', 'delivered', 'product_history_id'];
 
     protected $table = 'order_products';

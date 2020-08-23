@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Interfaces\Services\OrdersServiceInterface;
+use App\Interfaces\Services\ProductsServiceInterface;
 
 class OrdersController extends Controller
 {
@@ -15,10 +16,12 @@ class OrdersController extends Controller
      */
 
     private $service;
+    private $productsService;
 
-    public function __construct(OrdersServiceInterface $service)
+    public function __construct(OrdersServiceInterface $service, ProductsServiceInterface $productsService)
     {
         $this->service = $service;
+        $this->productsService = $productsService;
     }
 
     public function getOrders(Request $request)
@@ -92,6 +95,7 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         $product_id = $request->get('product_id');
         $ammount = $request->get('ammount');
+        $delivered = $request->get('delivered');
         $this->validate(
             $request,
             [
@@ -110,9 +114,10 @@ class OrdersController extends Controller
                     })
                 ],
                 'ammount' => 'required|integer',
+                'delivered' => 'required|integer'
             ]
         );
-        return $this->service->modifyOrderProduct($order_id, $product_id, $ammount);
+        return $this->service->modifyOrderProduct($order_id, $product_id, $ammount, $delivered);
     }
     public function removeOrderProduct(Request $request)
     {
@@ -132,9 +137,19 @@ class OrdersController extends Controller
     {
         //ACÁ DEBERÍA VALIDAR QUE LA CANTIDAD ENTREGADA NO SEA MAYOR A LA CANTIDAD QUE HAY EN STOCK
         //HACIENDO UNA REGLA DE VALIDACION PERSONALIZADA
+        $order_id = $request->get('order_id');
         $product_id = $request->get('product_id');
         $ammount = $request->get('ammount');
-        return $this->service->markDelivered($product_id, $ammount);
+        $ammountOnStock = $this->productsService->getProductById($product_id)->stock;
+        $this->validate(
+            $request,
+            [
+                'order_id' => 'required|numeric|exists:order_products,order_id',
+                'product_id' => 'required|numeric|exists:order_products,product_id',
+                'ammount' => 'required|numeric|max:'.$ammountOnStock
+            ]
+        );
+        return $this->service->markDelivered($order_id, $product_id, $ammount);
     }
     public function getTransactions(Request $request)
     {

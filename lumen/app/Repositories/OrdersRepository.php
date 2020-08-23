@@ -18,7 +18,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $loweredOrder = strtolower($order);
         $loweredType = strtolower($type);
 
-        $Orders = Order::where('type', $loweredType)->with('contact')->withCount('products')->orderBy('created_at','desc');
+        $Orders = Order::where('type', $loweredType)->with('contact')->withCount('products')->orderBy('created_at', 'desc');
 
         //argumentos para el where
         $whereRaw = ['lower(contacts.name) like (?)', ["%{$loweredSearch}%"]];
@@ -105,7 +105,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $Order->type = $type;
         return $Order->save();
     }
-    public function addOrderProduct(int $order_id, int $product_id, int $ammount)
+    public function addOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered = 0)
     {
         $Product = Product::find($product_id);
         return Order::find($order_id)->products()->attach(
@@ -113,7 +113,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             [
                 'product_history_id' => $Product->product_history_id,
                 'ammount' => $ammount,
-                'delivered' => 0
+                'delivered' => $delivered
             ]
         );
     }
@@ -121,15 +121,30 @@ class OrdersRepository implements OrdersRepositoryInterface
     {
         return Order::find($order_id)->products()->detach($product_id);
     }
-    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount)
+    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered)
     {
+        //EN VEZ DE ASIGNAR DELIVERED DE NUEVO, DEBERIA BUSCARLO EN LA TABLA Y ASIGNAR EL VALOR ANTERIOR
         $this->removeOrderProduct($order_id, $product_id);
-        return $this->addOrderProduct($order_id, $product_id, $ammount);
+        return $this->addOrderProduct($order_id, $product_id, $ammount, $delivered);
     }
-    public function markDelivered(int $product_id, int $ammount)
+    public function markDelivered(int $order_id, int $product_id, int $ammount)
     {
-        return "hello";
+        //busca el producto en el pedido
+        $OrderProductQuery = OrderProducts::where('order_id', $order_id)->where('product_id', $product_id);
+
+        //obtengo los datos para hacer la suma en la asignacion
+        $OrderProduct = $OrderProductQuery->first();
+
+        //busco el producto en stock
+        $Product = Product::find($product_id);
+
+        //para restarle lo que le sumo a lo entregado
+        $Product->stock -= $ammount;
+
+        //OrderProduct es actualizado de esta forma porque la tabla no tiene llave primaria, y no se puede usar la funcion save() sin una
+        return [$OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $ammount]), $Product->save()];
     }
+
     public function getTransactions(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
@@ -142,16 +157,16 @@ class OrdersRepository implements OrdersRepositoryInterface
         $whereRawType = ['lower(type) like (?)', ["%{$loweredType}%"]];
         $whereRawName = ['lower(name) like (?)', ["%{$loweredSearch}%"]];
 
-        
+
         //filtra la query por tipo de transaccion y nombre de contacto
         $filteredTransactions = $Transactions->whereHas('order', function ($order) use ($whereRawType, $whereRawName) {
-            $orderFilteredByContactName = $order->whereHas('contact', function($contact) use ($whereRawName){
+            $orderFilteredByContactName = $order->whereHas('contact', function ($contact) use ($whereRawName) {
                 return $contact->whereRaw($whereRawName[0], $whereRawName[1]);
             });
             return $orderFilteredByContactName->whereRaw($whereRawType[0], $whereRawType[1]);
         });
 
-        return ['result' => $filteredTransactions->with('order.contact')->orderBy('created_at','desc')->take(10)->offset($offset)->get()];
+        return ['result' => $filteredTransactions->with('order.contact')->orderBy('created_at', 'desc')->take(10)->offset($offset)->get()];
     }
     public function addTransaction(int $order_id, float $sum)
     {

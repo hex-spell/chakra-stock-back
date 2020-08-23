@@ -42,17 +42,17 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->addOrderProduct($order_id, $product_id, $ammount);
     }
-    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount)
+    public function modifyOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered)
     {
-        return $this->repo->modifyOrderProduct($order_id, $product_id, $ammount);
+        return $this->repo->modifyOrderProduct($order_id, $product_id, $ammount, $delivered);
     }
     public function removeOrderProduct(int $order_id, int $product_id)
     {
         return $this->repo->removeOrderProduct($order_id, $product_id);
     }
-    public function markDelivered(int $product_id, int $ammount)
+    public function markDelivered(int $order_id, int $product_id, int $ammount)
     {
-        return $this->repo->markDelivered($product_id, $ammount);
+        return $this->repo->markDelivered($order_id, $product_id, $ammount);
     }
     public function getTransactions(string $search, string $order, string $type, int $offset)
     {

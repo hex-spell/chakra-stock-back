@@ -35,9 +35,9 @@ class ProductsService implements ProductsServiceInterface
         return $this->repo->searchProducts();
     }
 
-    public function getProductById()
+    public function getProductById(int $product_id)
     {
-        return $this->repo->getProductById();
+        return $this->repo->getProductById($product_id);
     }
 
     public function deleteProductById(int $product_id)
