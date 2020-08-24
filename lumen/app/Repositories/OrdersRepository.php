@@ -11,7 +11,10 @@ use App\Models\Transaction;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
-    //ME FALTA ORDENARLOS
+    //POR AHI EN VEZ DE HACER UNA COLUMNA CON EL TIPO DE TRANSACCION, DEBERÍA HACER QUE EL TIPO LO DEFINA EL TIPO DE CONTACTO
+    //LOS DATOS VAN A SER MAS SOLIDOS DE ESA FORMA
+    //ES REDUNDANTE QUE SIEMPRE TENGA QUE ACLARAR QUE LOS CLIENTES HACEN PEDIDOS COMPRANDO
+    //Y CASI NUNCA SUCEDE QUE SE LE COMPRA A UN CLIENTE
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
@@ -91,8 +94,8 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function deleteOrderById(int $order_id)
     {
-        //ESTA FUNCION DEBERÍA DEVOLVER A STOCK LOS ITEMS YA ENTREGADOS?
-        return "hello";
+        //las transacciones y los orderproducts se mantienen en caso de querer reestablecer el pedido
+        return [Order::destroy($order_id)];
     }
     public function postOrder(int $contact_id, string $type)
     {
@@ -154,6 +157,10 @@ class OrdersRepository implements OrdersRepositoryInterface
         $Transactions = Transaction::with('order');
 
         //argumentos para el where
+        //lo hago de esta manera para poder verlos aparte
+        //el whereraw es necesario para que sea case insensitive
+        //podria crear una funcion personalizada para esto, pero ahora mismo no tengo ganas
+        //le pondria whereLowerLikeLower(column,variable);
         $whereRawType = ['lower(type) like (?)', ["%{$loweredType}%"]];
         $whereRawName = ['lower(name) like (?)', ["%{$loweredSearch}%"]];
 
@@ -185,6 +192,8 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function markCompleted(int $order_id)
     {
+        //esta funcion va a revisar que este pago el pedido, si no lo está se va a restar del dinero del contacto (si es un pedido tipo a (saliente))
+
         return "hello";
     }
 }

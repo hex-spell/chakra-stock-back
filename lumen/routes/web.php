@@ -62,6 +62,7 @@ $router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function ()
 
 $router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'OrdersController@getOrders');
+    $router->delete('/', 'OrdersController@deleteOrderById');
     $router->get('/id', 'OrdersController@getOrderById');
     $router->post('/', 'OrdersController@postOrder');
     $router->put('/', 'OrdersController@updateOrder');

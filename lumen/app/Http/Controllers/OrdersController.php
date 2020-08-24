@@ -42,8 +42,10 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         return $this->service->getOrderById($order_id);
     }
-    public function deleteOrderById(int $order_id)
+    public function deleteOrderById(Request $request)
     {
+        $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
+        $order_id = $request->get('order_id');
         return $this->service->deleteOrderById($order_id);
     }
     public function postOrder(Request $request)
@@ -146,7 +148,7 @@ class OrdersController extends Controller
             [
                 'order_id' => 'required|numeric|exists:order_products,order_id',
                 'product_id' => 'required|numeric|exists:order_products,product_id',
-                'ammount' => 'required|numeric|max:'.$ammountOnStock
+                'ammount' => 'required|numeric|max:' . $ammountOnStock
             ]
         );
         return $this->service->markDelivered($order_id, $product_id, $ammount);
