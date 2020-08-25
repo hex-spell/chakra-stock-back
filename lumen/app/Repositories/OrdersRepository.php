@@ -19,13 +19,13 @@ class OrdersRepository implements OrdersRepositoryInterface
     //SINO DESDE EL FRONTEND TENGO QUE HACER QUE NO SE PUEDA ELEGIR Y SIEMPRE PROVEEDORES HAGAN A Y CLIENTES B
     //EN CASO  DE QUE LAS RELACIONES SEAN DEMASIADO COMPLICADAS DE MANEJAR COMO PARA HACER ESTE CAMBIO
     //ESA PODRIA SER LA SOLUCION MAS FLOJA, PERO ES LA MAS RAPIDA AHORA MISMO, CREO
-    public function getOrders(string $search, string $order, string $type, int $offset)
+    public function getOrders(string $search, bool $completed, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
         $loweredType = strtolower($type);
 
-        $Orders = Order::where('type', $loweredType)->with('contact')->withCount('products')->orderBy('created_at', 'desc');
+        $Orders = Order::where('type', $loweredType)->where('completed',$completed)->with('contact')->withCount('products')->orderBy('created_at', 'desc');
 
         //argumentos para el where
         $whereRaw = ['lower(contacts.name) like (?)', ["%{$loweredSearch}%"]];
@@ -136,6 +136,9 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function markDelivered(int $order_id, int $product_id, int $ammount)
     {
+        //busco el pedido para saber el tipo
+        $type = Order::find($order_id)->type;
+
         //busca el producto en el pedido
         $OrderProductQuery = OrderProducts::where('order_id', $order_id)->where('product_id', $product_id);
 
@@ -145,8 +148,8 @@ class OrdersRepository implements OrdersRepositoryInterface
         //busco el producto en stock
         $Product = Product::find($product_id);
 
-        //para restarle lo que le sumo a lo entregado
-        $Product->stock -= $ammount;
+        //para restarle o sumarle lo que le sumo a lo entregado
+        $Product->stock += $type=="a" ? $ammount : -$ammount;
 
         //OrderProduct es actualizado de esta forma porque la tabla no tiene llave primaria, y no se puede usar la funcion save() sin una
         return [$OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $ammount]), $Product->save()];
