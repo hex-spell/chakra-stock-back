@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\Repositories\OrdersRepositoryInterface;
 use App\Models\Order;
+use App\Models\Contact;
 use App\Models\Product;
 use App\Models\OrderProducts;
 use App\Models\ProductHistory;
@@ -15,6 +16,9 @@ class OrdersRepository implements OrdersRepositoryInterface
     //LOS DATOS VAN A SER MAS SOLIDOS DE ESA FORMA
     //ES REDUNDANTE QUE SIEMPRE TENGA QUE ACLARAR QUE LOS CLIENTES HACEN PEDIDOS COMPRANDO
     //Y CASI NUNCA SUCEDE QUE SE LE COMPRA A UN CLIENTE
+    //SINO DESDE EL FRONTEND TENGO QUE HACER QUE NO SE PUEDA ELEGIR Y SIEMPRE PROVEEDORES HAGAN A Y CLIENTES B
+    //EN CASO  DE QUE LAS RELACIONES SEAN DEMASIADO COMPLICADAS DE MANEJAR COMO PARA HACER ESTE CAMBIO
+    //ESA PODRIA SER LA SOLUCION MAS FLOJA, PERO ES LA MAS RAPIDA AHORA MISMO, CREO
     public function getOrders(string $search, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
@@ -193,7 +197,26 @@ class OrdersRepository implements OrdersRepositoryInterface
     public function markCompleted(int $order_id)
     {
         //esta funcion va a revisar que este pago el pedido, si no lo está se va a restar del dinero del contacto (si es un pedido tipo a (saliente))
-
-        return "hello";
+        $OrderDetails = $this->getOrderById($order_id);
+        //el modelo lo cargo aparte para guardar de forma mas limpia
+        $Order = Order::find($order_id);
+        $sum = $OrderDetails['sum'];
+        $paid = $OrderDetails['paid'];
+        $type = $OrderDetails['order']['type'];
+        $Contact = Contact::find($Order->contact_id);
+        if ($sum != $paid){
+            switch($type){
+                case "a":
+                    //A ES CUANDO VOS COMPRAS, EL CONTACTO OBTIENE COMO DINERO "A FAVOR" LO QUE TE FALTÓ PAGAR, ES DECIR ES TU DEUDA
+                    $Contact->money += $sum - $paid;
+                break;
+                case "b":
+                    //B ES CUANDO VOS VENDES, AL CONTACTO SE LE RESTA LO QUE QUEDA POR PAGAR, ES SU DEUDA CON VOS
+                    $Contact->money += $paid - $sum ;
+                break;
+            }
+        }
+        $Order->completed = true;
+        return [$Order->save(), $Contact->save()];
     }
 }

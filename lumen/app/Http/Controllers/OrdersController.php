@@ -50,7 +50,7 @@ class OrdersController extends Controller
     }
     public function postOrder(Request $request)
     {
-        //los tipos son A (salientes) o B (entrantes)
+        //los tipos son A (proveedores) o B (clientes)
         $this->validate(
             $request,
             [
