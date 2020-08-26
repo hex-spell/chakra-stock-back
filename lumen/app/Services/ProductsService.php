@@ -55,6 +55,11 @@ class ProductsService implements ProductsServiceInterface
         return $this->repo->updateProduct($name, $sell, $buy, $stock, $product_id, $category_id);
     }
 
+    public function updateProductStock(int $product_id, int $ammount)
+    {
+        return $this->repo->updateProductStock($product_id, $ammount);
+    }
+
     public function postProductCategory(string $name)
     {
         return $this->repo->postProductCategory($name);

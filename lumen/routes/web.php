@@ -54,6 +54,7 @@ $router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function ()
     $router->delete('/', 'ProductsController@deleteProductById');
     $router->post('/', 'ProductsController@postProduct');
     $router->put('/', 'ProductsController@updateProduct');
+    $router->put('/stock', 'ProductsController@updateProductStock');
     $router->post('/categories', 'ProductsController@postProductCategory');
     $router->put('/categories', 'ProductsController@updateProductCategory');
     $router->delete('/categories', 'ProductsController@deleteProductCategoryById');

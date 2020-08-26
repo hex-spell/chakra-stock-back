@@ -28,10 +28,11 @@ class OrdersController extends Controller
     {
         $search = $request->get('search') ? $request->get('search') : "";
         $completed = $request->get('completed');
+        $delivered = $request->get('delivered');
         $order = $request->get('order') ? $request->get('order') : "";
         $type = $request->get('type') ? $request->get('type') : "a";
         $offset = $request->get('offset') ? $request->get('offset') : 0;
-        return $this->service->getOrders($search, $completed, $order, $type, $offset);
+        return $this->service->getOrders($search, $completed, $delivered, $order, $type, $offset);
     }
     public function searchOrders()
     {

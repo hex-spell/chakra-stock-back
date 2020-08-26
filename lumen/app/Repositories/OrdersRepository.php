@@ -19,13 +19,38 @@ class OrdersRepository implements OrdersRepositoryInterface
     //SINO DESDE EL FRONTEND TENGO QUE HACER QUE NO SE PUEDA ELEGIR Y SIEMPRE PROVEEDORES HAGAN A Y CLIENTES B
     //EN CASO  DE QUE LAS RELACIONES SEAN DEMASIADO COMPLICADAS DE MANEJAR COMO PARA HACER ESTE CAMBIO
     //ESA PODRIA SER LA SOLUCION MAS FLOJA, PERO ES LA MAS RAPIDA AHORA MISMO, CREO
-    public function getOrders(string $search, bool $completed, string $order, string $type, int $offset)
+    public function getOrders(string $search, string $completed, string $delivered, string $order, string $type, int $offset)
     {
         $loweredSearch = strtolower($search);
         $loweredOrder = strtolower($order);
         $loweredType = strtolower($type);
 
-        $Orders = Order::where('type', $loweredType)->where('completed',$completed)->with('contact')->withCount('products')->orderBy('created_at', 'desc');
+        $Orders = Order::where('type', $loweredType)
+            ->where(function ($query) use ($completed) {
+                switch ($completed) {
+                    case "completed":
+                        return $query->where('completed', true);
+                    case "not_completed":
+                        return $query->where('completed', false);
+                    case "all":
+                    default:
+                        return $query;
+                }
+            })
+            ->where(function ($query) use ($delivered) {
+                switch ($delivered) {
+                    case "delivered":
+                        return $query->where('delivered',true);
+                    case "not_delivered":
+                        return $query->where('delivered',false);
+                    case "all":
+                    default:
+                        return $query;
+                }
+            })
+            ->with('contact')
+            ->withCount('products')
+            ->orderBy('created_at', 'desc');
 
         //argumentos para el where
         $whereRaw = ['lower(contacts.name) like (?)', ["%{$loweredSearch}%"]];
@@ -42,22 +67,29 @@ class OrdersRepository implements OrdersRepositoryInterface
         foreach ($filteredOrders as $order) {
             $sum = 0;
             $paid = 0;
+            $delivered = true;
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
             foreach ($order->products()->get() as $product) {
                 $productHistory = ProductHistory::find($product->details->product_history_id);
                 $sell = $productHistory->sell_price;
                 $ammount = $product->details->ammount;
                 $sum += $sell ? $sell * $ammount : 0;
+                //si uno de todos los productos no se entregó, el checkbox de entregado se va a ver falso en el frontend
+                if ($product->details->delivered != $ammount) {
+                    $delivered = false;
+                }
             }
             //loop que suma todas las transacciones para saber el total pagado
             foreach ($order->transactions()->get() as $transaction) {
                 $paid += $transaction->sum;
             }
+            //delivered2 funciona para saber si la funcion checkDelivered esta funcionando
+            $order->delivered2 = $delivered;
             $order->paid = $paid;
             $order->sum = $sum;
         }
 
-        return ['result' => $filteredOrders];
+        return ['result' => $filteredOrders, 'count' => $filteredOrders->count()];
     }
     public function searchOrders()
     {
@@ -115,7 +147,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     public function addOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered = 0)
     {
         $Product = Product::find($product_id);
-        return Order::find($order_id)->products()->attach(
+        $added = Order::find($order_id)->products()->attach(
             $Product,
             [
                 'product_history_id' => $Product->product_history_id,
@@ -123,16 +155,35 @@ class OrdersRepository implements OrdersRepositoryInterface
                 'delivered' => $delivered
             ]
         );
+        return ['added'=>$added, 'checked'=>$this->checkDelivered($order_id)];
     }
     public function removeOrderProduct(int $order_id, int $product_id)
     {
-        return Order::find($order_id)->products()->detach($product_id);
+        $removed = Order::find($order_id)->products()->detach($product_id);
+        return ['removed'=>$removed, 'checked'=>$this->checkDelivered($order_id)];
     }
     public function modifyOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered)
     {
         //EN VEZ DE ASIGNAR DELIVERED DE NUEVO, DEBERIA BUSCARLO EN LA TABLA Y ASIGNAR EL VALOR ANTERIOR
         $this->removeOrderProduct($order_id, $product_id);
-        return $this->addOrderProduct($order_id, $product_id, $ammount, $delivered);
+        $added = $this->addOrderProduct($order_id, $product_id, $ammount, $delivered);
+        return ['modified'=>$added, 'checked'=>$this->checkDelivered($order_id)];
+    }
+    public function checkDelivered(int $order_id)
+    {
+        //reviso si todos los productos estan entregados para marcar delivered
+        $Order = Order::find($order_id);
+        $delivered = true;
+        $AllOrderProducts = OrderProducts::where('order_id', $order_id);
+
+        foreach ($AllOrderProducts->get() as $orderProduct) {
+            if ($orderProduct->ammount != $orderProduct->delivered) {
+                $delivered = false;
+            }
+        }
+
+        $Order->delivered = $delivered;
+        return $Order->save();
     }
     public function markDelivered(int $order_id, int $product_id, int $ammount)
     {
@@ -145,14 +196,17 @@ class OrdersRepository implements OrdersRepositoryInterface
         //obtengo los datos para hacer la suma en la asignacion
         $OrderProduct = $OrderProductQuery->first();
 
+        //actualizo los numeros del producto
+        $update = $OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $ammount]);
+
         //busco el producto en stock
         $Product = Product::find($product_id);
 
         //para restarle o sumarle lo que le sumo a lo entregado
-        $Product->stock += $type=="a" ? $ammount : -$ammount;
+        $Product->stock += $type == "a" ? $ammount : -$ammount;
 
         //OrderProduct es actualizado de esta forma porque la tabla no tiene llave primaria, y no se puede usar la funcion save() sin una
-        return [$OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $ammount]), $Product->save()];
+        return ['updated' => $update, 'checked' => $this->checkDelivered($order_id), 'substracted' => $Product->save()];
     }
 
     public function getTransactions(string $search, string $order, string $type, int $offset)
@@ -207,16 +261,16 @@ class OrdersRepository implements OrdersRepositoryInterface
         $paid = $OrderDetails['paid'];
         $type = $OrderDetails['order']['type'];
         $Contact = Contact::find($Order->contact_id);
-        if ($sum != $paid){
-            switch($type){
+        if ($sum != $paid) {
+            switch ($type) {
                 case "a":
                     //A ES CUANDO VOS COMPRAS, EL CONTACTO OBTIENE COMO DINERO "A FAVOR" LO QUE TE FALTÓ PAGAR, ES DECIR ES TU DEUDA
                     $Contact->money += $sum - $paid;
-                break;
+                    break;
                 case "b":
                     //B ES CUANDO VOS VENDES, AL CONTACTO SE LE RESTA LO QUE QUEDA POR PAGAR, ES SU DEUDA CON VOS
-                    $Contact->money += $paid - $sum ;
-                break;
+                    $Contact->money += $paid - $sum;
+                    break;
             }
         }
         $Order->completed = true;

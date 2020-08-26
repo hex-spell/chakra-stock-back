@@ -36,7 +36,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['contact_id', 'completed', 'type'];
+    protected $fillable = ['contact_id', 'completed', 'type', 'delivered'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

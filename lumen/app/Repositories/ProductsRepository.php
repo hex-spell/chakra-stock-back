@@ -65,6 +65,13 @@ class ProductsRepository implements ProductsRepositoryInterface
     $Product->stock = $stock;
     return $Product->save();
   }
+  public function updateProductStock(int $product_id, int $ammount)
+  {
+    $Product = Product::find($product_id);
+    $Product->stock += $ammount;
+    return $Product->save();
+  }
+
   public function postProductCategory(string $name)
   {
     return ProductCategory::create(['name' => $name]);

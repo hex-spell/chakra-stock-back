@@ -41,7 +41,7 @@ class ProductsController extends Controller
 
     public function getProductById()
     {
-        return $this->service->getProductById();
+        return "hello";
     }
 
     public function deleteProductById(Request $request)
@@ -98,6 +98,16 @@ class ProductsController extends Controller
         $product_id = $request->get('product_id');
         $stock = $request->get('stock') ? $request->get('stock') : 0;
         return $this->service->updateProduct($name, $sell, $buy, $stock, $product_id, $category_id);
+    }
+
+    public function updateProductStock(Request $request){
+        $this->validate($request,[
+            'product_id' => 'required|exists:products,product_id',
+            'ammount' => 'required|integer'
+        ]);
+        $product_id = $request->get('product_id');
+        $ammount = $request->get('ammount');
+        return $this->service->updateProductStock($product_id,$ammount);
     }
 
     public function postProductCategory(Request $request)
