@@ -17,6 +17,10 @@ class ContactsRepository implements ContactsRepositoryInterface {
         return ['result'=>$orderedQuery->skip($offset)->take(10)->get(),'count'=>$count];
     }
 
+    public function getContactsMinified(){
+        return ['result'=>Contact::select('contact_id as value','name')->get()];
+    }
+
     public function searchContacts(string $search){
         $loweredString = strtolower($search);
         return Contact::whereRaw('lower(name) like (?)',["%{$loweredString}%"])->take(10)->get();

@@ -25,6 +25,11 @@ class ContactsService implements ContactsServiceInterface
         return $this->repo->getContacts($offset,$search,$role,$order);
     }
 
+    public function getContactsMinified()
+    {
+        return $this->repo->getContactsMinified();
+    }
+
     public function searchContacts(string $search)
     {
         return $this->repo->searchContacts($search);
