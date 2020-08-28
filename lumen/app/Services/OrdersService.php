@@ -26,6 +26,9 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->getOrderById($order_id);
     }
+    public function getOrderProductsByOrderId(int $order_id){
+        return $this->repo->getOrderProductsByOrderId($order_id);
+    }
     public function deleteOrderById(int $order_id)
     {
         return $this->repo->deleteOrderById($order_id);

@@ -40,9 +40,9 @@ class OrdersRepository implements OrdersRepositoryInterface
             ->where(function ($query) use ($delivered) {
                 switch ($delivered) {
                     case "delivered":
-                        return $query->where('delivered',true);
+                        return $query->where('delivered', true);
                     case "not_delivered":
-                        return $query->where('delivered',false);
+                        return $query->where('delivered', false);
                     case "all":
                     default:
                         return $query;
@@ -95,6 +95,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     {
         return "hello";
     }
+    //funcion provisoria, no tiene uso real en el frontend
     public function getOrderById(int $order_id)
     {
         $Order = Order::find($order_id);
@@ -123,10 +124,28 @@ class OrdersRepository implements OrdersRepositoryInterface
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
             if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
-                $product->currentVersion = $product->currentVersion()->first();
+                $product->current_version = $product->currentVersion()->first();
             }
         }
         return ['order' => $Order, 'sum' => $sum, 'paid' => $paid, 'contact' => $Order->contact()->first(), 'products' => $Products, 'transactions' => $Transactions];
+    }
+    public function getOrderProductsByOrderId(int $order_id)
+    {
+        $Products = OrderProducts::where('order_id', $order_id)->with('productVersion')->select(
+            [
+                "ammount",
+                "delivered",
+                "product_id",
+                "product_history_id"
+            ]
+        )->get();
+        //loop que revisa si los productos estan actualizados
+        foreach ($Products as $product) {
+            if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
+                $product->current_version = $product->currentVersion()->first();
+            }
+        }
+        return ['result' => $Products];
     }
     public function deleteOrderById(int $order_id)
     {
@@ -155,19 +174,19 @@ class OrdersRepository implements OrdersRepositoryInterface
                 'delivered' => $delivered
             ]
         );
-        return ['added'=>$added, 'checked'=>$this->checkDelivered($order_id)];
+        return ['added' => $added, 'checked' => $this->checkDelivered($order_id)];
     }
     public function removeOrderProduct(int $order_id, int $product_id)
     {
         $removed = Order::find($order_id)->products()->detach($product_id);
-        return ['removed'=>$removed, 'checked'=>$this->checkDelivered($order_id)];
+        return ['removed' => $removed, 'checked' => $this->checkDelivered($order_id)];
     }
     public function modifyOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered)
     {
         //EN VEZ DE ASIGNAR DELIVERED DE NUEVO, DEBERIA BUSCARLO EN LA TABLA Y ASIGNAR EL VALOR ANTERIOR
         $this->removeOrderProduct($order_id, $product_id);
         $added = $this->addOrderProduct($order_id, $product_id, $ammount, $delivered);
-        return ['modified'=>$added, 'checked'=>$this->checkDelivered($order_id)];
+        return ['modified' => $added, 'checked' => $this->checkDelivered($order_id)];
     }
     public function checkDelivered(int $order_id)
     {

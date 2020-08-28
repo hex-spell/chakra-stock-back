@@ -7,6 +7,7 @@ interface OrdersRepositoryInterface
     public function getOrders(string $search, string $completed, string $delivered, string $order, string $type, int $offset);
     public function searchOrders();
     public function getOrderById(int $order_id);
+    public function getOrderProductsByOrderId(int $order_id);
     public function deleteOrderById(int $order_id);
     public function postOrder(int $contact_id, string $type);
     public function updateOrder(int $order_id, int $contact_id, string $type);

@@ -44,6 +44,12 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         return $this->service->getOrderById($order_id);
     }
+    public function getOrderProductsByOrderId(Request $request)
+    {
+        $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
+        $order_id = $request->get('order_id');
+        return $this->service->getOrderProductsByOrderId($order_id);
+    }
     public function deleteOrderById(Request $request)
     {
         $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
