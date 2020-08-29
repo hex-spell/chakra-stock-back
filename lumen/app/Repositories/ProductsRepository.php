@@ -41,6 +41,25 @@ class ProductsRepository implements ProductsRepositoryInterface
   {
     return ['result' => ProductCategory::all()];
   }
+  public function getProductsList()
+  {
+    //obtiene lista minificada de productos
+    $Products = Product::with('current')->get();
+    $ProductsList = [];
+    foreach ($Products as $product) {
+      array_push(
+        $ProductsList,
+        (object)[
+          'name' => $product->current->name,
+          'price' => $product->current->sell_price,
+          'stock' => $product->stock,
+          'product_id' => $product->product_id,
+          'category_id' => $product->category_id
+        ]
+      );
+    }
+    return ['result' => $ProductsList, 'count'=>$Products->count()];
+  }
   public function searchProducts()
   {
     return "hello";

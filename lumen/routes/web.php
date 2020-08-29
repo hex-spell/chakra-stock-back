@@ -50,6 +50,7 @@ $router->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function ()
 $router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ProductsController@getProducts');
     $router->get('/categories', 'ProductsController@getProductCategories');
+    $router->get('/list', 'ProductsController@getProductsList');
     $router->get('/search/{search}', 'ProductsController@searchProducts');
     $router->get('/id/{id:[0-9]+}', 'ProductsController@getProductById');
     $router->delete('/', 'ProductsController@deleteProductById');

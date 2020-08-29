@@ -145,7 +145,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                 $product->current_version = $product->currentVersion()->first();
             }
         }
-        return ['result' => $Products];
+        return ['result' => $Products, 'count'=> $Products->count()];
     }
     public function deleteOrderById(int $order_id)
     {

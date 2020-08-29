@@ -34,6 +34,11 @@ class ProductsController extends Controller
         return $this->service->getProductCategories();
     }
 
+    public function getProductsList()
+    {
+        return $this->service->getProductsList();
+    }
+
     public function searchProducts()
     {
         return $this->service->searchProducts();
