@@ -137,7 +137,7 @@ class OrdersController extends Controller
         $this->validate(
             $request,
             [
-                'order_id' => 'required|numeric|exist:order_products,order_id',
+                'order_id' => 'required|numeric|exists:order_products,order_id',
                 'product_id' => 'required|numeric|exists:order_products,product_id'
             ]
         );

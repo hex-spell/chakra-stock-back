@@ -49,7 +49,6 @@ class OrdersRepository implements OrdersRepositoryInterface
                 }
             })
             ->with('contact')
-            ->withCount('products')
             ->orderBy('created_at', 'desc');
 
         //argumentos para el where
@@ -61,19 +60,22 @@ class OrdersRepository implements OrdersRepositoryInterface
         });
 
         //ejecuta la consulta
-        $filteredOrders = $filteredOrders->get();
+        $count = $filteredOrders->count();
+        $filteredOrders = $filteredOrders->offset($offset)->take(10)->get();
 
         //agrega propiedades {sum, paid} a cada pedido
         foreach ($filteredOrders as $order) {
             $sum = 0;
             $paid = 0;
             $delivered = true;
+            $products_count = 0;
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
             foreach ($order->products()->get() as $product) {
                 $productHistory = ProductHistory::find($product->details->product_history_id);
                 $sell = $productHistory->sell_price;
                 $ammount = $product->details->ammount;
                 $sum += $sell ? $sell * $ammount : 0;
+                $products_count += $ammount;
                 //si uno de todos los productos no se entregó, el checkbox de entregado se va a ver falso en el frontend
                 if ($product->details->delivered != $ammount) {
                     $delivered = false;
@@ -87,9 +89,10 @@ class OrdersRepository implements OrdersRepositoryInterface
             $order->delivered2 = $delivered;
             $order->paid = $paid;
             $order->sum = $sum;
+            $order->products_count = $products_count;
         }
 
-        return ['result' => $filteredOrders, 'count' => $filteredOrders->count()];
+        return ['result' => $filteredOrders, 'count' => $count];
     }
     public function searchOrders()
     {
