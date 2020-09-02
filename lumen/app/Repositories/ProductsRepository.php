@@ -51,7 +51,8 @@ class ProductsRepository implements ProductsRepositoryInterface
         $ProductsList,
         (object)[
           'name' => $product->current->name,
-          'price' => $product->current->sell_price,
+          'sell_price' => $product->current->sell_price,
+          'buy_price' => $product->current->buy_price,
           'stock' => $product->stock,
           'product_id' => $product->product_id,
           'category_id' => $product->category_id

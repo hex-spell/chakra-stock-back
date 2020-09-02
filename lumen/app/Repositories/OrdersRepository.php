@@ -72,9 +72,9 @@ class OrdersRepository implements OrdersRepositoryInterface
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
             foreach ($order->products()->get() as $product) {
                 $productHistory = ProductHistory::find($product->details->product_history_id);
-                $sell = $productHistory->sell_price;
+                $price = $order->type==="a" ? $productHistory->buy_price : $productHistory->sell_price;
                 $ammount = $product->details->ammount;
-                $sum += $sell ? $sell * $ammount : 0;
+                $sum += $price ? $price * $ammount : 0;
                 $products_count += $ammount;
                 //si uno de todos los productos no se entregó, el checkbox de entregado se va a ver falso en el frontend
                 if ($product->details->delivered != $ammount) {
@@ -116,7 +116,8 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         //loop que suma los valores de los productos
         foreach ($Products as $product) {
-            $sum += $product->productVersion->sell_price * $product->ammount;
+            $price = $Order->type==="a" ? $product->productVersion->buy_price : $product->productVersion->sell_price;
+            $sum += $Order->type==="a" ? : $price * $product->ammount;
         }
 
         //loop que suma todas las transacciones

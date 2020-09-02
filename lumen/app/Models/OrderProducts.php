@@ -30,6 +30,7 @@ class OrderProducts extends Pivot
             "product_history_id",
             "name",
             "sell_price",
+            "buy_price"
         ]);
     }
 
@@ -39,6 +40,7 @@ class OrderProducts extends Pivot
             "product_history_id",
             "name",
             "sell_price",
+            "buy_price"
         ])->latest();
     }
 }
