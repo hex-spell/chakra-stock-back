@@ -73,7 +73,7 @@ $router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () u
     $router->post('/products', 'OrdersController@addOrderProduct');
     $router->put('/products', 'OrdersController@modifyOrderProduct');
     $router->delete('/products', 'OrdersController@removeOrderProduct');
-    $router->post('/products/delivered', 'OrdersController@markDelivered');
+    $router->post('/products/delivered', 'OrdersController@markDeliveredMultiple');
     $router->get('/transactions', 'OrdersController@getTransactions');
     $router->post('/transactions', 'OrdersController@addTransaction');
     $router->put('/transactions', 'OrdersController@modifyTransaction');

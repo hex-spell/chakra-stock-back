@@ -148,7 +148,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                 $product->current_version = $product->currentVersion()->first();
             }
         }
-        return ['result' => $Products, 'count'=> $Products->count()];
+        return ['result' => $Products, 'count' => $Products->count()];
     }
     public function deleteOrderById(int $order_id)
     {
@@ -229,6 +229,37 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         //OrderProduct es actualizado de esta forma porque la tabla no tiene llave primaria, y no se puede usar la funcion save() sin una
         return ['updated' => $update, 'checked' => $this->checkDelivered($order_id), 'substracted' => $Product->save()];
+    }
+
+    public function markDeliveredMultiple(int $order_id, array $products)
+    {
+        //busco el pedido para saber el tipo
+        $type = Order::find($order_id)->type;
+
+        $updatedStock = [];
+        $updatedOrderProduct = [];
+        foreach ($products as $product) {
+            //busca el producto en el pedido
+            $OrderProductQuery = OrderProducts::where('order_id', $order_id)->where('product_id', $product['product_id']);
+
+            //obtengo los datos para hacer la suma en la asignacion
+            $OrderProduct = $OrderProductQuery->first();
+
+            //actualizo los numeros del producto en el pedido
+            $updatedOrderProduct[] = $OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $product['ammount']]);
+
+            //busco el producto en stock
+            $Product = Product::find($product['product_id']);
+
+            //para restarle o sumarle lo que le sumo a lo entregado
+            $Product->stock += $type == "a" ? $product['ammount'] : -$product['ammount'];
+
+            $updatedStock[] = $Product->save();
+        }
+
+
+        //OrderProduct es actualizado de esta forma porque la tabla no tiene llave primaria, y no se puede usar la funcion save() sin una
+        return ['updated' => $updatedOrderProduct, 'checked' => $this->checkDelivered($order_id), 'updated_stock' => $updatedStock];
     }
 
     public function getTransactions(string $search, string $order, string $type, int $offset)

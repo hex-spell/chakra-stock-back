@@ -15,6 +15,7 @@ interface OrdersServiceInterface
     public function modifyOrderProduct(int $order_id, int $product_id, int $ammount, int $delivered);
     public function removeOrderProduct(int $order_id, int $product_id);
     public function markDelivered(int $order_id, int $product_id, int $ammount);
+    public function markDeliveredMultiple(int $order_id, array $products);
     public function getTransactions(string $search, string $order, string $type, int $offset);
     public function addTransaction(int $order_id, float $sum);
     public function modifyTransaction(int $transaction_id, float $sum);  

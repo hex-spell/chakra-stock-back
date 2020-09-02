@@ -57,6 +57,10 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->markDelivered($order_id, $product_id, $ammount);
     }
+    public function markDeliveredMultiple(int $order_id, array $products)
+    {
+        return $this->repo->markDeliveredMultiple($order_id, $products);
+    }
     public function getTransactions(string $search, string $order, string $type, int $offset)
     {
         return $this->repo->getTransactions($search, $order, $type, $offset);

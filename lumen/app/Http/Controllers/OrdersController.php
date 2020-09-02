@@ -154,12 +154,24 @@ class OrdersController extends Controller
         $this->validate(
             $request,
             [
-                'order_id' => 'required|numeric|exists:order_products,order_id',
-                'product_id' => 'required|numeric|exists:order_products,product_id',
-                'ammount' => 'required|numeric|max:' . $ammountOnStock
+                'order_id' => 'required|integer|exists:order_products,order_id',
+                'product_id' => 'required|integer|exists:order_products,product_id',
+                'ammount' => 'required|integer|max:' . $ammountOnStock
             ]
         );
         return $this->service->markDelivered($order_id, $product_id, $ammount);
+    }
+    public function markDeliveredMultiple(Request $request)
+    {
+        $this->validate($request,[
+            'order_id' => 'required|integer|exists:order_products,order_id',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|numeric|exists:order_products,product_id',
+            'products.*.ammount' => 'required|integer'
+        ]);
+        $order_id = $request->get('order_id');
+        $products = $request->get('products');
+        return $this->service->markDeliveredMultiple($order_id, $products);
     }
     public function getTransactions(Request $request)
     {
