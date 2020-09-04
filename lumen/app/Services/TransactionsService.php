@@ -20,9 +20,9 @@ class TransactionsService implements TransactionsServiceInterface
         $this->repo = $repo;
     }
 
-    public function getTransactions(int $offset,string $search,string $role,string $order)
+    public function getTransactions(int $offset,string $search,string $type)
     {
-        return $this->repo->getTransactions($offset,$search,$role,$order);
+        return $this->repo->getTransactions($offset,$search,$type);
     }
 
     public function getTransactionsMinified()

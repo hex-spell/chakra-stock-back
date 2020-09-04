@@ -51,4 +51,5 @@ class Transaction extends Model
     {
         return $this->belongsTo('App\Models\Order', 'order_id', 'order_id');
     }
+
 }

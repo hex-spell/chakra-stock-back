@@ -4,7 +4,7 @@ namespace App\Interfaces\Services;
 
 interface TransactionsServiceInterface
 {
-    public function getTransactions(int $offset,string $search,string $role,string $order);
+    public function getTransactions(int $offset,string $search,string $type);
     public function getTransactionsMinified();
     public function searchTransactions(string $search);
     public function getTransactionById(int $id);

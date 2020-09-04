@@ -29,10 +29,9 @@ class TransactionsController extends Controller
         //role es 'c' o 'p', clientes o proveedores respectivamente
         //por default quiero que devuelva clientes
         //deberia buscar una forma de validar 'role' para que solamente pueda ser 'c' o 'p'
-        $role = $request->get('role') ? $request->get('role') : 'c';
-        $order = $request->get('order') ? $request->get('order') : 'name';
+        $type = $request->get('type') ? $request->get('type') : 'a';
         //deberia preguntarle a alguien si esto se puede refactorizar, son demasiados parametros para una sola funcion
-        return $this->service->getTransactions($offset, $search, $role, $order);
+        return $this->service->getTransactions($offset, $search, $type);
     }
 
     public function getTransactionsMinified()
