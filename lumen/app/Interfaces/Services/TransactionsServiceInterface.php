@@ -10,5 +10,5 @@ interface TransactionsServiceInterface
     public function getTransactionById(int $id);
     public function deleteTransactionById(int $id);
     public function postTransaction(string $name, string $phone, string $role, float $money, string $address);
-    public function updateTransaction(string $name,string $phone,string $address,float $money,int $id);
+    public function updateTransaction(int $transaction_id, float $sum);
 }

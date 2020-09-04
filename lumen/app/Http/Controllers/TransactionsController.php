@@ -79,20 +79,12 @@ class TransactionsController extends Controller
         $this->validate(
             $request,
             [
-                'name' => 'required|string|between:4,30',
-                'address' => 'required|string|between:4,30',
-                'contact_id' => 'required|integer|exists:contacts,contact_id',
-                'money' => 'required|numeric',
-                'phone' => 'required|numeric|unique:contacts,phone,'
-                    . $request->get('contact_id') .
-                    ',contact_id'
+                'transaction_id' => 'required|numeric|exists:transactions,transaction_id',
+                'sum' => 'required|numeric'
             ]
         );
-        $name = $request->get('name');
-        $phone = $request->get('phone');
-        $address = $request->get('address');
-        $money = $request->get('money');
-        $id = $request->get('contact_id');
-        return $this->service->updateTransaction($name, $phone, $address, $money, $id);
+        $transaction_id = $request->get('transaction_id');
+        $sum = $request->get('sum');
+        return $this->service->updateTransaction($transaction_id, $sum);
     }
 }

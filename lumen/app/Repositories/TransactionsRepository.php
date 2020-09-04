@@ -11,21 +11,15 @@ class TransactionsRepository implements TransactionsRepositoryInterface
     {
         //los paso a minusculas para asegurarme de no perder resultados
         //tengo que hacer un middleware para hacer todo esto minusculas
-        //('lower(contact.name) like (?) and lower(orderType) = (?)', ["%{$loweredSearch}%", "{$loweredType}"]);
         $loweredSearch = strtolower($search);
         $loweredType = strtolower($type);
 
-        $query = Transaction::
-        with('contact:name,contact_id')
-        ->with('order:type,order_id')
-        ->whereHas('contact', function ($query) use ($loweredSearch) {
-            return $query->whereRaw('lower(name) like (?)', ["%{$loweredSearch}%"]);
-        })
-        ->whereHas('order', function ($query) use ($loweredType) {
-            return $query->whereRaw('lower(type) like (?)', ["%{$loweredType}%"]);
-        });
+        //aca tengo que agregar orders.completed para definir desde el frontend si se puede modificar o no la transaccion
+        $query = Transaction::select('transactions.*','contacts.name','orders.type')
+        ->leftJoin('orders','transactions.order_id','=','orders.order_id')
+        ->leftJoin('contacts','transactions.contact_id','=','contacts.contact_id')
+        ->whereRaw('lower(name) like ? and lower(type) = ?', ["%{$loweredSearch}%","{$loweredType}"]);
 
-        //si el orden es por fecha, quiero que sea descendiente
         $count = $query->count();
         return ['result' => $query->orderBy('created_at','desc')->skip($offset)->take(10)->get(), 'count' => $count];
     }
@@ -46,9 +40,9 @@ class TransactionsRepository implements TransactionsRepositoryInterface
         return Transaction::find($id);
     }
 
-    public function deleteTransactionById(int $id)
+    public function deleteTransactionById(int $transaction_id)
     {
-        return Transaction::destroy($id);
+        return Transaction::find($transaction_id)->destroy();
     }
 
     public function postTransaction(string $name, string $phone, string $role, float $money, string $address)
@@ -56,13 +50,10 @@ class TransactionsRepository implements TransactionsRepositoryInterface
         return Transaction::create(['name' => $name, 'phone' => $phone, 'role' => $role, 'money' => $money, 'address' => $address]);
     }
 
-    public function updateTransaction(string $name, string $phone, string $address, float $money, int $id)
+    public function updateTransaction(int $transaction_id, float $sum)
     {
-        $Transaction = Transaction::find($id);
-        $Transaction->name = $name;
-        $Transaction->phone = $phone;
-        $Transaction->address = $address;
-        $Transaction->money = $money;
+        $Transaction = Transaction::find($transaction_id);
+        $Transaction->sum = $sum;
         return $Transaction->save();
     }
 }

@@ -50,8 +50,8 @@ class TransactionsService implements TransactionsServiceInterface
         return $this->repo->postTransaction($name, $phone, $role, $money, $address);
     }
 
-    public function updateTransaction(string $name,string $phone,string $address,float $money,int $id)
+    public function updateTransaction(int $transaction_id, float $sum)
     {
-        return $this->repo->updateTransaction($name,$phone,$address,$money,$id);
+        return $this->repo->updateTransaction($transaction_id, $sum);
     }
 }

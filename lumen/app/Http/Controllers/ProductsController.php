@@ -23,7 +23,7 @@ class ProductsController extends Controller
     public function getProducts(Request $request)
     {
         $search = $request->get('search') ? $request->get('search') : "";
-        $order = $request->get('order') ? $request->get('order') : "name";
+        $order = $request->get('order') ? $request->get('order') : "stock";
         $category_id = $request->get('category_id') ? $request->get('category_id') : 0; //si es 0, que obtenga todas las categorias
         $offset = $request->get('offset') ? $offset = $request->get('offset') : 0;
         return $this->service->getProducts($search, $order, $category_id, $offset);
