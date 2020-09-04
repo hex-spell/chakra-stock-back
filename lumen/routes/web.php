@@ -80,3 +80,13 @@ $router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () u
     $router->delete('/transactions', 'OrdersController@deleteTransaction');
     $router->post('/completed', 'OrdersController@markCompleted');
 });
+
+$router->group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function () use ($router) {
+    $router->get('/', 'TransactionsController@getTransactions');
+    $router->get('/menu', 'TransactionsController@getTransactionsMinified');
+    $router->get('/search/{search}', 'TransactionsController@searchTransactions');
+    $router->get('/id/{id:[0-9]+}', 'TransactionsController@getTransactionById');
+    $router->delete('/id/{id:[0-9]+}', 'TransactionsController@deleteTransactionById');
+    $router->post('/', 'TransactionsController@postTransaction');
+    $router->put('/', 'TransactionsController@updateTransaction');
+});

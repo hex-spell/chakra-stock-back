@@ -11,7 +11,8 @@ use App\Services\ExpensesService;
 use App\Interfaces\Services\ExpensesServiceInterface;
 use App\Services\ProductsService;
 use App\Interfaces\Services\ProductsServiceInterface;
-use App\Models\Product;
+use App\Services\TransactionsService;
+use App\Interfaces\Services\TransactionsServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ContactsServiceInterface::class, ContactsService::class);
+        $this->app->bind(TransactionsServiceInterface::class, TransactionsService::class);
         $this->app->bind(OrdersServiceInterface::class, OrdersService::class);
         $this->app->bind(ExpensesServiceInterface::class, ExpensesService::class);
         $this->app->bind(ProductsServiceInterface::class, ProductsService::class);

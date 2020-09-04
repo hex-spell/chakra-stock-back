@@ -72,7 +72,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
             foreach ($order->products()->get() as $product) {
                 $productHistory = ProductHistory::find($product->details->product_history_id);
-                $price = $order->type==="a" ? $productHistory->buy_price : $productHistory->sell_price;
+                $price = $order->type === "a" ? $productHistory->buy_price : $productHistory->sell_price;
                 $ammount = $product->details->ammount;
                 $sum += $price ? $price * $ammount : 0;
                 $products_count += $ammount;
@@ -116,8 +116,8 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         //loop que suma los valores de los productos
         foreach ($Products as $product) {
-            $price = $Order->type==="a" ? $product->productVersion->buy_price : $product->productVersion->sell_price;
-            $sum += $Order->type==="a" ? : $price * $product->ammount;
+            $price = $Order->type === "a" ? $product->productVersion->buy_price : $product->productVersion->sell_price;
+            $sum += $Order->type === "a" ?: $price * $product->ammount;
         }
 
         //loop que suma todas las transacciones
@@ -307,10 +307,20 @@ class OrdersRepository implements OrdersRepositoryInterface
     }
     public function markCompleted(int $order_id)
     {
-        //esta funcion va a revisar que este pago el pedido, si no lo está se va a restar del dinero del contacto (si es un pedido tipo a (saliente))
-        $OrderDetails = $this->getOrderById($order_id);
         //el modelo lo cargo aparte para guardar de forma mas limpia
         $Order = Order::find($order_id);
+        foreach ($Order->products()->get() as $product) {
+            if($product->details->delivered){
+                $this->modifyOrderProduct($order_id, $product->product_id, $product->details->delivered, $product->details->delivered);
+            }
+            else {
+                $this->removeOrderProduct($order_id,$product->product_id);
+            }
+        }
+        $Order->completed = true;
+        $Order->save();
+        //esta funcion va a revisar que este pago el pedido, si no lo está se va a restar del dinero del contacto (si es un pedido tipo a (saliente))
+        $OrderDetails = $this->getOrderById($order_id);
         $sum = $OrderDetails['sum'];
         $paid = $OrderDetails['paid'];
         $type = $OrderDetails['order']['type'];
@@ -327,7 +337,6 @@ class OrdersRepository implements OrdersRepositoryInterface
                     break;
             }
         }
-        $Order->completed = true;
-        return [$Order->save(), $Contact->save()];
+        return [$Contact->save()];
     }
 }
