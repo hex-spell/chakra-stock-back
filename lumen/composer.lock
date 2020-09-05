@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f3f30390774afe83fce6415cf58ed1e",
+    "content-hash": "522b2349b999508d4eb361b19ac6ce7e",
     "packages": [
+        {
+            "name": "askedio/laravel-soft-cascade",
+            "version": "7.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Askedio/laravel-soft-cascade.git",
+                "reference": "a9384201c86c2b5b2e41f562c9eaba82a8cf1a53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Askedio/laravel-soft-cascade/zipball/a9384201c86c2b5b2e41f562c9eaba82a8cf1a53",
+                "reference": "a9384201c86c2b5b2e41f562c9eaba82a8cf1a53",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "^7.0",
+                "illuminate/database": "^7.0",
+                "illuminate/events": "^7.0",
+                "illuminate/support": "^7.0",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "codacy/coverage": "dev-master",
+                "orchestra/testbench": "^5.0",
+                "phpunit/phpunit": "^8.4|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Askedio\\SoftCascade\\Providers\\GenericServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Askedio\\SoftCascade\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Laravel Cascade Soft Delete & Restore",
+            "time": "2020-06-27T11:51:18+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.8.14",

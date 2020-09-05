@@ -70,8 +70,8 @@ class OrdersRepository implements OrdersRepositoryInterface
             $delivered = true;
             $products_count = 0;
             //loop que suma los valores de los productos multiplicados por la cantidad pedida
-            foreach ($order->products()->get() as $product) {
-                $productHistory = ProductHistory::find($product->details->product_history_id);
+            foreach ($order->products()->withTrashed()->get() as $product) {
+                $productHistory = ProductHistory::withTrashed()->find($product->details->product_history_id);
                 $price = $order->type === "a" ? $productHistory->buy_price : $productHistory->sell_price;
                 $ammount = $product->details->ammount;
                 $sum += $price ? $price * $ammount : 0;
@@ -127,7 +127,7 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
-            if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
+            if ($product->product_history_id !== Product::withTrashed()->find($product->product_id)->product_history_id) {
                 $product->current_version = $product->currentVersion()->first();
             }
         }
@@ -145,7 +145,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         )->get();
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
-            if ($product->product_history_id !== Product::find($product->product_id)->product_history_id) {
+            if ($product->product_history_id !== Product::withTrashed()->find($product->product_id)->product_history_id) {
                 $product->current_version = $product->currentVersion()->first();
             }
         }
@@ -214,7 +214,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $type = Order::find($order_id)->type;
 
         //busca el producto en el pedido
-        $OrderProductQuery = OrderProducts::where('order_id', $order_id)->where('product_id', $product_id);
+        $OrderProductQuery = OrderProducts::withTrashed()->where('order_id', $order_id)->where('product_id', $product_id);
 
         //obtengo los datos para hacer la suma en la asignacion
         $OrderProduct = $OrderProductQuery->first();
@@ -223,7 +223,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $update = $OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $ammount]);
 
         //busco el producto en stock
-        $Product = Product::find($product_id);
+        $Product = Product::withTrashed()->find($product_id);
 
         //para restarle o sumarle lo que le sumo a lo entregado
         $Product->stock += $type == "a" ? $ammount : -$ammount;
@@ -250,7 +250,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             $updatedOrderProduct[] = $OrderProductQuery->update(['delivered' => $OrderProduct->delivered += $product['ammount']]);
 
             //busco el producto en stock
-            $Product = Product::find($product['product_id']);
+            $Product = Product::withTrashed()->find($product['product_id']);
 
             //para restarle o sumarle lo que le sumo a lo entregado
             $Product->stock += $type == "a" ? $product['ammount'] : -$product['ammount'];

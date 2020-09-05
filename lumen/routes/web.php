@@ -29,7 +29,7 @@ $router->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function ()
     $router->get('/menu', 'ContactsController@getContactsMinified');
     $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
-    $router->delete('/id/{id:[0-9]+}', 'ContactsController@deleteContactById');
+    $router->delete('/', 'ContactsController@deleteContactById');
     $router->post('/', 'ContactsController@postContact');
     $router->put('/', 'ContactsController@updateContact');
 });

@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-//$app->withFacades();
+$app->withFacades();
 
 $app->withEloquent();
 
@@ -101,6 +101,7 @@ $app->middleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AppRepositoryProvider::class);
 $app->register(Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class);
+$app->register(Askedio\SoftCascade\Providers\LumenServiceProvider::class);
 //$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 

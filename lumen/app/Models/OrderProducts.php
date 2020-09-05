@@ -31,7 +31,7 @@ class OrderProducts extends Pivot
             "name",
             "sell_price",
             "buy_price"
-        ]);
+        ])->withTrashed();
     }
 
     public function currentVersion() {

@@ -50,8 +50,12 @@ class ContactsController extends Controller
         return $this->service->getContactById($id);
     }
 
-    public function deleteContactById(int $id)
+    public function deleteContactById(Request $request)
     {
+        $this->validate($request,[
+            'contact_id' => 'required|exists:contacts,contact_id'
+        ]);
+        $id = $request->get('contact_id');
         return $this->service->deleteContactById($id);
     }
 
