@@ -40,11 +40,6 @@ class ContactsController extends Controller
         return $this->service->getContactsMinified();
     }
 
-    public function searchContacts(string $search)
-    {
-        return $this->service->searchContacts($search);
-    }
-
     public function getContactById(int $id)
     {
         return $this->service->getContactById($id);

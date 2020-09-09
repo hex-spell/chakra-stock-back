@@ -34,27 +34,13 @@ class TransactionsController extends Controller
         return $this->service->getTransactions($offset, $search, $type);
     }
 
-    public function getTransactionsMinified()
-    {
-        return $this->service->getTransactionsMinified();
-    }
-
-    public function searchTransactions(string $search)
-    {
-        return $this->service->searchTransactions($search);
-    }
-
-    public function getTransactionById(int $id)
-    {
-        return $this->service->getTransactionById($id);
-    }
-
     public function deleteTransactionById(int $id)
     {
         return $this->service->deleteTransactionById($id);
     }
 
-    public function postTransaction(Request $request)
+    //POR AHORA ESTO NO LO USO
+    /* public function postTransaction(Request $request)
     {
         $this->validate(
             $request,
@@ -72,7 +58,7 @@ class TransactionsController extends Controller
         $role = $request->get('role');
         $money = $request->get('money');
         return $this->service->postTransaction($name, $phone, $role, $money, $address);
-    }
+    } */
 
     public function updateTransaction(Request $request)
     {

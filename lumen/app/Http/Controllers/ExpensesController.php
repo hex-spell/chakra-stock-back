@@ -34,16 +34,6 @@ class ExpensesController extends Controller
         return $this->service->getExpenseCategories();
     }
 
-    public function searchExpenses()
-    {
-        return $this->service->searchExpenses();
-    }
-
-    public function getExpenseById()
-    {
-        return $this->service->getExpenseById();
-    }
-
     public function deleteExpenseById(Request $request)
     {
         {

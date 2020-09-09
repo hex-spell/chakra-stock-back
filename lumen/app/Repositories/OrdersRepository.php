@@ -94,10 +94,7 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         return ['result' => $filteredOrders, 'count' => $count];
     }
-    public function searchOrders()
-    {
-        return "hello";
-    }
+
     //funcion provisoria, no tiene uso real en el frontend
     public function getOrderById(int $order_id)
     {

@@ -39,14 +39,10 @@ class ProductsController extends Controller
         return $this->service->getProductsList();
     }
 
-    public function searchProducts()
-    {
-        return $this->service->searchProducts();
-    }
 
-    public function getProductById()
+    public function getProductById(int $id)
     {
-        return "hello";
+        return $this->service->getProductById($id);
     }
 
     public function deleteProductById(Request $request)

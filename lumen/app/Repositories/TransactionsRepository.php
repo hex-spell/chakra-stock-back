@@ -29,12 +29,6 @@ class TransactionsRepository implements TransactionsRepositoryInterface
         return ['result' => Transaction::select('contact_id as value', 'name')->get()];
     }
 
-    public function searchTransactions(string $search)
-    {
-        $loweredString = strtolower($search);
-        return Transaction::whereRaw('lower(name) like (?)', ["%{$loweredString}%"])->take(10)->get();
-    }
-
     public function getTransactionById(int $id)
     {
         return Transaction::find($id);

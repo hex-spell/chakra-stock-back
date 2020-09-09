@@ -34,10 +34,6 @@ class OrdersController extends Controller
         $offset = $request->get('offset') ? $request->get('offset') : 0;
         return $this->service->getOrders($search, $completed, $delivered, $order, $type, $offset);
     }
-    public function searchOrders()
-    {
-        return $this->service->searchOrders();
-    }
     public function getOrderById(Request $request)
     {
         $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);

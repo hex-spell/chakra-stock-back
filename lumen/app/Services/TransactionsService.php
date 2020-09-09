@@ -30,11 +30,6 @@ class TransactionsService implements TransactionsServiceInterface
         return $this->repo->getTransactionsMinified();
     }
 
-    public function searchTransactions(string $search)
-    {
-        return $this->repo->searchTransactions($search);
-    }
-
     public function getTransactionById(int $id)
     {
         return $this->repo->getTransactionById($id);

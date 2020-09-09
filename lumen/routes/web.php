@@ -27,7 +27,6 @@ $router->group(['prefix' => 'users'], function () use ($router) {
 $router->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ContactsController@getContacts');
     $router->get('/menu', 'ContactsController@getContactsMinified');
-    $router->get('/search/{search}', 'ContactsController@searchContacts');
     $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
     $router->delete('/', 'ContactsController@deleteContactById');
     $router->post('/', 'ContactsController@postContact');
@@ -37,8 +36,6 @@ $router->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function ()
 $router->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'ExpensesController@getExpenses');
     $router->get('/categories', 'ExpensesController@getExpenseCategories');
-    $router->get('/search/{search}', 'ExpensesController@searchExpenses');
-    $router->get('/id/{id:[0-9]+}', 'ExpensesController@getExpenseById');
     $router->delete('/', 'ExpensesController@deleteExpenseById');
     $router->post('/', 'ExpensesController@postExpense');
     $router->put('/', 'ExpensesController@updateExpense');
@@ -51,7 +48,6 @@ $router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function ()
     $router->get('/', 'ProductsController@getProducts');
     $router->get('/categories', 'ProductsController@getProductCategories');
     $router->get('/list', 'ProductsController@getProductsList');
-    $router->get('/search/{search}', 'ProductsController@searchProducts');
     $router->get('/id/{id:[0-9]+}', 'ProductsController@getProductById');
     $router->delete('/', 'ProductsController@deleteProductById');
     $router->post('/', 'ProductsController@postProduct');
@@ -84,9 +80,9 @@ $router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () u
 $router->group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function () use ($router) {
     $router->get('/', 'TransactionsController@getTransactions');
     $router->get('/menu', 'TransactionsController@getTransactionsMinified');
-    $router->get('/search/{search}', 'TransactionsController@searchTransactions');
-    $router->get('/id/{id:[0-9]+}', 'TransactionsController@getTransactionById');
     $router->delete('/id/{id:[0-9]+}', 'TransactionsController@deleteTransactionById');
     $router->post('/', 'TransactionsController@postTransaction');
     $router->put('/', 'TransactionsController@updateTransaction');
 });
+
+$router->options('/{route:.*}/', function () { return response(['status' => 'success']); });

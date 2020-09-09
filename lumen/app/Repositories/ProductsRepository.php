@@ -59,10 +59,6 @@ class ProductsRepository implements ProductsRepositoryInterface
     }
     return ['result' => $ProductsList, 'count' => $Products->count()];
   }
-  public function searchProducts()
-  {
-    return "hello";
-  }
   public function getProductById(int $product_id)
   {
     return Product::find($product_id);

@@ -18,10 +18,6 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->getOrders($search, $completed, $delivered, $order, $type, $offset);
     }
-    public function searchOrders()
-    {
-        return $this->repo->searchOrders();
-    }
     public function getOrderById(int $order_id)
     {
         return $this->repo->getOrderById($order_id);

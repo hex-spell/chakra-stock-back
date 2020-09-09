@@ -28,15 +28,6 @@ class ExpensesRepository implements ExpensesRepositoryInterface
     return ['result'=>ExpenseCategory::all()];
   }
 
-
-  public function searchExpenses()
-  {
-    return "hello";
-  }
-  public function getExpenseById()
-  {
-    return "hello";
-  }
   public function deleteExpenseById(int $expense_id)
   {
     return Expense::destroy($expense_id);

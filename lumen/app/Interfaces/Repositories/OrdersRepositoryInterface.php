@@ -5,7 +5,6 @@ namespace App\Interfaces\Repositories;
 interface OrdersRepositoryInterface
 {
     public function getOrders(string $search, string $completed, string $delivered, string $order, string $type, int $offset);
-    public function searchOrders();
     public function getOrderById(int $order_id);
     public function getOrderProductsByOrderId(int $order_id);
     public function deleteOrderById(int $order_id);
