@@ -12,77 +12,86 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+$api = app('Dingo\Api\Routing\Router');
 
-$router->post('/login', 'AuthController@authenticate');
+$api->version('v0.1', function ($api) {
 
-$router->group(['prefix' => 'users'], function () use ($router) {
-    $router->get('/', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@getUsers']);
-    $router->get('/{id}', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@getUserByID']);
-    $router->post('/', 'UsersController@addUser');
-    $router->put('/updatename', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@updateUserName']);
-    $router->put('/updatepassword', ['middleware' => 'jwt.auth', 'uses' => 'UsersController@updateUserPassword']);
-    $router->delete('/', 'UsersController@deleteUser');
+$api->post('/login', 'App\Http\Controllers\AuthController@authenticate');
+
+$api->group(['prefix' => 'users'], function($api) {
+    $api->get('/', ['middleware' => 'jwt.auth', 'uses' => 'App\Http\Controllers\UsersController@getUsers']);
+    $api->get('/{id}', ['middleware' => 'jwt.auth', 'uses' => 'App\Http\Controllers\UsersController@getUserByID']);
+    $api->post('/', 'App\Http\Controllers\UsersController@addUser');
+    $api->put('/updatename', ['middleware' => 'jwt.auth', 'uses' => 'App\Http\Controllers\UsersController@updateUserName']);
+    $api->put('/updatepassword', ['middleware' => 'jwt.auth', 'uses' => 'App\Http\Controllers\UsersController@updateUserPassword']);
+    $api->delete('/{id}', 'App\Http\Controllers\UsersController@deleteUser');
 });
 
-$router->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function () use ($router) {
-    $router->get('/', 'ContactsController@getContacts');
-    $router->get('/menu', 'ContactsController@getContactsMinified');
-    $router->get('/id/{id:[0-9]+}', 'ContactsController@getContactById');
-    $router->delete('/', 'ContactsController@deleteContactById');
-    $router->post('/', 'ContactsController@postContact');
-    $router->put('/', 'ContactsController@updateContact');
+$api->group(['prefix' => 'contacts', 'middleware' => 'jwt.auth'], function($api) {
+    $api->get('/', 'App\Http\Controllers\ContactsController@getContacts');
+    $api->get('/menu', 'App\Http\Controllers\ContactsController@getContactsMinified');
+    $api->get('/id/{id:[0-9]+}', 'App\Http\Controllers\ContactsController@getContactById');
+    $api->delete('/', 'App\Http\Controllers\ContactsController@deleteContactById');
+    $api->post('/', 'App\Http\Controllers\ContactsController@postContact');
+    $api->put('/', 'App\Http\Controllers\ContactsController@updateContact');
 });
 
-$router->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function () use ($router) {
-    $router->get('/', 'ExpensesController@getExpenses');
-    $router->get('/categories', 'ExpensesController@getExpenseCategories');
-    $router->delete('/', 'ExpensesController@deleteExpenseById');
-    $router->post('/', 'ExpensesController@postExpense');
-    $router->put('/', 'ExpensesController@updateExpense');
-    $router->post('/categories', 'ExpensesController@postExpenseCategory');
-    $router->put('/categories', 'ExpensesController@updateExpenseCategory');
-    $router->delete('/categories', 'ExpensesController@deleteExpenseCategoryById');
+$api->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function($api) {
+    $api->get('/', 'App\Http\Controllers\ExpensesController@getExpenses');
+    $api->get('/categories', 'App\Http\Controllers\ExpensesController@getExpenseCategories');
+    $api->delete('/', 'App\Http\Controllers\ExpensesController@deleteExpenseById');
+    $api->post('/', 'App\Http\Controllers\ExpensesController@postExpense');
+    $api->put('/', 'App\Http\Controllers\ExpensesController@updateExpense');
+    $api->post('/categories', 'App\Http\Controllers\ExpensesController@postExpenseCategory');
+    $api->put('/categories', 'App\Http\Controllers\ExpensesController@updateExpenseCategory');
+    $api->delete('/categories', 'App\Http\Controllers\ExpensesController@deleteExpenseCategoryById');
 });
 
-$router->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function () use ($router) {
-    $router->get('/', 'ProductsController@getProducts');
-    $router->get('/categories', 'ProductsController@getProductCategories');
-    $router->get('/list', 'ProductsController@getProductsList');
-    $router->get('/id/{id:[0-9]+}', 'ProductsController@getProductById');
-    $router->delete('/', 'ProductsController@deleteProductById');
-    $router->post('/', 'ProductsController@postProduct');
-    $router->put('/', 'ProductsController@updateProduct');
-    $router->put('/stock', 'ProductsController@updateProductStock');
-    $router->post('/categories', 'ProductsController@postProductCategory');
-    $router->put('/categories', 'ProductsController@updateProductCategory');
-    $router->delete('/categories', 'ProductsController@deleteProductCategoryById');
+$api->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function($api) {
+    $api->get('/', 'App\Http\Controllers\ProductsController@getProducts');
+    $api->get('/categories', 'App\Http\Controllers\ProductsController@getProductCategories');
+    $api->get('/list', 'App\Http\Controllers\ProductsController@getProductsList');
+    $api->get('/id/{id:[0-9]+}', 'App\Http\Controllers\ProductsController@getProductById');
+    $api->delete('/', 'App\Http\Controllers\ProductsController@deleteProductById');
+    $api->post('/', 'App\Http\Controllers\ProductsController@postProduct');
+    $api->put('/', 'App\Http\Controllers\ProductsController@updateProduct');
+    $api->put('/stock', 'App\Http\Controllers\ProductsController@updateProductStock');
+    $api->post('/categories', 'App\Http\Controllers\ProductsController@postProductCategory');
+    $api->put('/categories', 'App\Http\Controllers\ProductsController@updateProductCategory');
+    $api->delete('/categories', 'App\Http\Controllers\ProductsController@deleteProductCategoryById');
 });
 
 
-$router->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function () use ($router) {
-    $router->get('/', 'OrdersController@getOrders');
-    $router->delete('/', 'OrdersController@deleteOrderById');
-    $router->get('/id', 'OrdersController@getOrderById');
-    $router->get('/id/products', 'OrdersController@getOrderProductsByOrderId');
-    $router->post('/', 'OrdersController@postOrder');
-    $router->put('/', 'OrdersController@updateOrder');
-    $router->post('/products', 'OrdersController@addOrderProduct');
-    $router->put('/products', 'OrdersController@modifyOrderProduct');
-    $router->delete('/products', 'OrdersController@removeOrderProduct');
-    $router->post('/products/delivered', 'OrdersController@markDeliveredMultiple');
-    $router->get('/transactions', 'OrdersController@getTransactions');
-    $router->post('/transactions', 'OrdersController@addTransaction');
-    $router->put('/transactions', 'OrdersController@modifyTransaction');
-    $router->delete('/transactions', 'OrdersController@deleteTransaction');
-    $router->post('/completed', 'OrdersController@markCompleted');
+$api->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function($api) {
+    $api->get('/', 'App\Http\Controllers\OrdersController@getOrders');
+    $api->delete('/', 'App\Http\Controllers\OrdersController@deleteOrderById');
+    $api->get('/id', 'App\Http\Controllers\OrdersController@getOrderById');
+    $api->get('/id/products', 'App\Http\Controllers\OrdersController@getOrderProductsByOrderId');
+    $api->post('/', 'App\Http\Controllers\OrdersController@postOrder');
+    $api->put('/', 'App\Http\Controllers\OrdersController@updateOrder');
+    $api->post('/products', 'App\Http\Controllers\OrdersController@addOrderProduct');
+    $api->put('/products', 'App\Http\Controllers\OrdersController@modifyOrderProduct');
+    $api->delete('/products', 'App\Http\Controllers\OrdersController@removeOrderProduct');
+    $api->post('/products/delivered', 'App\Http\Controllers\OrdersController@markDeliveredMultiple');
+    $api->get('/transactions', 'App\Http\Controllers\OrdersController@getTransactions');
+    $api->post('/transactions', 'App\Http\Controllers\OrdersController@addTransaction');
+    $api->put('/transactions', 'App\Http\Controllers\OrdersController@modifyTransaction');
+    $api->delete('/transactions', 'App\Http\Controllers\OrdersController@deleteTransaction');
+    $api->post('/completed', 'App\Http\Controllers\OrdersController@markCompleted');
 });
 
-$router->group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function () use ($router) {
-    $router->get('/', 'TransactionsController@getTransactions');
-    $router->get('/menu', 'TransactionsController@getTransactionsMinified');
-    $router->delete('/id/{id:[0-9]+}', 'TransactionsController@deleteTransactionById');
-    $router->post('/', 'TransactionsController@postTransaction');
-    $router->put('/', 'TransactionsController@updateTransaction');
+$api->group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function($api) {
+    $api->get('/', 'App\Http\Controllers\TransactionsController@getTransactions');
+    $api->get('/menu', 'App\Http\Controllers\TransactionsController@getTransactionsMinified');
+    $api->delete('/id/{id:[0-9]+}', 'App\Http\Controllers\TransactionsController@deleteTransactionById');
+    $api->post('/', 'App\Http\Controllers\TransactionsController@postTransaction');
+    $api->put('/', 'App\Http\Controllers\TransactionsController@updateTransaction');
 });
 
-$router->options('/{route:.*}/', function () { return response(['status' => 'success']); });
+$api->group(['prefix'=>'stats'], function($api){
+    $api->get('/','App\Http\Controllers\StatsController@hello');
+});
+
+$api->options('/{route:.*}/', function () { return response(['status' => 'success']); });
+
+});

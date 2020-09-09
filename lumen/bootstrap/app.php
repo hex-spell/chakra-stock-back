@@ -102,6 +102,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AppRepositoryProvider::class);
 $app->register(Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class);
 $app->register(Askedio\SoftCascade\Providers\LumenServiceProvider::class);
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
 //$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 

@@ -6,6 +6,11 @@ use App\Interfaces\Repositories\UsersRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+/**
+ * Representación del recurso de usuarios.
+ *
+ * @Resource("Users", uri="/users")
+ */
 class UsersController extends Controller
 {
     /**
@@ -23,43 +28,88 @@ class UsersController extends Controller
         $this->repo = $repo;
     }
 
-    private $validateUserName = ['name'=>'required|string|between:4,30'];
+    private $validateUserName = ['name' => 'required|string|between:4,30'];
 
-    private $validateUserPassword = ['name'=>'required|string|between:4,30'];
+    private $validateUserPassword = ['name' => 'required|string|between:4,30'];
 
-    private $validateAddUser = ['name'=>'required|string|between:4,30','email'=>'required|email|between:4,30|unique:users,email','password'=>'required|string|between:4,30'];
+    private $validateAddUser = ['name' => 'required|string|between:4,30', 'email' => 'required|email|between:4,30|unique:users,email', 'password' => 'required|string|between:4,30'];
 
-    public function getUsers(){
+    /**
+     * Mostrar todos los usuarios.
+     *
+     * Obtener una representación JSON de todos los usuarios en la base de datos.
+     *
+     * @Get("/")
+     */
+    public function getUsers()
+    {
         return User::all();
     }
 
-    public function getUserByID(int $id){
+    /**
+     * Obtener usuario específico.
+     *
+     * Obtener una representación JSON de un usuario por su ID.
+     *
+     * @Get("/id/{id}")
+     * @Request("id=integer", contentType="application/x-www-form-urlencoded")
+     */
+    public function getUserByID(int $id)
+    {
         return User::find($id);
     }
 
-    public function addUser(){
-        $this->validate($this->request,$this->validateAddUser);
+    /**
+     * Crear un nuevo usuario.
+     * 
+     * @Post("/")
+     * @Request({"name": "string", "password": "string", "email": "email"})
+     */
+    public function addUser()
+    {
+        $this->validate($this->request, $this->validateAddUser);
         $name = $this->request->json()->get('name');
         $password = app('hash')->make($this->request->json()->get('password'));
         $email = $this->request->json()->get('email');
-        return $this->repo->addUser($name,$password,$email);
+        return $this->repo->addUser($name, $password, $email);
     }
 
-    public function updateUserName(){
-        $this->validate($this->request,$this->validateUserName);
+    /**
+     * Actualizar nombre de usuario.
+     * 
+     * @Put("/updatename")
+     * @Request({"name": "string"}, headers={"Authorization": "Bearer {token}"}))
+     */
+    public function updateUserName()
+    {
+        $this->validate($this->request, $this->validateUserName);
         $name = $this->request->json()->get('name');
         $id = $this->request->auth->id;
-        return $this->repo->updateUserName($name,$id);
+        return $this->repo->updateUserName($name, $id);
     }
 
-    public function updateUserPassword(){
-        $this->validate($this->request,$this->validateUserPassword);
+    /**
+     * Actualizar contraseña.
+     * 
+     * @Put("/updatepassword")
+     * @Request({"password": "string"}, headers={"Authorization": "Bearer {token}"}))
+     */
+    public function updateUserPassword()
+    {
+        $this->validate($this->request, $this->validateUserPassword);
         $password = $this->request->json()->get('password');
         $id = $this->request->auth->id;
-        return $this->repo->updateUserPassword($password,$id);
+        return $this->repo->updateUserPassword($password, $id);
     }
 
-    public function deleteUser(int $id){
+    /**
+     * Eliminar usuario.
+     * 
+     * @Delete("/{id}")
+     * @Request("id=integer", contentType="application/x-www-form-urlencoded")
+     */
+    public function deleteUser(int $id)
+    {
         //return $this->service->deleteUser($id);
     }
 }
