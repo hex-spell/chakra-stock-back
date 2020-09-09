@@ -40,7 +40,7 @@ class UsersController extends Controller
      * Obtener una representación JSON de todos los usuarios en la base de datos.
      *
      * @Get("/")
-     * @Response(200, body={"response":{{"user_id": "integer", "email": "string", "name": "string"}}, "count":"integer"})
+     * @Response(200, body={"result":{{"user_id": "integer", "email": "string", "name": "string"}}, "count":"integer"})
      */
     public function getUsers()
     {

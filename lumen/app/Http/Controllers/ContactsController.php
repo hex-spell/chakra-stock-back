@@ -27,20 +27,21 @@ class ContactsController extends Controller
 
     /**
      * Obtener contactos. 
-     * Filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
+     * Filtrados por nombre, rol y offset.
+     * Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
      * El límite está programado a 10.
      * Los roles son "c" para los clientes y "p" para los proveedores
+     * Los parámetros pueden ser enviados por querystring o por json.
      * 
-     * @Get("/{search?,role?,order?,offset?}")
-     * 
+     * @Get("{search?,role?,order?,offset?}")
+     * @Request({"search":"Patricio", "role":"c", "order":"name", "offset":"0"},headers={"Authorization": "Bearer {token}"})
      * @Parameters({
-     *      @Parameter("search", type="string", required=false, description="Buscar por nombre de contacto.", default=""),
-     *      @Parameter("role", type="c|p", required=false, description="Filtrar por cliente o proveedor.", default="c"),
-     *      @Parameter("order", type="name|created_at|updated_at|money", required=false, description="Define la columna utilizada para ordenar los resultados.", default="name"),
+     *      @Parameter("search", type="string", required=false, description="Buscar por nombre de contacto.", default="String vacío"),
+     *      @Parameter("role", type="'c'|'p'", required=false, description="Filtrar por cliente o proveedor.", default="c"),
+     *      @Parameter("order", type="'name'|'created_at'|'updated_at'|'money'", required=false, description="Define la columna utilizada para ordenar los resultados.", default="name"),
      *      @Parameter("offset", type="integer", required=false, description="Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.", default=0)
      *  })
-     * //@Request({"search": "string", "role": "c|p", "order": "name|created_at|updated_at|money", "offset": "integer"}, headers={"Authorization": "Bearer {token}"})
-     * @Response(200, body={"response":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
+     * @Response(200, body={"result":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
      */
     public function getContacts(Request $request)
     {
@@ -56,6 +57,16 @@ class ContactsController extends Controller
         return $this->service->getContacts($offset, $search, $role, $order);
     }
 
+    /**
+     * Obtener contactos minificados.
+     * Retorna una lista de todos los contactos, sólamente con sus nombres e ID's.
+     * Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús <select>
+     * 
+     * @Get("/menu")
+     * 
+     * @Request(headers={"Authorization": "Bearer {token}"})
+     * @Response(200, body={"result":{{"value": "integer", "name": "string"}}, "count":"integer"})
+     */
     public function getContactsMinified()
     {
         return $this->service->getContactsMinified();
