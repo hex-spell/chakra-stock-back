@@ -135,6 +135,9 @@ Elegí el alias "value" para los ID's porque desde el frontend servía para usar
     + Headers
 
             Authorization: Bearer {token}
+    + Body
+
+            []
 
 + Response 200 (application/json)
     + Body

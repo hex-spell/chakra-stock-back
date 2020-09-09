@@ -64,7 +64,7 @@ class ContactsController extends Controller
      * 
      * @Get("/menu")
      * 
-     * @Request(headers={"Authorization": "Bearer {token}"})
+     * @Request({},headers={"Authorization": "Bearer {token}"})
      * @Response(200, body={"result":{{"value": "integer", "name": "string"}}, "count":"integer"})
      */
     public function getContactsMinified()
