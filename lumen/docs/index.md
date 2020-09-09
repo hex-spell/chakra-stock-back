@@ -159,7 +159,7 @@ Los parámetros pueden ser enviados por querystring o por json.
 
 ## Obtener contactos minificados. [GET /contacts/menu]
 Retorna una lista de todos los contactos, sólamente con sus nombres e ID's.
-Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús <select>
+Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús 'select'
 
 + Request (application/json)
     + Headers

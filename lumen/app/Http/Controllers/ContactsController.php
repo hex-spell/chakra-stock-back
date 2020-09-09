@@ -60,7 +60,7 @@ class ContactsController extends Controller
     /**
      * Obtener contactos minificados.
      * Retorna una lista de todos los contactos, sólamente con sus nombres e ID's.
-     * Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús <select>
+     * Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús 'select'
      * 
      * @Get("/menu")
      * 
