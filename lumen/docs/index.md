@@ -85,9 +85,10 @@ Obtener una representación JSON de un usuario por su ID.
 
             id=integer
 
-# AppHttpControllersContactsController
+# Contacts [/contacts]
+Representación del recurso de contactos.
 
-## Mostrar los contactos filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda. [GET /]
+## Mostrar los contactos filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda. [GET /contacts]
 El límite está programado a 10.
 Los roles son "c" para los clientes y "p" para los proveedores
 
