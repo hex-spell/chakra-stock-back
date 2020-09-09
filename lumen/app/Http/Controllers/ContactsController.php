@@ -72,11 +72,32 @@ class ContactsController extends Controller
         return $this->service->getContactsMinified();
     }
 
+    /**
+     * Obtener contacto específico.
+     *
+     * Obtener una representación JSON de un contacto por su ID.
+     *
+     * @Get("/id/{id}")
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del contacto.")
+     * })
+     * @Request({},headers={"Authorization": "Bearer {token}"})
+     * @Response(200, body={"user_id": "integer", "email": "string", "name": "string"})
+     */
     public function getContactById(int $id)
     {
         return $this->service->getContactById($id);
     }
 
+    /**
+     * Eliminar contacto.
+     * 
+     * @Delete("/")
+     * @Request({"contact_id":"x"},headers={"Authorization": "Bearer {token}"})
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del contacto.")
+     * })
+     */
     public function deleteContactById(Request $request)
     {
         $this->validate($request, [
@@ -86,6 +107,12 @@ class ContactsController extends Controller
         return $this->service->deleteContactById($id);
     }
 
+    /**
+     * Crear un nuevo contacto.
+     * 
+     * @Post("/")
+     * @Request({"name": "string", "phone": "string", "address": "string", "role": "'c'|'p'"},headers={"Authorization": "Bearer {token}"})
+     */
     public function postContact(Request $request)
     {
         $this->validate(
@@ -106,6 +133,12 @@ class ContactsController extends Controller
         return $this->service->postContact($name, $phone, $role, $money, $address);
     }
 
+    /**
+     * Actualizar contacto.
+     * 
+     * @Put("/")
+     * @Request({"contact_id":"integer", "name": "string", "phone": "string", "address": "string", "role": "'c'|'p'"},headers={"Authorization": "Bearer {token}"})
+     */
     public function updateContact(Request $request)
     {
         $this->validate(

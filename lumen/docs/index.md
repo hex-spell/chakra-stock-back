@@ -181,3 +181,75 @@ Elegí el alias "value" para los ID's porque desde el frontend servía para usar
                 ],
                 "count": "integer"
             }
+
+## Obtener contacto específico. [GET /contacts/id/{id}]
+Obtener una representación JSON de un contacto por su ID.
+
++ Parameters
+    + id (integer, required) - ID del contacto.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "user_id": "integer",
+                "email": "string",
+                "name": "string"
+            }
+
+## Eliminar contacto. [DELETE /contacts]
+
+
++ Parameters
+    + id (integer, required) - ID del contacto.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "contact_id": "x"
+            }
+
+## Crear un nuevo contacto. [POST /contacts]
+
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "name": "string",
+                "phone": "string",
+                "address": "string",
+                "role": "'c'|'p'"
+            }
+
+## Actualizar contacto. [PUT /contacts]
+
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "contact_id": "integer",
+                "name": "string",
+                "phone": "string",
+                "address": "string",
+                "role": "'c'|'p'"
+            }
