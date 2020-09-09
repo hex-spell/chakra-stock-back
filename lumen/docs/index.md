@@ -25,11 +25,6 @@ Obtener una representación JSON de todos los usuarios en la base de datos.
 ## Obtener usuario específico. [GET /users/id/{id}]
 Obtener una representación JSON de un usuario por su ID.
 
-+ Request (application/x-www-form-urlencoded)
-    + Body
-
-            id=integer
-
 + Response 200 (application/json)
     + Body
 
@@ -80,30 +75,23 @@ Obtener una representación JSON de un usuario por su ID.
 ## Eliminar usuario. [DELETE /users/{id}]
 
 
-+ Request (application/x-www-form-urlencoded)
-    + Body
-
-            id=integer
-
 # Contactos [/contacts]
 Representación del recurso de contactos.
 
-## Mostrar los contactos filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda. [GET /contacts]
+## Obtener contactos. [GET /contacts/{search?,role?,order?,offset?}]
+Filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
 El límite está programado a 10.
 Los roles son "c" para los clientes y "p" para los proveedores
 
-+ Request (application/json)
-    + Headers
-
-            Authorization: Bearer {token}
-    + Body
-
-            {
-                "search": "string",
-                "role": "c|p",
-                "order": "name|created_at|updated_at|money",
-                "offset": "integer"
-            }
++ Parameters
+    + search (string, optional) - Buscar por nombre de contacto.
+        + Default: 
+    + role (c|p, optional) - Filtrar por cliente o proveedor.
+        + Default: c
+    + order (name|created_at|updated_at|money, optional) - Define la columna utilizada para ordenar los resultados.
+        + Default: name
+    + offset (integer, optional) - Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.
+        + Default: 0
 
 + Response 200 (application/json)
     + Body

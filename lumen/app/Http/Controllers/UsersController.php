@@ -53,7 +53,6 @@ class UsersController extends Controller
      * Obtener una representación JSON de un usuario por su ID.
      *
      * @Get("/id/{id}")
-     * @Request("id=integer", contentType="application/x-www-form-urlencoded")
      * @Response(200, body={"user_id": "integer", "email": "string", "name": "string"})
      */
     public function getUserByID(int $id)
@@ -108,7 +107,6 @@ class UsersController extends Controller
      * Eliminar usuario.
      * 
      * @Delete("/{id}")
-     * @Request("id=integer", contentType="application/x-www-form-urlencoded")
      */
     public function deleteUser(int $id)
     {
