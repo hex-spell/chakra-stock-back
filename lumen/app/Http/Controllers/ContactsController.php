@@ -20,7 +20,17 @@ class ContactsController extends Controller
         $this->service = $service;
     }
 
-    //NO OLVIDARME DE AGREGAR EL PARAMETRO DE ORDENAR
+    /**
+     * Mostrar los contactos filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
+     * El límite está programado a 10.
+     * Los roles son "c" para los clientes y "p" para los proveedores
+     * 
+     * @Get("/")
+     * 
+     * @Request("search=string&role=c|p&order=name|created_at|updated_at|money&offset=integer", contentType="application/x-www-form-urlencoded", headers={"Authorization": "Bearer {token}"})
+     * @Request({"search": "string", "role": "c|p", "order": "name|created_at|updated_at|money", "offset": "integer"}, headers={"Authorization": "Bearer {token}"})
+     * @Response(200, body={"response":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
+     */
     public function getContacts(Request $request)
     {
         //saca los 4 parametros de la url
@@ -47,7 +57,7 @@ class ContactsController extends Controller
 
     public function deleteContactById(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'contact_id' => 'required|exists:contacts,contact_id'
         ]);
         $id = $request->get('contact_id');

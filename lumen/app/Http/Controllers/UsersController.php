@@ -40,6 +40,7 @@ class UsersController extends Controller
      * Obtener una representación JSON de todos los usuarios en la base de datos.
      *
      * @Get("/")
+     * @Response(200, body={"response":{{"user_id": "integer", "email": "string", "name": "string"}}, "count":"integer"})
      */
     public function getUsers()
     {
@@ -53,6 +54,7 @@ class UsersController extends Controller
      *
      * @Get("/id/{id}")
      * @Request("id=integer", contentType="application/x-www-form-urlencoded")
+     * @Response(200, body={"user_id": "integer", "email": "string", "name": "string"})
      */
     public function getUserByID(int $id)
     {
@@ -78,7 +80,7 @@ class UsersController extends Controller
      * Actualizar nombre de usuario.
      * 
      * @Put("/updatename")
-     * @Request({"name": "string"}, headers={"Authorization": "Bearer {token}"}))
+     * @Request({"name": "string"}, headers={"Authorization": "Bearer {token}"})
      */
     public function updateUserName()
     {
@@ -92,7 +94,7 @@ class UsersController extends Controller
      * Actualizar contraseña.
      * 
      * @Put("/updatepassword")
-     * @Request({"password": "string"}, headers={"Authorization": "Bearer {token}"}))
+     * @Request({"password": "string"}, headers={"Authorization": "Bearer {token}"})
      */
     public function updateUserPassword()
     {
