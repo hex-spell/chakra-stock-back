@@ -92,13 +92,18 @@ Representación del recurso de contactos.
 El límite está programado a 10.
 Los roles son "c" para los clientes y "p" para los proveedores
 
-+ Request (application/x-www-form-urlencoded)
++ Request (application/json)
     + Headers
 
             Authorization: Bearer {token}
     + Body
 
-            search=string&role=c|p&order=name|created_at|updated_at|money&offset=integer
+            {
+                "search": "string",
+                "role": "c|p",
+                "order": "name|created_at|updated_at|money",
+                "offset": "integer"
+            }
 
 + Response 200 (application/json)
     + Body

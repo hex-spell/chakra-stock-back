@@ -32,7 +32,6 @@ class ContactsController extends Controller
      * 
      * @Get("/")
      * 
-     * @Request("search=string&role=c|p&order=name|created_at|updated_at|money&offset=integer", contentType="application/x-www-form-urlencoded", headers={"Authorization": "Bearer {token}"})
      * @Request({"search": "string", "role": "c|p", "order": "name|created_at|updated_at|money", "offset": "integer"}, headers={"Authorization": "Bearer {token}"})
      * @Response(200, body={"response":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
      */
