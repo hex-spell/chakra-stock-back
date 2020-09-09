@@ -40,6 +40,7 @@ class UsersController extends Controller
      * Obtener una representación JSON de todos los usuarios en la base de datos.
      *
      * @Get("/")
+     * @Request({},headers={"Authorization": "Bearer {token}"})
      * @Response(200, body={"result":{{"user_id": "integer", "email": "string", "name": "string"}}, "count":"integer"})
      */
     public function getUsers()
@@ -53,6 +54,10 @@ class UsersController extends Controller
      * Obtener una representación JSON de un usuario por su ID.
      *
      * @Get("/id/{id}")
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del usuario.")
+     * })
+     * @Request({},headers={"Authorization": "Bearer {token}"})
      * @Response(200, body={"user_id": "integer", "email": "string", "name": "string"})
      */
     public function getUserByID(int $id)
@@ -107,6 +112,10 @@ class UsersController extends Controller
      * Eliminar usuario.
      * 
      * @Delete("/{id}")
+     * @Request({},headers={"Authorization": "Bearer {token}"})
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del usuario.")
+     * })
      */
     public function deleteUser(int $id)
     {

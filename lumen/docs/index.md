@@ -8,6 +8,14 @@ Representación del recurso de usuarios.
 ## Mostrar todos los usuarios. [GET /users]
 Obtener una representación JSON de todos los usuarios en la base de datos.
 
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
+
 + Response 200 (application/json)
     + Body
 
@@ -24,6 +32,17 @@ Obtener una representación JSON de todos los usuarios en la base de datos.
 
 ## Obtener usuario específico. [GET /users/id/{id}]
 Obtener una representación JSON de un usuario por su ID.
+
++ Parameters
+    + id (integer, required) - ID del usuario.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
 
 + Response 200 (application/json)
     + Body
@@ -74,6 +93,17 @@ Obtener una representación JSON de un usuario por su ID.
 
 ## Eliminar usuario. [DELETE /users/{id}]
 
+
++ Parameters
+    + id (integer, required) - ID del usuario.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
 
 # Contactos [/contacts]
 Representación del recurso de contactos.
