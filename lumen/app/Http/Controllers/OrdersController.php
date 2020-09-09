@@ -7,6 +7,11 @@ use Illuminate\Validation\Rule;
 use App\Interfaces\Services\OrdersServiceInterface;
 use App\Interfaces\Services\ProductsServiceInterface;
 
+/**
+ * Representación del recurso de pedidos.
+ *
+ * @Resource("Pedidos", uri="/orders")
+ */
 class OrdersController extends Controller
 {
     /**
@@ -24,6 +29,24 @@ class OrdersController extends Controller
         $this->productsService = $productsService;
     }
 
+    /**
+     * Obtener Pedidos. 
+     * Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) y offset.
+     * Ordenados por suma, fecha de creación o fecha de actualización.
+     * El límite está programado a 10.
+     * Los parámetros pueden ser enviados por querystring o por json.
+     * 
+     * @Get("{search?,type?,completed?,delivered?,order?,offset?}")
+     * @Request({"search":"Patricio", "role":"c", "order":"name", "offset":"0"},headers={"Authorization": "Bearer {token}"})
+     * @Parameters({
+     *      @Parameter("search", type="string", required=false, description="Buscar por descripción del gasto.", default="String vacío"),
+     *      @Parameter("completed", type="'completed'|'not_completed'|'all'", required=false, description="Filtrar por compleción.", default="all"),
+     *      @Parameter("delivered", type="'delivered'|'not_delivered'|'all'", required=false, description="Filtrar por entregados.", default="all"),
+     *      @Parameter("order", type="'created_at'|'updated_at'", required=false, description="Define la columna utilizada para ordenar los resultados. No está utilizado en el front", default="created_at"),
+     *      @Parameter("offset", type="integer", required=false, description="Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.", default=0)
+     *  })
+     * @Response(200, body={"result":{{"expense_id": "integer", "category_id": "integer", "description": "string", "sum": "float", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
+     */
     public function getOrders(Request $request)
     {
         $search = $request->get('search') ? $request->get('search') : "";
@@ -159,7 +182,7 @@ class OrdersController extends Controller
     }
     public function markDeliveredMultiple(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'order_id' => 'required|integer|exists:order_products,order_id',
             'products' => 'required|array',
             'products.*.product_id' => 'required|numeric|exists:order_products,product_id',

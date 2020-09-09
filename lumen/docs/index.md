@@ -409,3 +409,55 @@ Retorna una lista de todas las categorías de los gastos.
             {
                 "expense_id": "integer"
             }
+
+# Pedidos [/orders]
+Representación del recurso de pedidos.
+
+## Obtener Pedidos. [GET /orders/{search?,type?,completed?,delivered?,order?,offset?}]
+Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) y offset.
+Ordenados por suma, fecha de creación o fecha de actualización.
+El límite está programado a 10.
+Los parámetros pueden ser enviados por querystring o por json.
+
++ Parameters
+    + search (string, optional) - Buscar por descripción del gasto.
+        + Default: String vacío
+    + completed ('completed'|'not_completed'|'all', optional) - Filtrar por compleción.
+        + Default: all
+    + delivered ('delivered'|'not_delivered'|'all', optional) - Filtrar por entregados.
+        + Default: all
+    + order ('created_at'|'updated_at', optional) - Define la columna utilizada para ordenar los resultados. No está utilizado en el front
+        + Default: created_at
+    + offset (integer, optional) - Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.
+        + Default: 0
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "search": "Patricio",
+                "role": "c",
+                "order": "name",
+                "offset": "0"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "result": [
+                    {
+                        "expense_id": "integer",
+                        "category_id": "integer",
+                        "description": "string",
+                        "sum": "float",
+                        "created_at": "timestamp",
+                        "updated_at": "timestamp",
+                        "deleted_at": "null"
+                    }
+                ],
+                "count": "integer"
+            }
