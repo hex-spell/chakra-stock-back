@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Interfaces\Services\ContactsServiceInterface;
 use Illuminate\Http\Request;
 
+/**
+ * Representación del recurso de contactos.
+ *
+ * @Resource("Contacts", uri="/contacts")
+ */
 class ContactsController extends Controller
 {
     /**
