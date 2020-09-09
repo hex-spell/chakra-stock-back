@@ -414,7 +414,7 @@ Retorna una lista de todas las categorías de los gastos.
 Representación del recurso de pedidos.
 
 ## Obtener Pedidos. [GET /orders/{search?,type?,completed?,delivered?,order?,offset?}]
-Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) y offset.
+Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) ('a' o 'b', respectivamente) y offset.
 Ordenados por suma, fecha de creación o fecha de actualización.
 El límite está programado a 10.
 Los parámetros pueden ser enviados por querystring o por json.
@@ -450,13 +450,23 @@ Los parámetros pueden ser enviados por querystring o por json.
             {
                 "result": [
                     {
-                        "expense_id": "integer",
-                        "category_id": "integer",
-                        "description": "string",
+                        "order_id": "integer",
+                        "contact_id": "integer",
+                        "completed": "boolean",
+                        "delivered": "boolean",
+                        "type": "'a'|'b'",
+                        "paid": "float",
                         "sum": "float",
+                        "products_count": "integer",
                         "created_at": "timestamp",
                         "updated_at": "timestamp",
-                        "deleted_at": "null"
+                        "deleted_at": "null",
+                        "contact": {
+                            "name": "string",
+                            "address": "string",
+                            "phone": "string",
+                            "contact_id": "integer"
+                        }
                     }
                 ],
                 "count": "integer"

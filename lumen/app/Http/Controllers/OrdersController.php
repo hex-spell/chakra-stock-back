@@ -31,7 +31,7 @@ class OrdersController extends Controller
 
     /**
      * Obtener Pedidos. 
-     * Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) y offset.
+     * Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) ('a' o 'b', respectivamente) y offset.
      * Ordenados por suma, fecha de creación o fecha de actualización.
      * El límite está programado a 10.
      * Los parámetros pueden ser enviados por querystring o por json.
@@ -45,7 +45,7 @@ class OrdersController extends Controller
      *      @Parameter("order", type="'created_at'|'updated_at'", required=false, description="Define la columna utilizada para ordenar los resultados. No está utilizado en el front", default="created_at"),
      *      @Parameter("offset", type="integer", required=false, description="Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.", default=0)
      *  })
-     * @Response(200, body={"result":{{"expense_id": "integer", "category_id": "integer", "description": "string", "sum": "float", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
+     * @Response(200, body={"result":{{"order_id": "integer", "contact_id": "integer", "completed": "boolean", "delivered": "boolean", "type": "'a'|'b'", "paid": "float", "sum": "float", "products_count": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null", "contact":{"name":"string","address":"string","phone":"string","contact_id":"integer"}}}, "count":"integer"})
      */
     public function getOrders(Request $request)
     {
