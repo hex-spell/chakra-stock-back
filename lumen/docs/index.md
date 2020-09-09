@@ -85,7 +85,7 @@ Obtener una representación JSON de un usuario por su ID.
 
             id=integer
 
-# Contacts [/contacts]
+# Contactos [/contacts]
 Representación del recurso de contactos.
 
 ## Mostrar los contactos filtrados por nombre, rol y offset. Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda. [GET /contacts]

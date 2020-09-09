@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 /**
  * Representación del recurso de contactos.
  *
- * @Resource("Contacts", uri="/contacts")
+ * @Resource("Contactos", uri="/contacts")
  */
 class ContactsController extends Controller
 {
