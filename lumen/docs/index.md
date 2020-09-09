@@ -251,9 +251,10 @@ Obtener una representación JSON de un contacto por su ID.
                 "contact_id": "integer"
             }
 
-# AppHttpControllersExpensesController
+# Gastos [/expenses]
+Representación del recurso de gastos.
 
-## Obtener gastos. [GET /{search?,category_id,order?,offset?}]
+## Obtener gastos. [GET /expenses/{search?,category_id,order?,offset?}]
 Filtrados por descripción, categoría y offset.
 Ordenados por descripción, suma, fecha de creación o fecha de actualización.
 El límite está programado a 10.
@@ -299,7 +300,7 @@ Los parámetros pueden ser enviados por querystring o por json.
                 "count": "integer"
             }
 
-## Obtener categorías. [GET /categories]
+## Obtener categorías. [GET /expenses/categories]
 Retorna una lista de todas las categorías de los gastos.
 
 + Request (application/json)
@@ -323,7 +324,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "count": "integer"
             }
 
-## Crear una categoría. [POST /categories]
+## Crear una categoría. [POST /expenses/categories]
 
 
 + Request (application/json)
@@ -336,7 +337,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "name": "string"
             }
 
-## Actualizar una categoría. [PUT /categories]
+## Actualizar una categoría. [PUT /expenses/categories]
 
 
 + Request (application/json)
@@ -350,7 +351,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "category_id": "integer"
             }
 
-## Eliminar una categoría. [DELETE /categories]
+## Eliminar una categoría. [DELETE /expenses/categories]
 
 
 + Request (application/json)
@@ -363,7 +364,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "category_id": "integer"
             }
 
-## Postear un gasto. [POST /]
+## Postear un gasto. [POST /expenses]
 
 
 + Request (application/json)
@@ -379,7 +380,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "sum": "float"
             }
 
-## Actualizar un gasto. [PUT /]
+## Actualizar un gasto. [PUT /expenses]
 
 
 + Request (application/json)
@@ -396,7 +397,7 @@ Retorna una lista de todas las categorías de los gastos.
                 "sum": "float"
             }
 
-## Eliminar gasto. [DELETE /]
+## Eliminar gasto. [DELETE /expenses]
 
 
 + Request (application/json)

@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Interfaces\Services\ExpensesServiceInterface;
 use Illuminate\Http\Request;
 
+/**
+ * Representación del recurso de gastos.
+ *
+ * @Resource("Gastos", uri="/expenses")
+ */
 class ExpensesController extends Controller
 {
     /**
