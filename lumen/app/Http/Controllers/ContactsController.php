@@ -41,7 +41,7 @@ class ContactsController extends Controller
      *      @Parameter("order", type="'name'|'created_at'|'updated_at'|'money'", required=false, description="Define la columna utilizada para ordenar los resultados.", default="name"),
      *      @Parameter("offset", type="integer", required=false, description="Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.", default=0)
      *  })
-     * @Response(200, body={"result":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "integer", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
+     * @Response(200, body={"result":{{"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "float", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"}}, "count":"integer"})
      */
     public function getContacts(Request $request)
     {
@@ -87,24 +87,6 @@ class ContactsController extends Controller
     public function getContactById(int $id)
     {
         return $this->service->getContactById($id);
-    }
-
-    /**
-     * Eliminar contacto.
-     * 
-     * @Delete("/")
-     * @Request({"contact_id":"x"},headers={"Authorization": "Bearer {token}"})
-     * @Parameters({
-     *      @Parameter("id", type="integer", required=true, description="ID del contacto.")
-     * })
-     */
-    public function deleteContactById(Request $request)
-    {
-        $this->validate($request, [
-            'contact_id' => 'required|exists:contacts,contact_id'
-        ]);
-        $id = $request->get('contact_id');
-        return $this->service->deleteContactById($id);
     }
 
     /**
@@ -159,5 +141,20 @@ class ContactsController extends Controller
         $money = $request->get('money');
         $id = $request->get('contact_id');
         return $this->service->updateContact($name, $phone, $address, $money, $id);
+    }
+
+    /**
+     * Eliminar contacto.
+     * 
+     * @Delete("/")
+     * @Request({"contact_id":"integer"},headers={"Authorization": "Bearer {token}"})
+     */
+    public function deleteContactById(Request $request)
+    {
+        $this->validate($request, [
+            'contact_id' => 'required|exists:contacts,contact_id'
+        ]);
+        $id = $request->get('contact_id');
+        return $this->service->deleteContactById($id);
     }
 }
