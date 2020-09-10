@@ -108,6 +108,40 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         return $this->service->getOrderById($order_id);
     }
+    /**
+     * Obtener productos de un pedido específico.
+     *
+     * Obtener una representación JSON de los productos de un pedido por su ID.
+     * "current_version" solo aparece si el producto en el pedido está desactualizado.
+     *
+     * @Get("/id/products/{id}")
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del pedido.")
+     * })
+     * @Request({},headers={"Authorization": "Bearer {token}"})
+     * @Response(200, body={
+     *  "result":{{
+     *      "ammount": "integer",
+     *      "delivered": "boolean",
+     *      "product_id": "integer",
+     *      "product_history_id": "integer",
+     *      "current_version": {
+     *          "product_id": "integer",
+     *          "product_history_id": "integer",
+     *          "name": "string",
+     *          "sell_price": "float",
+     *          "buy_price": "float"
+     *      },
+     *      "product_version": {
+     *          "product_id": "integer",
+     *          "product_history_id": "integer",
+     *          "name": "string",
+     *          "sell_price": "integer",
+     *          "buy_price": "integer"
+     *     } 
+     * }}
+     * })
+     */
     public function getOrderProductsByOrderId(Request $request)
     {
         $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);

@@ -537,3 +537,46 @@ Obtener una representación JSON de un pedido por su ID.
                     }
                 ]
             }
+
+## Obtener productos de un pedido específico. [GET /orders/id/products/{id}]
+Obtener una representación JSON de los productos de un pedido por su ID.
+"current_version" solo aparece si el producto en el pedido está desactualizado.
+
++ Parameters
+    + id (integer, required) - ID del pedido.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "result": [
+                    {
+                        "ammount": "integer",
+                        "delivered": "boolean",
+                        "product_id": "integer",
+                        "product_history_id": "integer",
+                        "current_version": {
+                            "product_id": "integer",
+                            "product_history_id": "integer",
+                            "name": "string",
+                            "sell_price": "float",
+                            "buy_price": "float"
+                        },
+                        "product_version": {
+                            "product_id": "integer",
+                            "product_history_id": "integer",
+                            "name": "string",
+                            "sell_price": "integer",
+                            "buy_price": "integer"
+                        }
+                    }
+                ]
+            }
