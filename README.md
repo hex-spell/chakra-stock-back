@@ -471,3 +471,69 @@ Los parámetros pueden ser enviados por querystring o por json.
                 ],
                 "count": "integer"
             }
+
+## Obtener pedido específico. [GET /orders/id/{id}]
+Obtener una representación JSON de un pedido por su ID.
+"current_version" solo aparece si el producto en el pedido está desactualizado.
+
++ Parameters
+    + id (integer, required) - ID del pedido.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            []
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "order_id": "integer",
+                "contact_id": "integer",
+                "completed": "boolean",
+                "delivered": "boolean",
+                "type": "'a'|'b'",
+                "paid": "float",
+                "sum": "float",
+                "created_at": "timestamp",
+                "updated_at": "timestamp",
+                "deleted_at": "null",
+                "contact": {
+                    "name": "string",
+                    "address": "string",
+                    "phone": "string",
+                    "contact_id": "integer"
+                },
+                "products": [
+                    {
+                        "ammount": "integer",
+                        "delivered": "boolean",
+                        "product_id": "integer",
+                        "product_history_id": "integer",
+                        "current_version": {
+                            "product_id": "integer",
+                            "product_history_id": "integer",
+                            "name": "string",
+                            "sell_price": "float",
+                            "buy_price": "float"
+                        },
+                        "product_version": {
+                            "product_id": "integer",
+                            "product_history_id": "integer",
+                            "name": "string",
+                            "sell_price": "integer",
+                            "buy_price": "integer"
+                        }
+                    }
+                ],
+                "transactions": [
+                    {
+                        "transaction_id": "integer",
+                        "sum": "integer",
+                        "created_at": "timestamp"
+                    }
+                ]
+            }

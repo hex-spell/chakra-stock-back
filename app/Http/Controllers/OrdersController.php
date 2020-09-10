@@ -57,6 +57,51 @@ class OrdersController extends Controller
         $offset = $request->get('offset') ? $request->get('offset') : 0;
         return $this->service->getOrders($search, $completed, $delivered, $order, $type, $offset);
     }
+    /**
+     * Obtener pedido específico.
+     *
+     * Obtener una representación JSON de un pedido por su ID.
+     * "current_version" solo aparece si el producto en el pedido está desactualizado.
+     *
+     * @Get("/id/{id}")
+     * @Parameters({
+     *      @Parameter("id", type="integer", required=true, description="ID del pedido.")
+     * })
+     * @Request({},headers={"Authorization": "Bearer {token}"})
+     * @Response(200, body={"order_id": "integer", "contact_id": "integer",
+     *  "completed": "boolean", "delivered": "boolean", "type": "'a'|'b'",
+     *  "paid": "float", "sum": "float", "created_at": "timestamp",
+     *  "updated_at": "timestamp", "deleted_at": "null",
+     *  "contact":{"name":"string","address":"string","phone":"string","contact_id":"integer"},
+     *  "products":{{
+     *      "ammount": "integer",
+     *      "delivered": "boolean",
+     *      "product_id": "integer",
+     *      "product_history_id": "integer",
+     *      "current_version": {
+     *          "product_id": "integer",
+     *          "product_history_id": "integer",
+     *          "name": "string",
+     *          "sell_price": "float",
+     *          "buy_price": "float"
+     *      },
+     *      "product_version": {
+     *          "product_id": "integer",
+     *          "product_history_id": "integer",
+     *          "name": "string",
+     *          "sell_price": "integer",
+     *          "buy_price": "integer"
+     *     } 
+     * }},
+     * "transactions":{
+     *      {
+     *          "transaction_id": "integer",
+     *          "sum": "integer",
+     *          "created_at": "timestamp"
+     *      }
+     * }
+     * })
+     */
     public function getOrderById(Request $request)
     {
         $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
