@@ -82,7 +82,7 @@ class ContactsController extends Controller
      *      @Parameter("id", type="integer", required=true, description="ID del contacto.")
      * })
      * @Request({},headers={"Authorization": "Bearer {token}"})
-     * @Response(200, body={"user_id": "integer", "email": "string", "name": "string"})
+     * @Response(200, body={"contact_id": "integer", "address": "string", "name": "string", "phone": "string", "money": "float", "created_at": "timestamp", "updated_at": "timestamp", "deleted_at": "null"})
      */
     public function getContactById(int $id)
     {

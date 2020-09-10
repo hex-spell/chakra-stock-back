@@ -200,9 +200,14 @@ Obtener una representación JSON de un contacto por su ID.
     + Body
 
             {
-                "user_id": "integer",
-                "email": "string",
-                "name": "string"
+                "contact_id": "integer",
+                "address": "string",
+                "name": "string",
+                "phone": "string",
+                "money": "float",
+                "created_at": "timestamp",
+                "updated_at": "timestamp",
+                "deleted_at": "null"
             }
 
 ## Crear un nuevo contacto. [POST /contacts]
@@ -577,6 +582,127 @@ Obtener una representación JSON de los productos de un pedido por su ID.
                             "sell_price": "integer",
                             "buy_price": "integer"
                         }
+                    }
+                ]
+            }
+
+## Eliminar un pedido. [DELETE /orders/orders]
+
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer"
+            }
+
+## Crear un pedido. [POST /orders]
+La variable type define si el pedido es una compra (a), o una venta (b).
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "contact_id": "integer",
+                "type": "'a'|'b'"
+            }
+
+## Actualizar un pedido. [PUT /orders]
+La variable type define si el pedido es una compra (a), o una venta (b).
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "contact_id": "integer",
+                "type": "'a'|'b'"
+            }
+
+## Agregar un producto a un pedido. [POST /orders/products]
+Los productos no pueden estar repetidos en un pedido, si se intenta agregar un producto ya existente, devuelve error de validación.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "product_id": "integer",
+                "ammount": "integer"
+            }
+
+## Modificar un producto de un pedido. [PUT /orders/products]
+Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un producto ya existente, devuelve error de validación.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "product_id": "integer",
+                "ammount": "integer",
+                "delivered": "integer"
+            }
+
+## Remover un producto de un pedido. [DELETE /orders/products]
+
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "product_id": "integer"
+            }
+
+## Definir cantidad de entregados de un producto en un pedido. [POST /orders/products/delivered]
+
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "product_id": "integer",
+                "ammount": "integer"
+            }
+
+## Definir cantidad de entregados de varios productos en un pedido al mismo tiempo. [POST /orders/products/delivered]
+- falta poder validar el maximo de productos que podes entregar en base a la cantidad de stock, para no quedar en números negativos
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer",
+                "products": [
+                    {
+                        "product_id": "integer",
+                        "ammount": "integer"
                     }
                 ]
             }

@@ -148,12 +148,25 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         return $this->service->getOrderProductsByOrderId($order_id);
     }
+    /**
+     * Eliminar un pedido.
+     * 
+     * @Delete("/orders")
+     * @Request({"order_id": "integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function deleteOrderById(Request $request)
     {
         $this->validate($request, ['order_id' => 'required|numeric|exists:orders,order_id']);
         $order_id = $request->get('order_id');
         return $this->service->deleteOrderById($order_id);
     }
+    /**
+     * Crear un pedido.
+     * La variable type define si el pedido es una compra (a), o una venta (b).
+     * 
+     * @Post("/")
+     * @Request({"contact_id": "integer", "type": "'a'|'b'"},headers={"Authorization": "Bearer {token}"})
+     */
     public function postOrder(Request $request)
     {
         //los tipos son A (proveedores) o B (clientes)
@@ -168,6 +181,13 @@ class OrdersController extends Controller
         $type = $request->get('type');
         return $this->service->postOrder($contact_id, $type);
     }
+    /**
+     * Actualizar un pedido.
+     * La variable type define si el pedido es una compra (a), o una venta (b).
+     * 
+     * @Put("/")
+     * @Request({"order_id":"integer", "contact_id": "integer", "type": "'a'|'b'"},headers={"Authorization": "Bearer {token}"})
+     */
     public function updateOrder(Request $request)
     {
         $this->validate(
@@ -183,6 +203,13 @@ class OrdersController extends Controller
         $type = $request->get('type');
         return $this->service->updateOrder($order_id, $contact_id, $type);
     }
+    /**
+     * Agregar un producto a un pedido.
+     * Los productos no pueden estar repetidos en un pedido, si se intenta agregar un producto ya existente, devuelve error de validación.
+     * 
+     * @Post("/products")
+     * @Request({"order_id":"integer", "product_id": "integer", "ammount": "integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function addOrderProduct(Request $request)
     {
         $order_id = $request->get('order_id');
@@ -198,6 +225,13 @@ class OrdersController extends Controller
         );
         return $this->service->addOrderProduct($order_id, $product_id, $ammount);
     }
+    /**
+     * Modificar un producto de un pedido.
+     * Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un producto ya existente, devuelve error de validación.
+     * 
+     * @Put("/products")
+     * @Request({"order_id":"integer", "product_id": "integer", "ammount": "integer", "delivered": "integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function modifyOrderProduct(Request $request)
     {
         $order_id = $request->get('order_id');
@@ -227,6 +261,12 @@ class OrdersController extends Controller
         );
         return $this->service->modifyOrderProduct($order_id, $product_id, $ammount, $delivered);
     }
+    /**
+     * Remover un producto de un pedido.
+     * 
+     * @Delete("/products")
+     * @Request({"order_id":"integer", "product_id": "integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function removeOrderProduct(Request $request)
     {
         $order_id = $request->get('order_id');
@@ -241,6 +281,12 @@ class OrdersController extends Controller
         );
         return $this->service->removeOrderProduct($order_id, $product_id);
     }
+    /**
+     * Definir cantidad de entregados de un producto en un pedido.
+     * 
+     * @Post("/products/delivered")
+     * @Request({"order_id":"integer", "product_id": "integer", "ammount":"integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function markDelivered(Request $request)
     {
         //ACÁ DEBERÍA VALIDAR QUE LA CANTIDAD ENTREGADA NO SEA MAYOR A LA CANTIDAD QUE HAY EN STOCK
@@ -259,6 +305,13 @@ class OrdersController extends Controller
         );
         return $this->service->markDelivered($order_id, $product_id, $ammount);
     }
+    /**
+     * Definir cantidad de entregados de varios productos en un pedido al mismo tiempo.
+     * - falta poder validar el maximo de productos que podes entregar en base a la cantidad de stock, para no quedar en números negativos
+     * 
+     * @Post("/products/delivered")
+     * @Request({"order_id":"integer", "products":{{"product_id": "integer", "ammount":"integer"}}},headers={"Authorization": "Bearer {token}"})
+     */
     public function markDeliveredMultiple(Request $request)
     {
         $this->validate($request, [
