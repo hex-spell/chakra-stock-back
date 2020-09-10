@@ -706,3 +706,57 @@ Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un
                     }
                 ]
             }
+
+## Agregar una transacción a un pedido. [POST /orders/transactions]
+- debería pasar este endpoint al recurso "transacciones"
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "transaction_id": "integer",
+                "sum": "float"
+            }
+
+## Modificar una transacción de un pedido. [PUT /orders/transactions]
+- debería pasar este endpoint al recurso "transacciones"
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "transaction_id": "integer",
+                "sum": "float"
+            }
+
+## Eliminar una transacción de un pedido. [DELETE /orders/transactions]
+- debería pasar este endpoint al recurso "transacciones"
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "transaction_id": "integer"
+            }
+
+## Marcar pedido como completado. [POST /orders/completed]
+Cambia el booleano "completed" de false a true
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "order_id": "integer"
+            }

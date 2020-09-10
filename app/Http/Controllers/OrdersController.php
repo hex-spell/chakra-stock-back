@@ -310,7 +310,7 @@ class OrdersController extends Controller
      * - falta poder validar el maximo de productos que podes entregar en base a la cantidad de stock, para no quedar en números negativos
      * 
      * @Post("/products/delivered")
-     * @Request({"order_id":"integer", "products":{{"product_id": "integer", "ammount":"integer"}}},headers={"Authorization": "Bearer {token}"})
+     * @Request({"order_id": "integer", "products":{{"product_id": "integer", "ammount":"integer"}}},headers={"Authorization": "Bearer {token}"})
      */
     public function markDeliveredMultiple(Request $request)
     {
@@ -332,6 +332,13 @@ class OrdersController extends Controller
         $offset = $request->get('offset') ? $request->get('offset') : 0;
         return $this->service->getTransactions($search, $order, $type, $offset);
     }
+    /**
+     * Agregar una transacción a un pedido.
+     * - debería pasar este endpoint al recurso "transacciones"
+     * 
+     * @Post("/transactions")
+     * @Request({"transaction_id": "integer", "sum": "float"},headers={"Authorization": "Bearer {token}"})
+     */
     public function addTransaction(Request $request)
     {
         $this->validate(
@@ -345,6 +352,13 @@ class OrdersController extends Controller
         $sum = $request->get('sum');
         return $this->service->addTransaction($order_id, $sum);
     }
+    /**
+     * Modificar una transacción de un pedido.
+     * - debería pasar este endpoint al recurso "transacciones"
+     * 
+     * @Put("/transactions")
+     * @Request({"transaction_id": "integer", "sum": "float"},headers={"Authorization": "Bearer {token}"})
+     */
     public function modifyTransaction(Request $request)
     {
         $this->validate(
@@ -358,6 +372,13 @@ class OrdersController extends Controller
         $sum = $request->get('sum');
         return $this->service->modifyTransaction($transaction_id, $sum);
     }
+    /**
+     * Eliminar una transacción de un pedido.
+     * - debería pasar este endpoint al recurso "transacciones"
+     * 
+     * @Delete("/transactions")
+     * @Request({"transaction_id":"integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function deleteTransaction(Request $request)
     {
         $this->validate(
@@ -369,6 +390,13 @@ class OrdersController extends Controller
         $transaction_id = $request->get('transaction_id');
         return $this->service->deleteTransaction($transaction_id);
     }
+    /**
+     * Marcar pedido como completado.
+     * Cambia el booleano "completed" de false a true
+     * 
+     * @Post("/completed")
+     * @Request({"order_id":"integer"},headers={"Authorization": "Bearer {token}"})
+     */
     public function markCompleted(Request $request)
     {
         //ACÁ DEBERIA VALIDAR QUE EL PEDIDO ESTÉ PAGO Y ENTREGADO
