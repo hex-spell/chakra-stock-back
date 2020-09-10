@@ -268,7 +268,8 @@ Los parámetros pueden ser enviados por querystring o por json.
 + Parameters
     + search (string, optional) - Buscar por descripción del gasto.
         + Default: String vacío
-    + category_id (integer, required) - Filtrar por categoría.
+    + category_id (integer, optional) - Filtrar por categoría. 0 obtiene de todas las categorías
+        + Default: 0
     + order ('description'|'created_at'|'updated_at'|'sum', optional) - Define la columna utilizada para ordenar los resultados.
         + Default: name
     + offset (integer, optional) - Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.
@@ -281,9 +282,9 @@ Los parámetros pueden ser enviados por querystring o por json.
     + Body
 
             {
-                "search": "Patricio",
-                "role": "c",
-                "order": "name",
+                "search": "Factura ejemplo",
+                "order": "description",
+                "category_id": "1",
                 "offset": "0"
             }
 
@@ -413,6 +414,55 @@ Retorna una lista de todas las categorías de los gastos.
 
             {
                 "expense_id": "integer"
+            }
+
+# AppHttpControllersProductsController
+
+## Obtener productos. [GET /{search?,category_id,order?,offset?}]
+Filtrados por nombre, categoría y offset.
+Ordenados por nombre, precio de venta, precio de compra, fecha de creación o fecha de actualización.
+El límite está programado a 10.
+Los parámetros pueden ser enviados por querystring o por json.
+
++ Parameters
+    + search (string, optional) - Buscar por nombre del producto.
+        + Default: String vacío
+    + category_id (integer, required) - Filtrar por categoría. 0 obtiene de todas las categorías
+        + Default: 0
+    + order ('name'|'created_at'|'updated_at'|'buy_price'|'sell_price', optional) - Define la columna utilizada para ordenar los resultados.
+        + Default: name
+    + offset (integer, optional) - Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.
+        + Default: 0
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer {token}
+    + Body
+
+            {
+                "search": "Arróz",
+                "category_id": 1,
+                "order": "name",
+                "offset": "0"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "result": [
+                    {
+                        "expense_id": "integer",
+                        "category_id": "integer",
+                        "description": "string",
+                        "sum": "float",
+                        "created_at": "timestamp",
+                        "updated_at": "timestamp",
+                        "deleted_at": "null"
+                    }
+                ],
+                "count": "integer"
             }
 
 # Pedidos [/orders]

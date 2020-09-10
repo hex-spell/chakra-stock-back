@@ -33,10 +33,10 @@ class ExpensesController extends Controller
      * Los parámetros pueden ser enviados por querystring o por json.
      * 
      * @Get("{search?,category_id,order?,offset?}")
-     * @Request({"search":"Patricio", "role":"c", "order":"name", "offset":"0"},headers={"Authorization": "Bearer {token}"})
+     * @Request({"search":"Factura ejemplo", "order":"description", "category_id":"1", "offset":"0"},headers={"Authorization": "Bearer {token}"})
      * @Parameters({
      *      @Parameter("search", type="string", required=false, description="Buscar por descripción del gasto.", default="String vacío"),
-     *      @Parameter("category_id", type="integer", required=true, description="Filtrar por categoría."),
+     *      @Parameter("category_id", type="integer", required=false, description="Filtrar por categoría. 0 obtiene de todas las categorías", default=0),
      *      @Parameter("order", type="'description'|'created_at'|'updated_at'|'sum'", required=false, description="Define la columna utilizada para ordenar los resultados.", default="name"),
      *      @Parameter("offset", type="integer", required=false, description="Cantidad de resultados a saltear, recomendable ir de 10 en 10, ya que el límite está definido en 10.", default=0)
      *  })
