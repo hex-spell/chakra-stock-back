@@ -5,7 +5,11 @@ FORMAT: 1A
 Api rest backend de chakra stock
 
 ## Base de datos
+
+### Diagrama Entidad-Relación
 ![Esquema ERD](docs/img/erd.png "Diagrama Entidad-Relación")
+
+## Diagrama de tablas
 ![Tablas](docs/img/rel.png "Diagrama de tablas")
 
 ## Endpoints
