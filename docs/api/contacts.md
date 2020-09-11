@@ -2,11 +2,11 @@
 Representación del recurso de contactos.
 
 ## Obtener contactos. [GET /contacts/{search?,role?,order?,offset?}]
-Filtrados por nombre, rol y offset.
-Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
-El límite está programado a 10.
-Los roles son "c" para los clientes y "p" para los proveedores
-Los parámetros pueden ser enviados por querystring o por json.
+- Filtrados por nombre, rol y offset.
+- Ordenados por nombre, rol, fecha de creación, fecha de actualización o deuda.
+- El límite está programado a 10.
+- Los roles son "c" para los clientes y "p" para los proveedores
+- Los parámetros pueden ser enviados por querystring o por json.
 
 + Parameters
     + search (string, optional) - Buscar por nombre de contacto.
@@ -51,8 +51,8 @@ Los parámetros pueden ser enviados por querystring o por json.
             }
 
 ## Obtener contactos minificados. [GET /contacts/menu]
-Retorna una lista de todos los contactos, sólamente con sus nombres e ID's.
-Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús 'select'
+- Retorna una lista de todos los contactos, sólamente con sus nombres e ID's.
+- Elegí el alias "value" para los ID's porque desde el frontend servía para usarlos en menús 'select'
 
 + Request (application/json)
     + Headers

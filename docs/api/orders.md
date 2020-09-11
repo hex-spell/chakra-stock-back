@@ -2,10 +2,10 @@
 Representación del recurso de pedidos.
 
 ## Obtener Pedidos. [GET /orders/{search?,type?,completed?,delivered?,order?,offset?}]
-Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) ('a' o 'b', respectivamente) y offset.
-Ordenados por suma, fecha de creación o fecha de actualización.
-El límite está programado a 10.
-Los parámetros pueden ser enviados por querystring o por json.
+- Filtrados por nombre de contacto, compleción, entregados, tipo (entrante o saliente) ('a' o 'b', respectivamente) y offset.
+- Ordenados por suma, fecha de creación o fecha de actualización.
+- El límite está programado a 10.
+- Los parámetros pueden ser enviados por querystring o por json.
 
 + Parameters
     + search (string, optional) - Buscar por descripción del gasto.
@@ -62,7 +62,7 @@ Los parámetros pueden ser enviados por querystring o por json.
 
 ## Obtener pedido específico. [GET /orders/id/{id}]
 Obtener una representación JSON de un pedido por su ID.
-"current_version" solo aparece si el producto en el pedido está desactualizado.
+- "current_version" solo aparece si el producto en el pedido está desactualizado.
 
 + Parameters
     + id (integer, required) - ID del pedido.
@@ -128,7 +128,7 @@ Obtener una representación JSON de un pedido por su ID.
 
 ## Obtener productos de un pedido específico. [GET /orders/id/products/{id}]
 Obtener una representación JSON de los productos de un pedido por su ID.
-"current_version" solo aparece si el producto en el pedido está desactualizado.
+- "current_version" solo aparece si el producto en el pedido está desactualizado.
 
 + Parameters
     + id (integer, required) - ID del pedido.
@@ -183,7 +183,7 @@ Obtener una representación JSON de los productos de un pedido por su ID.
             }
 
 ## Crear un pedido. [POST /orders]
-La variable type define si el pedido es una compra (a), o una venta (b).
+- La variable type define si el pedido es una compra (a), o una venta (b).
 
 + Request (application/json)
     + Headers
@@ -197,7 +197,7 @@ La variable type define si el pedido es una compra (a), o una venta (b).
             }
 
 ## Actualizar un pedido. [PUT /orders]
-La variable type define si el pedido es una compra (a), o una venta (b).
+- La variable type define si el pedido es una compra (a), o una venta (b).
 
 + Request (application/json)
     + Headers
@@ -212,7 +212,7 @@ La variable type define si el pedido es una compra (a), o una venta (b).
             }
 
 ## Agregar un producto a un pedido. [POST /orders/products]
-Los productos no pueden estar repetidos en un pedido, si se intenta agregar un producto ya existente, devuelve error de validación.
+- Los productos no pueden estar repetidos en un pedido, si se intenta agregar un producto ya existente, devuelve error de validación.
 
 + Request (application/json)
     + Headers
@@ -227,7 +227,7 @@ Los productos no pueden estar repetidos en un pedido, si se intenta agregar un p
             }
 
 ## Modificar un producto de un pedido. [PUT /orders/products]
-Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un producto ya existente, devuelve error de validación.
+- Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un producto ya existente, devuelve error de validación.
 
 + Request (application/json)
     + Headers
@@ -332,7 +332,7 @@ Los productos no pueden estar repetidos en un pedido, si se intenta cambiar a un
             }
 
 ## Marcar pedido como completado. [POST /orders/completed]
-Cambia el booleano "completed" de false a true
+- Cambia el booleano "completed" de false a true
 
 + Request (application/json)
     + Headers

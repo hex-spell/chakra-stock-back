@@ -2,10 +2,10 @@
 Representación del recurso de gastos.
 
 ## Obtener gastos. [GET /expenses/{search?,category_id,order?,offset?}]
-Filtrados por descripción, categoría y offset.
-Ordenados por descripción, suma, fecha de creación o fecha de actualización.
-El límite está programado a 10.
-Los parámetros pueden ser enviados por querystring o por json.
+- Filtrados por descripción, categoría y offset.
+- Ordenados por descripción, suma, fecha de creación o fecha de actualización.
+- El límite está programado a 10.
+- Los parámetros pueden ser enviados por querystring o por json.
 
 + Parameters
     + search (string, optional) - Buscar por descripción del gasto.

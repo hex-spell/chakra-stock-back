@@ -2,10 +2,10 @@
 Representación del recurso de productos.
 
 ## Obtener productos. [GET /products/{search?,category_id,order?,offset?}]
-Filtrados por nombre, categoría y offset.
-Ordenados por nombre, precio de venta, precio de compra, fecha de creación o fecha de actualización.
-El límite está programado a 10.
-Los parámetros pueden ser enviados por querystring o por json.
+- Filtrados por nombre, categoría y offset.
+- Ordenados por nombre, precio de venta, precio de compra, fecha de creación o fecha de actualización.
+- El límite está programado a 10.
+- Los parámetros pueden ser enviados por querystring o por json.
 
 + Parameters
     + search (string, optional) - Buscar por nombre del producto.

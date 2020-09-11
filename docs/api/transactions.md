@@ -2,10 +2,10 @@
 Representación del recurso de transacciones.
 
 ## Obtener transacciones. [GET /transactions/{search?,category_id,order?,offset?}]
-Filtrados por nombre de contacto, tipo de pedido (compra o venta) y offset.
-Ordenados por fecha de creación.
-El límite está programado a 10.
-Los parámetros pueden ser enviados por querystring o por json.
+- Filtrados por nombre de contacto, tipo de pedido (compra o venta) y offset.
+- Ordenados por fecha de creación.
+- El límite está programado a 10.
+- Los parámetros pueden ser enviados por querystring o por json.
 - 'name' es el nombre del contacto vinculado a la transacción.
 
 + Parameters
