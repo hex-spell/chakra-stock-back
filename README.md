@@ -2,7 +2,7 @@ FORMAT: 1A
 
 # PHPStockREST
 
-Api rest backend de chakra stock
+Api REST hecha en lumen, backend de chakra stock
 
 ## Base de datos
 - El script para crear las tablas con sus relaciones en **mysql** está en [tables.sql](tables.sql)
