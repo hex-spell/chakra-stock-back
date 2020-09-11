@@ -5,6 +5,8 @@ FORMAT: 1A
 Api rest backend de chakra stock
 
 ## Base de datos
+- El script para crear las tablas con sus relaciones está en [tables.sql](tables.sql)
+- Para tener una base de datos con ya un par de datos guardados, podés importar [chakra_stock.sql](chakra_stock.sql)
 
 ### Diagrama Entidad-Relación
 ![Esquema ERD](docs/img/erd.png "Diagrama Entidad-Relación")
