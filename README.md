@@ -8,6 +8,7 @@ Api rest backend de chakra stock
 
 ### Diagrama Entidad-Relación
 ![Esquema ERD](docs/img/erd.png "Diagrama Entidad-Relación")
+- "Fecha de carga" representa los 3 timestamps de las tablas ("created_at","updated_at","deleted_at"), que no los puse por separado porque ocupaban mucho espacio.
 
 ## Diagrama de tablas
 ![Tablas](docs/img/rel.png "Diagrama de tablas")
