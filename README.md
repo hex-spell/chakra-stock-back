@@ -23,3 +23,8 @@ Api REST hecha en lumen, backend de chakra stock
 - [Pedidos](docs/api/orders.md)
 - [Transacciones](docs/api/transactions.md)
 - [Gastos](docs/api/expenses.md)
+
+
+## Más info
+
+- [Quehaceres](https://trello.com/b/PnLwPmH8/app-de-stock) **(tablero de trello)**
