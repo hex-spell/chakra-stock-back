@@ -47,10 +47,11 @@ $api->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function($api)
     $api->delete('/categories', 'App\Http\Controllers\ExpensesController@deleteExpenseCategoryById');
 });
 
-$api->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function($api) {
+$api->group(['prefix' => 'products'/* , 'middleware' => 'jwt.auth' */], function($api) {
     $api->get('/', 'App\Http\Controllers\ProductsController@getProducts');
     $api->get('/categories', 'App\Http\Controllers\ProductsController@getProductCategories');
     $api->get('/list', 'App\Http\Controllers\ProductsController@getProductsList');
+    $api->get('/pdf', 'App\Http\Controllers\ProductsController@getProductsPDF');
     $api->get('/id/{id:[0-9]+}', 'App\Http\Controllers\ProductsController@getProductById');
     $api->delete('/', 'App\Http\Controllers\ProductsController@deleteProductById');
     $api->post('/', 'App\Http\Controllers\ProductsController@postProduct');

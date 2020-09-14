@@ -110,6 +110,16 @@ class ProductsController extends Controller
         return $this->service->getProductsList();
     }
 
+    public function getProductsPDF()
+    {
+       $html = '<html><body>'
+			. '<p>Put your html here, or generate it with your favourite '
+			. 'templating system.</p>'
+            . '</body></html>'; */
+        /* $html =  */ return view('products', ['name' => 'James']);
+	    //return app('pdf')->load($html, 'A4', 'portrait')->show();
+    }
+
     /**
      * Obtener un producto específico.
      * Retorna un producto en base al id pasado por uri.
