@@ -35,6 +35,14 @@ class ProductsService implements ProductsServiceInterface
         return $this->repo->getProductsList();
     }
 
+    public function getProductsPDF()
+    {
+        $data = $this->repo->getProductsListGroupedByCategories();
+        $pdf = app('dompdf.wrapper')->loadView('products', ['data'=>$data]);
+        return $pdf->stream('productos.pdf');
+        /* $html = view('products', ['data' => $data]);
+        return app('pdf')->load($html, 'A4', 'portrait')->show(); */
+    }
     public function getProductById(int $product_id)
     {
         return $this->repo->getProductById($product_id);

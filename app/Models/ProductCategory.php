@@ -31,4 +31,9 @@ class ProductCategory extends Model
     {
         return $this->hasMany('App\Models\Product', 'category_id', 'category_id');
     }
+
+    public function productsWithDetails()
+    {
+        return $this->hasMany('App\Models\Product', 'category_id', 'category_id')->get();
+    }
 }

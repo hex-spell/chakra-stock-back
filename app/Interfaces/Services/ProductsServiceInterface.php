@@ -7,6 +7,7 @@ interface ProductsServiceInterface
     public function getProducts(string $search, string $order, int $category_id, int $offset);
     public function getProductCategories();
     public function getProductsList();
+    public function getProductsPDF();
     public function getProductById(int $product_id);
     public function deleteProductById(int $product_id);
     public function postProduct(string $name, float $sell, float $buy, int $stock, int $category_id);

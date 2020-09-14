@@ -112,12 +112,7 @@ class ProductsController extends Controller
 
     public function getProductsPDF()
     {
-       $html = '<html><body>'
-			. '<p>Put your html here, or generate it with your favourite '
-			. 'templating system.</p>'
-            . '</body></html>'; */
-        /* $html =  */ return view('products', ['name' => 'James']);
-	    //return app('pdf')->load($html, 'A4', 'portrait')->show();
+        return $this->service->getProductsPDF();
     }
 
     /**

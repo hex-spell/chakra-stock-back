@@ -7,10 +7,10 @@
     "require": {
         "php": "^7.2.5",
         "askedio/laravel-soft-cascade": "^7.0",
+        "barryvdh/laravel-dompdf": "^0.8.7",
         "dingo/api": "^3.0.0",
         "firebase/php-jwt": "^5.2",
-        "laravel/lumen-framework": "^7.0",
-        "tibonilab/pdf-lumen-bundle": "~2.0.0"
+        "laravel/lumen-framework": "^7.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

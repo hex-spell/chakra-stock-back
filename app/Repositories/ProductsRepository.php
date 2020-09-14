@@ -59,6 +59,20 @@ class ProductsRepository implements ProductsRepositoryInterface
     }
     return ['result' => $ProductsList, 'count' => $Products->count()];
   }
+  public function getProductsListGroupedByCategories()
+  {
+    return ProductCategory::with(['products'=>function($q)
+    {
+      $q->leftJoin('product_history', function ($query) {
+      $query
+      ->on('products.product_id', '=', 'product_history.product_id')
+        ->whereRaw('product_history.product_history_id IN (select MAX(a2.product_history_id) from product_history as a2 join products as u2 on u2.product_id = a2.product_id group by u2.product_id)');  
+      }
+    )->select('name','sell_price','category_id','products.product_id','products.product_history_id');
+  }
+  ]
+  )->get();
+  }
   public function getProductById(int $product_id)
   {
     return Product::find($product_id);
