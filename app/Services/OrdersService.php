@@ -22,7 +22,8 @@ class OrdersService implements OrdersServiceInterface
     {
         return $this->repo->getOrderById($order_id);
     }
-    public function getOrderProductsByOrderId(int $order_id){
+    public function getOrderProductsByOrderId(int $order_id)
+    {
         return $this->repo->getOrderProductsByOrderId($order_id);
     }
     public function deleteOrderById(int $order_id)
@@ -76,5 +77,31 @@ class OrdersService implements OrdersServiceInterface
     public function markCompleted(int $order_id)
     {
         return $this->repo->markCompleted($order_id);
+    }
+    public function getOrderTicketPDF(int $order_id)
+    {
+        //ESTO DEBERIA HACER UNA CONSULTA PERSONALIZADA A LA BASE DE DATOS, PARA NO OBTENER TODOS LOS DATOS DE FORMA INNECESARIA, PERO POR AHORA FUNCIONA
+        $order = $this->repo->getOrderById($order_id);
+        $orderProducts = $order["products"];
+
+        $ticket = array_map(function ($product) {
+            $productInTicket = (object)[];
+            $objProduct = (object)$product;
+            $productInTicket->name = $objProduct->current_version->name;
+            $productInTicket->price = $objProduct->current_version->sell_price;
+            $productInTicket->ammount = $objProduct->ammount;
+            $productInTicket->total_value = $objProduct->ammount * $objProduct->current_version->sell_price;
+            return $productInTicket;
+        }, $orderProducts->toArray());
+
+        $sum = $order["sum"];
+
+        $contact = $order["contact"];
+
+        $pdf = app('dompdf.wrapper')->loadView('orderProducts', ['ticket' => $ticket, 'sum' => $sum, 'contact' => $contact]);
+
+        return $pdf->stream('productos.pdf');
+
+        return $ticket;
     }
 }

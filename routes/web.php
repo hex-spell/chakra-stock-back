@@ -68,6 +68,7 @@ $api->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function($api) {
     $api->delete('/', 'App\Http\Controllers\OrdersController@deleteOrderById');
     $api->get('/id', 'App\Http\Controllers\OrdersController@getOrderById');
     $api->get('/id/products', 'App\Http\Controllers\OrdersController@getOrderProductsByOrderId');
+    $api->get('/id/products/pdf', 'App\Http\Controllers\OrdersController@getOrderTicketPDF');
     $api->post('/', 'App\Http\Controllers\OrdersController@postOrder');
     $api->put('/', 'App\Http\Controllers\OrdersController@updateOrder');
     $api->post('/products', 'App\Http\Controllers\OrdersController@addOrderProduct');

@@ -404,4 +404,10 @@ class OrdersController extends Controller
         $order_id = $request->get('order_id');
         return $this->service->markCompleted($order_id);
     }
+
+    public function getOrderTicketPDF(Request $request)
+    {
+        $order_id = $request->get('order_id');
+        return $this->service->getOrderTicketPDF($order_id);
+    }
 }
