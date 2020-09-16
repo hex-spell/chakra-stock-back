@@ -20,4 +20,5 @@ interface OrdersRepositoryInterface
     public function modifyTransaction(int $transaction_id, float $sum);
     public function deleteTransaction(int $transaction_id);
     public function markCompleted(int $order_id);
+    public function getPendingOrdersCount();
 }

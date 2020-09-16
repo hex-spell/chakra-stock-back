@@ -1,9 +1,18 @@
 <?php
 namespace App\Http\Controllers;
+use App\Interfaces\Services\StatsServiceInterface;
 
 class StatsController extends Controller {
-    public function hello()
+
+    private $service;
+
+    public function __construct(StatsServiceInterface $service)
     {
-        return "hello";
+        $this->service = $service;
+    }
+
+    public function getStats()
+    {
+        return $this->service->getStats();
     }
 }

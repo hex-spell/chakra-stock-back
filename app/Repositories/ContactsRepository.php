@@ -46,4 +46,13 @@ class ContactsRepository implements ContactsRepositoryInterface {
         $Contact->money = $money;
         return $Contact->save();
     }
+
+    public function getContactsDebt(){
+        return abs(Contact::where('money','<',0)->sum('money'));
+    }
+
+    public function getOwnDebt(){
+        return abs(Contact::where('money','>',0)->sum('money'));
+    }
+
 }

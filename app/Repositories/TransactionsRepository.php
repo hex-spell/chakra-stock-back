@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\Repositories\TransactionsRepositoryInterface;
 use App\Models\Transaction;
+use Carbon\Carbon;
 
 class TransactionsRepository implements TransactionsRepositoryInterface
 {
@@ -15,13 +16,13 @@ class TransactionsRepository implements TransactionsRepositoryInterface
         $loweredType = strtolower($type);
 
         //aca tengo que agregar orders.completed para definir desde el frontend si se puede modificar o no la transaccion
-        $query = Transaction::select('transactions.*','contacts.name','orders.type')
-        ->leftJoin('orders','transactions.order_id','=','orders.order_id')
-        ->leftJoin('contacts','transactions.contact_id','=','contacts.contact_id')
-        ->whereRaw('lower(name) like ? and lower(type) = ?', ["%{$loweredSearch}%","{$loweredType}"]);
+        $query = Transaction::select('transactions.*', 'contacts.name', 'orders.type')
+            ->leftJoin('orders', 'transactions.order_id', '=', 'orders.order_id')
+            ->leftJoin('contacts', 'transactions.contact_id', '=', 'contacts.contact_id')
+            ->whereRaw('lower(name) like ? and lower(type) = ?', ["%{$loweredSearch}%", "{$loweredType}"]);
 
         $count = $query->count();
-        return ['result' => $query->orderBy('created_at','desc')->skip($offset)->take(10)->get(), 'count' => $count];
+        return ['result' => $query->orderBy('created_at', 'desc')->skip($offset)->take(10)->get(), 'count' => $count];
     }
 
     public function getTransactionsMinified()
@@ -49,5 +50,14 @@ class TransactionsRepository implements TransactionsRepositoryInterface
         $Transaction = Transaction::find($transaction_id);
         $Transaction->sum = $sum;
         return $Transaction->save();
+    }
+
+    public function getTransactionsSum(string $type)
+    {
+        //tipos son a o b, viene de los pedidos
+        return Transaction::orderBy('transactions.created_at', 'DESC')           
+            ->leftJoin('orders', 'transactions.order_id', '=', 'orders.order_id')
+            ->whereDate('orders.created_at', '>', Carbon::now()->subMonth())
+            ->where('type', '=', $type)->sum('transactions.sum');
     }
 }

@@ -321,6 +321,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $sum = $OrderDetails['sum'];
         $paid = $OrderDetails['paid'];
         $type = $OrderDetails['order']['type'];
+        //esto deberia hacerlo desde el repositorio de contactos, pero por ahora acá funciona y se ve mejor lo que hace
         $Contact = Contact::find($Order->contact_id);
         if ($sum != $paid) {
             switch ($type) {
@@ -335,5 +336,10 @@ class OrdersRepository implements OrdersRepositoryInterface
             }
         }
         return [$Contact->save()];
+    }
+
+    public function getPendingOrdersCount()
+    {
+        return Order::where('completed',false)->count();
     }
 }

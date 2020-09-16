@@ -12,4 +12,5 @@ interface ExpensesRepositoryInterface
     public function postExpenseCategory(string $name);
     public function updateExpenseCategory(string $name, int $category_id);
     public function deleteExpenseCategoryById(int $category_id);
+    public function getExpensesSum();
 }

@@ -18,7 +18,7 @@ class ExpensesRepository implements ExpensesRepositoryInterface
     $query = $category_id ? ExpenseCategory::findOrFail($category_id)->expenses()->whereRaw($whereRaw[0], $whereRaw[1])
       : Expense::whereRaw($whereRaw[0], $whereRaw[1]);
     //si el orden es por fecha, se cambia la orientacion
-    $orderedQuery = $loweredOrder === 'updated_at' ? $query->orderBy($loweredOrder, 'desc') : $query->orderBy($loweredOrder);
+    $orderedQuery = $loweredOrder === 'updated_at' || $loweredOrder === 'created_at' ? $query->orderBy($loweredOrder, 'desc') : $query->orderBy($loweredOrder);
     $count = $query->count();
     return ['result' => $orderedQuery->skip($offset)->take(10)->get(), 'count' => $count];
   }
@@ -61,5 +61,12 @@ class ExpensesRepository implements ExpensesRepositoryInterface
 
   public function deleteExpenseCategoryById(int $category_id){
     return ExpenseCategory::destroy($category_id);
+  }
+
+  public function getExpensesSum()
+  {
+    return Expense::orderBy('created_at', 'DESC')
+    ->whereDate('created_at', '>', \Carbon\Carbon::now()->subMonth())
+    ->sum('sum');
   }
 }

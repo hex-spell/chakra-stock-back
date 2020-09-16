@@ -47,11 +47,10 @@ $api->group(['prefix' => 'expenses', 'middleware' => 'jwt.auth'], function($api)
     $api->delete('/categories', 'App\Http\Controllers\ExpensesController@deleteExpenseCategoryById');
 });
 
-$api->group(['prefix' => 'products'/* , 'middleware' => 'jwt.auth' */], function($api) {
+$api->group(['prefix' => 'products', 'middleware' => 'jwt.auth'], function($api) {
     $api->get('/', 'App\Http\Controllers\ProductsController@getProducts');
     $api->get('/categories', 'App\Http\Controllers\ProductsController@getProductCategories');
-    $api->get('/list', 'App\Http\Controllers\ProductsController@getProductsList');
-    $api->get('/pdf', 'App\Http\Controllers\ProductsController@getProductsPDF');
+    $api->get('/list', 'App\Http\Controllers\ProductsController@getProductsList');  
     $api->get('/id/{id:[0-9]+}', 'App\Http\Controllers\ProductsController@getProductById');
     $api->delete('/', 'App\Http\Controllers\ProductsController@deleteProductById');
     $api->post('/', 'App\Http\Controllers\ProductsController@postProduct');
@@ -62,6 +61,7 @@ $api->group(['prefix' => 'products'/* , 'middleware' => 'jwt.auth' */], function
     $api->delete('/categories', 'App\Http\Controllers\ProductsController@deleteProductCategoryById');
 });
 
+$api->get('/products/pdf', 'App\Http\Controllers\ProductsController@getProductsPDF');
 
 $api->group(['prefix' => 'orders', 'middleware' => 'jwt.auth'], function($api) {
     $api->get('/', 'App\Http\Controllers\OrdersController@getOrders');
@@ -90,7 +90,7 @@ $api->group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function($
 });
 
 $api->group(['prefix'=>'stats'], function($api){
-    $api->get('/','App\Http\Controllers\StatsController@hello');
+    $api->get('/','App\Http\Controllers\StatsController@getStats');
 });
 
 $api->options('/{route:.*}/', function () { return response(['status' => 'success']); });

@@ -13,6 +13,8 @@ use App\Services\ProductsService;
 use App\Interfaces\Services\ProductsServiceInterface;
 use App\Services\TransactionsService;
 use App\Interfaces\Services\TransactionsServiceInterface;
+use App\Services\StatsService;
+use App\Interfaces\Services\StatsServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ContactsServiceInterface::class, ContactsService::class);
         $this->app->bind(TransactionsServiceInterface::class, TransactionsService::class);
+        $this->app->bind(StatsServiceInterface::class, StatsService::class);
         $this->app->bind(OrdersServiceInterface::class, OrdersService::class);
         $this->app->bind(ExpensesServiceInterface::class, ExpensesService::class);
         $this->app->bind(ProductsServiceInterface::class, ProductsService::class);
