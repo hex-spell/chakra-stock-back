@@ -407,6 +407,9 @@ class OrdersController extends Controller
 
     public function getOrderTicketPDF(Request $request)
     {
+        $this->validate($request,[
+            'order_id'=>'required|integer|exists:orders,order_id'
+        ]);
         $order_id = $request->get('order_id');
         return $this->service->getOrderTicketPDF($order_id);
     }

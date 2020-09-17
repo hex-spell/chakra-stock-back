@@ -99,7 +99,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     public function getOrderById(int $order_id)
     {
         $Order = Order::find($order_id);
-        $Transactions = $Order->transactions()->select(['transaction_id', 'sum', 'created_at'])->get();
+        /* $Transactions = $Order->transactions()->select(['transaction_id', 'sum', 'created_at'])->get(); */
         $Products = OrderProducts::where('order_id', $order_id)->with('productVersion')->select(
             [
                 "ammount",
@@ -118,9 +118,9 @@ class OrdersRepository implements OrdersRepositoryInterface
         }
 
         //loop que suma todas las transacciones
-        foreach ($Transactions as $transaction) {
+        /* foreach ($Transactions as $transaction) {
             $paid += $transaction->sum;
-        }
+        } */
 
         //loop que revisa si los productos estan actualizados
         foreach ($Products as $product) {
@@ -128,7 +128,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                 $product->current_version = $product->currentVersion()->first();
             }
         }
-        return ['order' => $Order, 'sum' => $sum, 'paid' => $paid, 'contact' => $Order->contact()->first(), 'products' => $Products, 'transactions' => $Transactions];
+        return ['order' => $Order, 'sum' => $sum, 'paid' => $paid, 'contact' => $Order->contact()->first(), 'products' => $Products/* , 'transactions' => $Transactions */];
     }
     public function getOrderProductsByOrderId(int $order_id)
     {

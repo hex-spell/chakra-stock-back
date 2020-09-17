@@ -85,12 +85,15 @@ class OrdersService implements OrdersServiceInterface
         $orderProducts = $order["products"];
 
         $ticket = array_map(function ($product) {
+            //TYPECASTING MOLESTO PORQUE PHP PIERDE EL TIPO OBJECT
             $productInTicket = (object)[];
             $objProduct = (object)$product;
-            $productInTicket->name = $objProduct->current_version->name;
-            $productInTicket->price = $objProduct->current_version->sell_price;
+            $productVersion = $objProduct->product_version;
+            $objProductVersion = (object)$productVersion;
+            $productInTicket->name = $objProductVersion->name;
+            $productInTicket->price = $objProductVersion->sell_price;
             $productInTicket->ammount = $objProduct->ammount;
-            $productInTicket->total_value = $objProduct->ammount * $objProduct->current_version->sell_price;
+            $productInTicket->total_value = $objProduct->ammount * $objProductVersion->sell_price;
             return $productInTicket;
         }, $orderProducts->toArray());
 
