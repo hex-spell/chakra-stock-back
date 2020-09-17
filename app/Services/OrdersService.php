@@ -102,7 +102,7 @@ class OrdersService implements OrdersServiceInterface
 
         $pdf = app('dompdf.wrapper')->setPaper('a5', 'landscape')->loadView('orderProducts', ['ticket' => $ticket, 'sum' => $sum, 'contact' => $contact, 'date'=>$date]);
 
-        return $pdf->stream('productos.pdf');
+        return $pdf->stream($contact->name.'-'.$date.'.pdf');
 
         return $ticket;
     }
