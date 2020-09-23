@@ -17,6 +17,18 @@ Api REST hecha en lumen, backend de chakra stock
 
 ## Endpoints
 
+## Iniciar sesión. [POST /login]
+- Devuelve un token que es necesario para usar el resto de los endpoints.
+
++ Request (application/json)
+    + Body
+
+            {
+                "email": "email",
+                "password": "string",
+            }
+
+
 - [Usuarios](docs/api/users.md)
 - [Contactos](docs/api/contacts.md)
 - [Productos](docs/api/products.md)
