@@ -15,7 +15,6 @@ Api REST hecha en lumen, backend de chakra stock
 ## Diagrama de tablas
 ![Tablas](docs/img/rel.png "Diagrama de tablas")
 
-## Endpoints
 
 ## Iniciar sesión. [POST /login]
 - Devuelve un token que es necesario para usar el resto de los endpoints.
@@ -29,6 +28,8 @@ Api REST hecha en lumen, backend de chakra stock
             }
 
 
+## Endpoints
+
 - [Usuarios](docs/api/users.md)
 - [Contactos](docs/api/contacts.md)
 - [Productos](docs/api/products.md)
@@ -39,4 +40,5 @@ Api REST hecha en lumen, backend de chakra stock
 
 ## Más info
 
+- Lumen no tiene el comando `php artisan serve`, debe hostearse utilizando `php -S "host" -t public`
 - [Quehaceres](https://trello.com/b/PnLwPmH8/app-de-stock) **(tablero de trello)**
