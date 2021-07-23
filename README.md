@@ -1,6 +1,6 @@
 FORMAT: 1A
 
-# PHPStockREST
+# chakra-stock-back
 
 Api REST hecha en lumen, backend de chakra stock
 
